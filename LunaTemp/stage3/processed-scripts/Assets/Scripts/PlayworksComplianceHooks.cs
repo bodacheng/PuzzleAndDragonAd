@@ -16,13 +16,21 @@ public sealed class PlayworksComplianceHooks : MonoBehaviour
 
     private void Start()
     {
-        // LP3007 custom event
-        Analytics.LogEvent("session_start", 1);
-
         // Auto-bootstrap a simple playable loop in SampleScene.
         if (GetComponent<SimpleDodgeGame>() == null)
         {
             gameObject.AddComponent<SimpleDodgeGame>();
+        }
+
+        // LP3007 custom event
+        // Keep gameplay initialization resilient even if analytics is unavailable in preview/runtime.
+        try
+        {
+            Analytics.LogEvent("session_start", 1);
+        }
+        catch (System.Exception exception)
+        {
+            Debug.LogWarning("Analytics.LogEvent(session_start) failed: " + exception.Message);
         }
     }
 

@@ -1,6 +1,6 @@
 if ( TRACE ) { TRACE( JSON.parse( '["PlayworksComplianceHooks#init","PlayworksComplianceHooks#Start","PlayworksComplianceHooks#TriggerInstall","PlayworksComplianceHooks#TriggerGameEnded","SimpleDodgeGame#GetCircleSprite","SimpleDodgeGame#HasTouchBegan","SimpleDodgeGame#init","SimpleDodgeGame#Awake","SimpleDodgeGame#Update","SimpleDodgeGame#OnDestroy","SimpleDodgeGame#HandlePlayerMovement","SimpleDodgeGame#HandleSpawning","SimpleDodgeGame#SpawnObstacle","SimpleDodgeGame#UpdateObstaclesAndCollision","SimpleDodgeGame#HandleLose","SimpleDodgeGame#ResetRun","SimpleDodgeGame#ClearObstacles","SimpleDodgeGame#UpdateBounds","SimpleDodgeGame#CreatePlayer","SimpleDodgeGame#TryGetPointerWorldX","SimpleDodgeGame.Obstacle#ctor"]' ) ); }
 /**
- * @version 1.0.9532.31471
+ * @version 1.0.9532.31710
  * @copyright anton
  * @compiler Bridge.NET 17.9.42-luna
  */

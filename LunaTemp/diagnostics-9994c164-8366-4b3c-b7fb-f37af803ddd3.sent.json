@@ -1,0 +1,41 @@
+{
+    "BuildID": "9994c164-8366-4b3c-b7fb-f37af803ddd3",
+    "Command": "project:upload",
+    "ProjectID": "61b95b9034cdb4f8ab822253bfbd2351",
+    "ProjectStateHash": "6a4a2796ad69f265be518c368a4444a81afd0db1a363ca48f720b401657a11de",
+    "StageCompletedAt": 3,
+    "EarliestFatalError": 0,
+    "StartTime": 1770281329601,
+    "EndTime": 1770281360504,
+    "PlaygroundUserID": 32213,
+    "OperatingSystem": "darwin",
+    "UnityPackageID": null,
+    "TargetPlatform": "playground",
+    "UnityVersion": "6000.0.58f2",
+    "LunaVersion": "7.0.0",
+    "LogCount": 1,
+    "Logs": [
+        {
+            "LogID": "ea184895-fea4-4b1a-be64-ca1e2b3fade4",
+            "Order": 0,
+            "Timestamp": 1770281332289,
+            "Stage": 1,
+            "ErrorType": 0,
+            "ErrorCode": "LP1015",
+            "Description": "This TMP version is not fully supported",
+            "Details": [
+                "The incorrect Text Mesh Pro for this Unity version is in use, please update or downgrade to the recommended version {0} in the package manager. Go to Window → Package Manager"
+            ],
+            "DescriptionValues": [],
+            "DetailsValues": [
+                ""
+            ],
+            "LogCount": 1,
+            "LinePosition": 0,
+            "FilePath": "",
+            "ClassName": "",
+            "MemberName": "",
+            "Severity": 0
+        }
+    ]
+}

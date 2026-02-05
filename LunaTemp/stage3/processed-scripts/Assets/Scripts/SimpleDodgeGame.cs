@@ -37,7 +37,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
     }
 
-    private static Sprite circleSprite;
+    private static Sprite gameplaySprite;
 
     private readonly List<Obstacle> obstacles = new List<Obstacle>();
 
@@ -50,6 +50,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private float rightBound;
     private float topBound;
     private float bottomBound;
+    private float gameplayZ;
+    private float pointerDepth;
 
     private float survivalTime;
     private float spawnTimer;
@@ -72,6 +74,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
 
         complianceHooks = GetComponent<PlayworksComplianceHooks>();
+        gameplayZ = GetGameplayZ();
+        pointerDepth = Mathf.Abs(gameplayZ - gameplayCamera.transform.position.z);
         UpdateBounds();
         CreatePlayer();
         ResetRun();
@@ -125,7 +129,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
         position.x = Mathf.Clamp(position.x, leftBound + playerRadius, rightBound - playerRadius);
         position.y = bottomBound + playerBottomOffset;
-        position.z = 0f;
+        position.z = gameplayZ;
         playerTransform.position = position;
     }
 
@@ -151,11 +155,11 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         float speed = Random.Range(obstacleMinSpeed, obstacleMaxSpeed) + (survivalTime * 0.03f);
 
         GameObject obstacleObject = new GameObject("Obstacle");
-        obstacleObject.transform.position = new Vector3(x, y, 0f);
+        obstacleObject.transform.position = new Vector3(x, y, gameplayZ);
         obstacleObject.transform.localScale = new Vector3(radius * 2f, radius * 2f, 1f);
 
         SpriteRenderer renderer = obstacleObject.AddComponent<SpriteRenderer>();
-        renderer.sprite = GetCircleSprite();
+        renderer.sprite = GetGameplaySprite();
         renderer.color = new Color(1f, 0.4f, 0.2f, 1f);
         renderer.sortingOrder = 8;
 
@@ -210,7 +214,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         gameOver = false;
 
         float startX = Mathf.Clamp(gameplayCamera.transform.position.x, leftBound + playerRadius, rightBound - playerRadius);
-        Vector3 start = new Vector3(startX, bottomBound + playerBottomOffset, 0f);
+        Vector3 start = new Vector3(startX, bottomBound + playerBottomOffset, gameplayZ);
         playerTransform.position = start;
         playerRenderer.color = new Color(0.2f, 0.85f, 1f, 1f);
     }
@@ -244,47 +248,35 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     {
         GameObject playerObject = new GameObject("PlayerBall");
         playerTransform = playerObject.transform;
-        playerTransform.position = Vector3.zero;
+        playerTransform.position = new Vector3(0f, 0f, gameplayZ);
         playerTransform.localScale = new Vector3(playerRadius * 2f, playerRadius * 2f, 1f);
 
         playerRenderer = playerObject.AddComponent<SpriteRenderer>();
-        playerRenderer.sprite = GetCircleSprite();
+        playerRenderer.sprite = GetGameplaySprite();
         playerRenderer.color = new Color(0.2f, 0.85f, 1f, 1f);
         playerRenderer.sortingOrder = 10;
     }
 
-    private static Sprite GetCircleSprite()
+    private float GetGameplayZ()
     {
-        if (circleSprite != null)
+        float distanceFromCamera = Mathf.Max(gameplayCamera.nearClipPlane + 1f, 5f);
+        return gameplayCamera.transform.position.z + distanceFromCamera;
+    }
+
+    private static Sprite GetGameplaySprite()
+    {
+        if (gameplaySprite != null)
         {
-            return circleSprite;
+            return gameplaySprite;
         }
 
-        const int size = 64;
-        Texture2D texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
-        texture.name = "RuntimeCircle";
-        texture.filterMode = FilterMode.Bilinear;
-        texture.wrapMode = TextureWrapMode.Clamp;
-
-        float center = (size - 1) * 0.5f;
-        float radius = size * 0.48f;
-        float radiusSqr = radius * radius;
-        Color clear = new Color(1f, 1f, 1f, 0f);
-
-        for (int y = 0; y < size; y++)
-        {
-            for (int x = 0; x < size; x++)
-            {
-                float dx = x - center;
-                float dy = y - center;
-                bool inside = (dx * dx + dy * dy) <= radiusSqr;
-                texture.SetPixel(x, y, inside ? Color.white : clear);
-            }
-        }
-
-        texture.Apply();
-        circleSprite = Sprite.Create(texture, new Rect(0f, 0f, size, size), new Vector2(0.5f, 0.5f), size);
-        return circleSprite;
+        Texture2D white = Texture2D.whiteTexture;
+        gameplaySprite = Sprite.Create(
+            white,
+            new Rect(0f, 0f, white.width, white.height),
+            new Vector2(0.5f, 0.5f),
+            white.width);
+        return gameplaySprite;
     }
 
     private bool TryGetPointerWorldX(out float worldX)
@@ -311,7 +303,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             return false;
         }
 
-        screen.z = Mathf.Abs(gameplayCamera.transform.position.z);
+        screen.z = pointerDepth;
         worldX = gameplayCamera.ScreenToWorldPoint(screen).x;
         return true;
     }
