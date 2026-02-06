@@ -2,8 +2,9 @@
   "ignores": [],
   "groups": [
     [
-      "/Users/nettest/AdGame2/LunaTemp/stage3/processed-scripts/Assets/Scripts/PlayworksComplianceHooks.cs",
-      "/Users/nettest/AdGame2/LunaTemp/stage3/processed-scripts/Assets/Scripts/SimpleDodgeGame.cs"
+      "/Users/nettest/AdGame2/LunaTemp/stage3/processed-scripts/Assets/Scripts/DodgeVisualTheme.cs",
+      "/Users/nettest/AdGame2/LunaTemp/stage3/processed-scripts/Assets/Scripts/SimpleDodgeGame.cs",
+      "/Users/nettest/AdGame2/LunaTemp/stage3/processed-scripts/Assets/Scripts/PlayworksComplianceHooks.cs"
     ],
     [
       "/Users/nettest/7.0.0/pipeline/templates/LunaCompiler/Scripts/Properties/AssemblyInfo.cs"

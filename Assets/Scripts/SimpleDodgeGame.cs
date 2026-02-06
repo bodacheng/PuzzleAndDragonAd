@@ -17,23 +17,37 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     [SerializeField] private float spawnIntervalEnd = 0.25f;
     [SerializeField] private float difficultyRampSeconds = 40f;
 
+    [Header("Visual Theme")]
+    [SerializeField] private DodgeVisualTheme visualTheme;
+    [SerializeField] private Color defaultPlayerColor = new Color(0.2f, 0.85f, 1f, 1f);
+    [SerializeField] private Color defaultObstacleColor = new Color(1f, 0.4f, 0.2f, 1f);
+    [SerializeField] private Color defaultBackgroundColor = new Color(0.19215687f, 0.3019608f, 0.4745098f, 1f);
+
     [Header("Play Area")]
     [SerializeField] private float sidePadding = 0.5f;
     [SerializeField] private float despawnPadding = 1f;
+
     [Header("Rendering")]
     [SerializeField] private Material spriteMaterial;
+    [SerializeField] private bool useCustomMaterialInEditor = true;
+    [SerializeField] private bool useCustomMaterialInWebGl = false;
+    [SerializeField] private bool fallbackToDefaultIfShaderUnsupported = true;
 
     private sealed class Obstacle
     {
         public readonly GameObject gameObject;
         public readonly Transform transform;
-        public readonly float radius;
+        public readonly SpriteRenderer renderer;
+        public readonly float baseRadius;
+        public float radius;
         public readonly float speed;
 
-        public Obstacle(GameObject gameObject, float radius, float speed)
+        public Obstacle(GameObject gameObject, SpriteRenderer renderer, float baseRadius, float radius, float speed)
         {
             this.gameObject = gameObject;
-            this.transform = gameObject.transform;
+            this.renderer = renderer;
+            transform = gameObject.transform;
+            this.baseRadius = baseRadius;
             this.radius = radius;
             this.speed = speed;
         }
@@ -48,6 +62,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private PlayworksComplianceHooks complianceHooks;
     private Transform playerTransform;
     private SpriteRenderer playerRenderer;
+    private Transform backgroundTransform;
+    private SpriteRenderer backgroundRenderer;
 
     private float leftBound;
     private float rightBound;
@@ -59,6 +75,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private float survivalTime;
     private float spawnTimer;
     private bool gameOver;
+    private int obstacleSpawnCount;
 
 
     private void Awake()
@@ -80,6 +97,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         gameplayZ = GetGameplayZ();
         pointerDepth = Mathf.Abs(gameplayZ - gameplayCamera.transform.position.z);
         UpdateBounds();
+        CreateBackground();
         CreatePlayer();
         ResetRun();
     }
@@ -87,6 +105,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private void Update()
     {
         UpdateBounds();
+        UpdateBackgroundTransform();
 
         if (!gameOver)
         {
@@ -111,12 +130,28 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         {
             Destroy(playerTransform.gameObject);
         }
+
+        if (backgroundTransform != null)
+        {
+            Destroy(backgroundTransform.gameObject);
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        RefreshVisualsNow();
     }
 
 
     private void HandlePlayerMovement()
     {
         Vector3 position = playerTransform.position;
+        float playerCollisionRadius = GetPlayerCollisionRadius();
         float targetX = position.x;
 
         if (TryGetPointerWorldX(out float pointerX))
@@ -130,7 +165,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             position.x += axis * playerMoveSpeed * Time.deltaTime;
         }
 
-        position.x = Mathf.Clamp(position.x, leftBound + playerRadius, rightBound - playerRadius);
+        position.x = Mathf.Clamp(position.x, leftBound + playerCollisionRadius, rightBound - playerCollisionRadius);
         position.y = bottomBound + playerBottomOffset;
         position.z = gameplayZ;
         playerTransform.position = position;
@@ -152,30 +187,26 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
     private void SpawnObstacle()
     {
-        float radius = Random.Range(obstacleMinRadius, obstacleMaxRadius);
+        float baseRadius = Random.Range(obstacleMinRadius, obstacleMaxRadius);
+        float radius = baseRadius * GetObstacleSizeMultiplier();
         float x = Random.Range(leftBound + radius, rightBound - radius);
         float y = topBound + radius + 0.4f;
         float speed = Random.Range(obstacleMinSpeed, obstacleMaxSpeed) + (survivalTime * 0.03f);
 
         GameObject obstacleObject = new GameObject("Obstacle");
         obstacleObject.transform.position = new Vector3(x, y, gameplayZ);
-        obstacleObject.transform.localScale = new Vector3(radius * 2f, radius * 2f, 1f);
 
         SpriteRenderer renderer = obstacleObject.AddComponent<SpriteRenderer>();
-        renderer.sprite = GetGameplaySprite();
-        renderer.color = new Color(1f, 0.4f, 0.2f, 1f);
-        renderer.sortingOrder = 8;
-        if (spriteMaterial != null)
-        {
-            renderer.material = spriteMaterial;
-        }
-
-        obstacles.Add(new Obstacle(obstacleObject, radius, speed));
+        Obstacle obstacle = new Obstacle(obstacleObject, renderer, baseRadius, radius, speed);
+        ApplyObstacleVisuals(obstacle, obstacleSpawnCount);
+        obstacles.Add(obstacle);
+        obstacleSpawnCount++;
     }
 
     private void UpdateObstaclesAndCollision()
     {
         Vector3 playerPosition = playerTransform.position;
+        float playerCollisionRadius = GetPlayerCollisionRadius();
 
         for (int i = obstacles.Count - 1; i >= 0; i--)
         {
@@ -191,7 +222,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
                 continue;
             }
 
-            float totalRadius = playerRadius + obstacle.radius;
+            float totalRadius = playerCollisionRadius + obstacle.radius;
             if ((position - playerPosition).sqrMagnitude <= totalRadius * totalRadius)
             {
                 HandleLose();
@@ -203,7 +234,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private void HandleLose()
     {
         gameOver = true;
-        playerRenderer.color = new Color(1f, 0.3f, 0.3f, 1f);
+        playerRenderer.color = Color.Lerp(GetPlayerColor(), new Color(1f, 0.3f, 0.3f, 1f), 0.9f);
 
         if (complianceHooks != null)
         {
@@ -219,11 +250,13 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         survivalTime = 0f;
         spawnTimer = 0.25f;
         gameOver = false;
+        obstacleSpawnCount = 0;
 
-        float startX = Mathf.Clamp(gameplayCamera.transform.position.x, leftBound + playerRadius, rightBound - playerRadius);
+        float playerCollisionRadius = GetPlayerCollisionRadius();
+        float startX = Mathf.Clamp(gameplayCamera.transform.position.x, leftBound + playerCollisionRadius, rightBound - playerCollisionRadius);
         Vector3 start = new Vector3(startX, bottomBound + playerBottomOffset, gameplayZ);
         playerTransform.position = start;
-        playerRenderer.color = new Color(0.2f, 0.85f, 1f, 1f);
+        ApplyPlayerVisuals();
     }
 
     private void ClearObstacles()
@@ -256,15 +289,136 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         GameObject playerObject = new GameObject("PlayerBall");
         playerTransform = playerObject.transform;
         playerTransform.position = new Vector3(0f, 0f, gameplayZ);
-        playerTransform.localScale = new Vector3(playerRadius * 2f, playerRadius * 2f, 1f);
 
         playerRenderer = playerObject.AddComponent<SpriteRenderer>();
-        playerRenderer.sprite = GetGameplaySprite();
-        playerRenderer.color = new Color(0.2f, 0.85f, 1f, 1f);
         playerRenderer.sortingOrder = 10;
-        if (spriteMaterial != null)
+        ApplyPlayerVisuals();
+    }
+
+    private void CreateBackground()
+    {
+        GameObject backgroundObject = new GameObject("GameplayBackground");
+        backgroundTransform = backgroundObject.transform;
+        backgroundRenderer = backgroundObject.AddComponent<SpriteRenderer>();
+        backgroundRenderer.sortingOrder = -20;
+        ApplyBackgroundVisuals();
+    }
+
+    private void ApplyPlayerVisuals()
+    {
+        if (playerRenderer == null || playerTransform == null)
         {
-            playerRenderer.material = spriteMaterial;
+            return;
+        }
+
+        Sprite playerSprite = GetPlayerSprite();
+        playerRenderer.sprite = playerSprite;
+        playerRenderer.color = GetPlayerColor();
+        ApplyRendererMaterial(playerRenderer);
+        SetTransformDiameter(playerTransform, playerSprite, GetPlayerCollisionRadius() * 2f);
+    }
+
+    private void ApplyObstacleVisuals(Obstacle obstacle, int obstacleIndex)
+    {
+        if (obstacle == null || obstacle.renderer == null || obstacle.transform == null)
+        {
+            return;
+        }
+
+        Sprite obstacleSprite = GetObstacleSprite(obstacleIndex);
+        obstacle.renderer.sprite = obstacleSprite;
+        obstacle.renderer.color = GetObstacleColor();
+        obstacle.renderer.sortingOrder = 8;
+        ApplyRendererMaterial(obstacle.renderer);
+
+        obstacle.radius = obstacle.baseRadius * GetObstacleSizeMultiplier();
+        SetTransformDiameter(obstacle.transform, obstacleSprite, obstacle.radius * 2f);
+    }
+
+    private void ApplyBackgroundVisuals()
+    {
+        if (backgroundRenderer == null)
+        {
+            return;
+        }
+
+        Sprite backgroundSprite = GetBackgroundSprite();
+        backgroundRenderer.sprite = backgroundSprite;
+        backgroundRenderer.color = GetBackgroundColor();
+        backgroundRenderer.sortingOrder = GetBackgroundSortingOrder();
+        ApplyRendererMaterial(backgroundRenderer);
+
+        if (gameplayCamera != null)
+        {
+            gameplayCamera.backgroundColor = GetBackgroundColor();
+        }
+
+        UpdateBackgroundTransform();
+    }
+
+    private void UpdateBackgroundTransform()
+    {
+        if (backgroundTransform == null || backgroundRenderer == null || gameplayCamera == null)
+        {
+            return;
+        }
+
+        float worldHeight = gameplayCamera.orthographicSize * 2f;
+        float worldWidth = worldHeight * gameplayCamera.aspect;
+        Vector2 spriteSize = GetSpriteWorldSize(backgroundRenderer.sprite);
+        float scaleX = worldWidth / spriteSize.x;
+        float scaleY = worldHeight / spriteSize.y;
+
+        if (ShouldPreserveBackgroundAspect())
+        {
+            float uniformScale = Mathf.Max(scaleX, scaleY) * GetBackgroundScalePadding();
+            backgroundTransform.localScale = new Vector3(uniformScale, uniformScale, 1f);
+        }
+        else
+        {
+            float padding = GetBackgroundScalePadding();
+            backgroundTransform.localScale = new Vector3(scaleX * padding, scaleY * padding, 1f);
+        }
+
+        backgroundTransform.position = new Vector3(gameplayCamera.transform.position.x, gameplayCamera.transform.position.y, gameplayZ);
+    }
+
+    public void RefreshVisualsNow()
+    {
+        ApplyBackgroundVisuals();
+        ApplyPlayerVisuals();
+        RefreshObstacleVisuals();
+    }
+
+    [ContextMenu("Refresh Visual Theme")]
+    private void RefreshVisualThemeFromContextMenu()
+    {
+        RefreshVisualsNow();
+    }
+
+    private void RefreshObstacleVisuals()
+    {
+        for (int i = 0; i < obstacles.Count; i++)
+        {
+            Obstacle obstacle = obstacles[i];
+            if (obstacle == null || obstacle.gameObject == null)
+            {
+                continue;
+            }
+
+            ApplyObstacleVisuals(obstacle, i);
+            Vector3 position = obstacle.transform.position;
+            position.x = Mathf.Clamp(position.x, leftBound + obstacle.radius, rightBound - obstacle.radius);
+            obstacle.transform.position = position;
+        }
+    }
+
+    private void ApplyRendererMaterial(SpriteRenderer renderer)
+    {
+        Material selectedMaterial = GetSharedSpriteMaterial();
+        if (selectedMaterial != null)
+        {
+            renderer.material = selectedMaterial;
         }
     }
 
@@ -326,6 +480,191 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         screen.z = pointerDepth;
         worldX = gameplayCamera.ScreenToWorldPoint(screen).x;
         return true;
+    }
+
+    private float GetPlayerCollisionRadius()
+    {
+        return playerRadius * GetPlayerSizeMultiplier();
+    }
+
+    private Sprite GetPlayerSprite()
+    {
+        if (visualTheme != null && visualTheme.PlayerSprite != null)
+        {
+            return visualTheme.PlayerSprite;
+        }
+
+        return GetGameplaySprite();
+    }
+
+    private float GetPlayerSizeMultiplier()
+    {
+        if (visualTheme != null)
+        {
+            return Mathf.Max(0.1f, visualTheme.PlayerSizeMultiplier);
+        }
+
+        return 1f;
+    }
+
+    private Color GetPlayerColor()
+    {
+        if (visualTheme != null)
+        {
+            return visualTheme.PlayerColor;
+        }
+
+        return defaultPlayerColor;
+    }
+
+    private Sprite GetObstacleSprite(int obstacleIndex)
+    {
+        if (visualTheme != null)
+        {
+            Sprite sprite = visualTheme.GetObstacleSprite(obstacleIndex);
+            if (sprite != null)
+            {
+                return sprite;
+            }
+        }
+
+        return GetGameplaySprite();
+    }
+
+    private float GetObstacleSizeMultiplier()
+    {
+        if (visualTheme != null)
+        {
+            return Mathf.Max(0.1f, visualTheme.ObstacleSizeMultiplier);
+        }
+
+        return 1f;
+    }
+
+    private Color GetObstacleColor()
+    {
+        if (visualTheme != null)
+        {
+            return visualTheme.ObstacleColor;
+        }
+
+        return defaultObstacleColor;
+    }
+
+    private Sprite GetBackgroundSprite()
+    {
+        if (visualTheme != null && visualTheme.BackgroundSprite != null)
+        {
+            return visualTheme.BackgroundSprite;
+        }
+
+        return GetGameplaySprite();
+    }
+
+    private Color GetBackgroundColor()
+    {
+        if (visualTheme != null)
+        {
+            return visualTheme.BackgroundColor;
+        }
+
+        return defaultBackgroundColor;
+    }
+
+    private int GetBackgroundSortingOrder()
+    {
+        if (visualTheme != null)
+        {
+            return visualTheme.BackgroundSortingOrder;
+        }
+
+        return -20;
+    }
+
+    private float GetBackgroundScalePadding()
+    {
+        if (visualTheme != null)
+        {
+            return Mathf.Max(1f, visualTheme.BackgroundScalePadding);
+        }
+
+        return 1.02f;
+    }
+
+    private bool ShouldPreserveBackgroundAspect()
+    {
+        if (visualTheme != null)
+        {
+            return visualTheme.PreserveBackgroundAspect;
+        }
+
+        return true;
+    }
+
+    private Material GetSharedSpriteMaterial()
+    {
+        Material selectedMaterial = null;
+        if (visualTheme != null && visualTheme.OverrideMaterial != null)
+        {
+            selectedMaterial = visualTheme.OverrideMaterial;
+        }
+        else
+        {
+            selectedMaterial = spriteMaterial;
+        }
+
+        if (selectedMaterial == null)
+        {
+            return null;
+        }
+
+        if (!ShouldUseCustomMaterialForCurrentPlatform())
+        {
+            return null;
+        }
+
+        Shader shader = selectedMaterial.shader;
+        if (fallbackToDefaultIfShaderUnsupported && (shader == null || !shader.isSupported))
+        {
+            return null;
+        }
+
+        return selectedMaterial;
+    }
+
+    private bool ShouldUseCustomMaterialForCurrentPlatform()
+    {
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            return useCustomMaterialInWebGl;
+        }
+
+        return useCustomMaterialInEditor;
+    }
+
+    private static void SetTransformDiameter(Transform targetTransform, Sprite sprite, float diameter)
+    {
+        Vector2 spriteSize = GetSpriteWorldSize(sprite);
+        float safeDiameter = Mathf.Max(0.01f, diameter);
+        float scaleX = safeDiameter / spriteSize.x;
+        float scaleY = safeDiameter / spriteSize.y;
+        targetTransform.localScale = new Vector3(scaleX, scaleY, 1f);
+    }
+
+    private static Vector2 GetSpriteWorldSize(Sprite sprite)
+    {
+        if (sprite == null)
+        {
+            return Vector2.one;
+        }
+
+        Vector2 size = sprite.bounds.size;
+        if (size.x <= Mathf.Epsilon || size.y <= Mathf.Epsilon)
+        {
+            return Vector2.one;
+        }
+
+        return size;
     }
 
     private static bool HasTouchBegan()

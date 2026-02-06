@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d140b9b1e076455c867c711cbfcae0c4, type: 3}
+  m_Name: DodgeVisualTheme
+  m_EditorClassIdentifier: 
+  overrideMaterial: {fileID: 0}
+  playerSprite: {fileID: 2255658803395656465, guid: da69df30b9b6a4648a8041465bebd659, type: 3}
+  playerColor: {r: 0.2, g: 0.85, b: 1, a: 1}
+  playerSizeMultiplier: 1
+  obstacleSprite: {fileID: 3646122491767590160, guid: 9766facdce132454a95158658e5f1810, type: 3}
+  obstacleVariants:
+  - {fileID: -4467611338918269848, guid: 36eb594c3de68463592fe71f9a4cf457, type: 3}
+  randomizeObstacleVariant: 1
+  obstacleColor: {r: 1, g: 0.4, b: 0.2, a: 1}
+  obstacleSizeMultiplier: 1
+  backgroundSprite: {fileID: 6161013795131642340, guid: d4400633adefb40cb8088aa95e0217ad, type: 3}
+  backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  preserveBackgroundAspect: 1
+  backgroundScalePadding: 1.02
+  backgroundSortingOrder: -20
