@@ -9,9 +9,6 @@ public sealed class PlayworksComplianceHooks : MonoBehaviour
     [LunaPlaygroundField("Android Store URL", 1, "CTA")]
     [SerializeField] private string androidStoreUrl = "";
 
-    [LunaPlaygroundField("Default Level", 2, "Gameplay")]
-    [SerializeField] private int defaultLevel = 1;
-
     private bool gameEnded;
 
     private void Start()
