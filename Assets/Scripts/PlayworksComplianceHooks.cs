@@ -9,6 +9,9 @@ public sealed class PlayworksComplianceHooks : MonoBehaviour
     [LunaPlaygroundField("Android Store URL", 1, "CTA")]
     [SerializeField] private string androidStoreUrl = "";
 
+    [LunaPlaygroundField("Gameplay Variant", 2, "Gameplay")]
+    [SerializeField] [Range(0, 2)] private int gameplayVariant = 0;
+
     private bool gameEnded;
 
     private void Start()
@@ -24,6 +27,12 @@ public sealed class PlayworksComplianceHooks : MonoBehaviour
             {
                 Debug.LogError("Failed to add SimpleDodgeGame: " + exception.Message);
             }
+        }
+
+        SimpleDodgeGame gameplay = GetComponent<SimpleDodgeGame>();
+        if (gameplay != null)
+        {
+            gameplay.ApplyPlaygroundVariant(gameplayVariant);
         }
 
         // LP3007 custom event

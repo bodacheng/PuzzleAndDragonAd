@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if !UNITY_LUNA
+using UnityEngine.UI;
+#endif
 
 public sealed class SimpleDodgeGame : MonoBehaviour
 {
@@ -77,11 +80,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         new Vector2Int(0, -1),
     };
 
-    private static Sprite gameplaySprite;
-    private static Texture2D gameplayTexture;
-    private static Sprite orbSprite;
-    private static Texture2D orbTexture;
-
+    private static Sprite generatedFallbackSprite;
+    private static Texture2D generatedFallbackTexture;
     private Camera gameplayCamera;
     private PlayworksComplianceHooks complianceHooks;
 
@@ -111,9 +111,15 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private float timeRemaining;
     private int score;
     private int lastMoveCombos;
+    private bool hasLoggedMissingSpriteConfig;
 
-    private GUIStyle hudLabelStyle;
-    private GUIStyle resultLabelStyle;
+#if !UNITY_LUNA
+    private Transform hudRootTransform;
+    private Text scoreText;
+    private Text timeText;
+    private Text comboText;
+    private Text resultText;
+#endif
     private readonly List<OrbMove> moveBuffer = new List<OrbMove>(64);
     private readonly List<Vector2Int> matchedCellsBuffer = new List<Vector2Int>(64);
     private readonly List<Vector2Int> floodFillStackBuffer = new List<Vector2Int>(64);
@@ -144,11 +150,13 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
         complianceHooks = GetComponent<PlayworksComplianceHooks>();
         ValidateConfig();
+        WarnIfMissingSpriteSetup();
 
         gameplayZ = GetGameplayZ();
         pointerDepth = Mathf.Abs(gameplayZ - gameplayCamera.transform.position.z);
 
         CreateRuntimeVisuals();
+        CreateRuntimeHud();
         UpdateLayout(force: true);
         ResetRound();
     }
@@ -169,6 +177,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
                 ResetRound();
             }
 
+            UpdateHudTexts();
             return;
         }
 
@@ -177,6 +186,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         {
             timeRemaining = 0f;
             EndRound();
+            UpdateHudTexts();
             return;
         }
 
@@ -184,6 +194,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         {
             HandleDragInput();
         }
+
+        UpdateHudTexts();
     }
 
     private void OnDestroy()
@@ -199,11 +211,19 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         {
             Destroy(backgroundTransform.gameObject);
         }
+
+#if !UNITY_LUNA
+        if (hudRootTransform != null)
+        {
+            Destroy(hudRootTransform.gameObject);
+        }
+#endif
     }
 
     private void OnValidate()
     {
         ValidateConfig();
+        WarnIfMissingSpriteSetup();
 
         if (!Application.isPlaying)
         {
@@ -213,49 +233,12 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         RefreshVisualsNow();
     }
 
-    private void OnGUI()
-    {
-        if (hudLabelStyle == null)
-        {
-            hudLabelStyle = new GUIStyle(GUI.skin.label)
-            {
-                fontSize = 28,
-                fontStyle = FontStyle.Bold,
-                normal = { textColor = Color.white }
-            };
-        }
-
-        if (resultLabelStyle == null)
-        {
-            resultLabelStyle = new GUIStyle(GUI.skin.label)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = 34,
-                fontStyle = FontStyle.Bold,
-                normal = { textColor = Color.white }
-            };
-        }
-
-        GUI.Label(new Rect(20f, 16f, 460f, 42f), "Score: " + score, hudLabelStyle);
-        GUI.Label(new Rect(20f, 54f, 460f, 42f), "Time: " + timeRemaining.ToString("0.0"), hudLabelStyle);
-        GUI.Label(new Rect(20f, 92f, 560f, 42f), "Last Combo: x" + lastMoveCombos, hudLabelStyle);
-
-        if (!roundEnded)
-        {
-            return;
-        }
-
-        float centerX = Screen.width * 0.5f - 300f;
-        float centerY = Screen.height * 0.5f - 110f;
-        string text = "TIME UP\nScore: " + score + "\nTap / Click to restart";
-        GUI.Label(new Rect(centerX, centerY, 600f, 220f), text, resultLabelStyle);
-    }
-
     public void RefreshVisualsNow()
     {
         ValidateConfig();
         ApplyBackgroundVisuals();
         ApplyBoardFrameVisuals();
+        UpdateHudTexts();
 
         if (board == null)
         {
@@ -278,6 +261,60 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
     }
 
+    public void ApplyPlaygroundVariant(int variantIndex)
+    {
+        int normalizedVariant = Mathf.Abs(variantIndex) % 3;
+        if (normalizedVariant == 1)
+        {
+            columns = 6;
+            rows = 5;
+            boardSidePadding = 0.45f;
+            boardBottomPadding = 0.8f;
+            boardTopPadding = 2.15f;
+            orbScale = 0.88f;
+            clearDelaySeconds = 0.05f;
+            fallDurationSeconds = 0.08f;
+            roundDurationSeconds = 28f;
+            baseScorePerOrb = 16;
+        }
+        else if (normalizedVariant == 2)
+        {
+            columns = 5;
+            rows = 5;
+            boardSidePadding = 0.55f;
+            boardBottomPadding = 0.8f;
+            boardTopPadding = 2.2f;
+            orbScale = 0.92f;
+            clearDelaySeconds = 0.12f;
+            fallDurationSeconds = 0.16f;
+            roundDurationSeconds = 45f;
+            baseScorePerOrb = 10;
+        }
+        else
+        {
+            columns = 6;
+            rows = 5;
+            boardSidePadding = 0.45f;
+            boardBottomPadding = 0.8f;
+            boardTopPadding = 2.15f;
+            orbScale = 0.9f;
+            clearDelaySeconds = 0.08f;
+            fallDurationSeconds = 0.12f;
+            roundDurationSeconds = 35f;
+            baseScorePerOrb = 12;
+        }
+
+        ValidateConfig();
+
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        UpdateLayout(force: true);
+        ResetRound();
+    }
+
     [ContextMenu("Refresh Visual Theme")]
     private void RefreshVisualThemeFromContextMenu()
     {
@@ -298,6 +335,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
         ClearBoard();
         BuildInitialBoard();
+        SetResultVisible(false);
+        UpdateHudTexts();
     }
 
     private void EndRound()
@@ -317,6 +356,9 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             hasReportedGameEnded = true;
             complianceHooks.TriggerGameEnded();
         }
+
+        SetResultVisible(true);
+        UpdateHudTexts();
     }
 
     private void HandleDragInput()
@@ -537,7 +579,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private int CollectMatches(out List<Vector2Int> matchedCells)
     {
         EnsureMatchBuffers();
-        System.Array.Clear(markedCellsBuffer, 0, markedCellsBuffer.Length);
+        ClearBoolGrid(markedCellsBuffer);
         bool[,] marked = markedCellsBuffer;
 
         for (int y = 0; y < rows; y++)
@@ -637,7 +679,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
 
         int combos = 0;
-        System.Array.Clear(visitedCellsBuffer, 0, visitedCellsBuffer.Length);
+        ClearBoolGrid(visitedCellsBuffer);
         bool[,] visited = visitedCellsBuffer;
         List<Vector2Int> stack = floodFillStackBuffer;
         stack.Clear();
@@ -862,7 +904,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             return;
         }
 
-        backgroundRenderer.sprite = GetGameplaySprite();
+        backgroundRenderer.sprite = GetBoardSprite();
         backgroundRenderer.color = backgroundColor;
         ApplyRendererMaterial(backgroundRenderer);
         UpdateBackgroundTransform();
@@ -877,14 +919,14 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     {
         if (boardFrameRenderer != null)
         {
-            boardFrameRenderer.sprite = GetGameplaySprite();
+            boardFrameRenderer.sprite = GetBoardSprite();
             boardFrameRenderer.color = boardColor;
             ApplyRendererMaterial(boardFrameRenderer);
         }
 
         if (boardOutlineRenderer != null)
         {
-            boardOutlineRenderer.sprite = GetGameplaySprite();
+            boardOutlineRenderer.sprite = GetBoardSprite();
             boardOutlineRenderer.color = boardOutlineColor;
             ApplyRendererMaterial(boardOutlineRenderer);
         }
@@ -915,12 +957,187 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             Sprite configuredSprite = orbSprites[safeIndex];
             if (configuredSprite != null)
             {
-                return configuredSprite;
+                return PrepareSpriteForRuntime(configuredSprite);
             }
         }
 
-        return GetOrbSprite();
+        Sprite configuredFallback = GetAnyConfiguredOrbSprite();
+        return PrepareSpriteForRuntime(configuredFallback != null ? configuredFallback : GetGeneratedFallbackSprite());
     }
+
+    private Sprite GetBoardSprite()
+    {
+        return GetGeneratedFallbackSprite();
+    }
+
+    private Sprite GetAnyConfiguredOrbSprite()
+    {
+        if (orbSprites == null)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < orbSprites.Length; i++)
+        {
+            if (orbSprites[i] != null)
+            {
+                return orbSprites[i];
+            }
+        }
+
+        return null;
+    }
+
+    private Sprite PrepareSpriteForRuntime(Sprite sourceSprite)
+    {
+        if (sourceSprite == null)
+        {
+            return GetGeneratedFallbackSprite();
+        }
+
+        return sourceSprite;
+    }
+
+    private void WarnIfMissingSpriteSetup()
+    {
+        if (hasLoggedMissingSpriteConfig)
+        {
+            return;
+        }
+
+        if (GetAnyConfiguredOrbSprite() != null)
+        {
+            return;
+        }
+
+        hasLoggedMissingSpriteConfig = true;
+        Debug.LogWarning("SimpleDodgeGame has no configured orb/board Sprite. Playworks visibility may fail if runtime sprite generation is unsupported.");
+    }
+
+#if !UNITY_LUNA
+    private void CreateRuntimeHud()
+    {
+        if (hudRootTransform != null)
+        {
+            return;
+        }
+
+        GameObject canvasObject = new GameObject("RuntimeHud");
+        hudRootTransform = canvasObject.transform;
+
+        Canvas canvas = canvasObject.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvasObject.AddComponent<CanvasScaler>();
+        canvasObject.AddComponent<GraphicRaycaster>();
+
+        Font font = GetBuiltinHudFont();
+        scoreText = CreateHudText(canvasObject.transform, "ScoreText", font, 28, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -16f), new Vector2(460f, 42f), TextAnchor.MiddleLeft);
+        timeText = CreateHudText(canvasObject.transform, "TimeText", font, 28, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -54f), new Vector2(460f, 42f), TextAnchor.MiddleLeft);
+        comboText = CreateHudText(canvasObject.transform, "ComboText", font, 28, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -92f), new Vector2(560f, 42f), TextAnchor.MiddleLeft);
+        resultText = CreateHudText(canvasObject.transform, "ResultText", font, 34, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(700f, 220f), TextAnchor.MiddleCenter);
+        SetResultVisible(false);
+        UpdateHudTexts();
+    }
+
+    private static Text CreateHudText(
+        Transform parent,
+        string objectName,
+        Font font,
+        int fontSize,
+        Vector2 anchorMin,
+        Vector2 anchorMax,
+        Vector2 pivot,
+        Vector2 anchoredPosition,
+        Vector2 sizeDelta,
+        TextAnchor alignment)
+    {
+        GameObject textObject = new GameObject(objectName);
+        textObject.transform.SetParent(parent, false);
+
+        Text text = textObject.AddComponent<Text>();
+        text.font = font;
+        text.fontSize = fontSize;
+        text.fontStyle = FontStyle.Bold;
+        text.color = Color.white;
+        text.alignment = alignment;
+        text.horizontalOverflow = HorizontalWrapMode.Overflow;
+        text.verticalOverflow = VerticalWrapMode.Overflow;
+        text.raycastTarget = false;
+
+        RectTransform rectTransform = text.rectTransform;
+        rectTransform.anchorMin = anchorMin;
+        rectTransform.anchorMax = anchorMax;
+        rectTransform.pivot = pivot;
+        rectTransform.anchoredPosition = anchoredPosition;
+        rectTransform.sizeDelta = sizeDelta;
+        return text;
+    }
+
+    private void UpdateHudTexts()
+    {
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + score;
+        }
+
+        if (timeText != null)
+        {
+            timeText.text = "Time: " + timeRemaining.ToString("0.0");
+        }
+
+        if (comboText != null)
+        {
+            comboText.text = "Last Combo: x" + lastMoveCombos;
+        }
+
+        if (resultText != null && roundEnded)
+        {
+            resultText.text = "TIME UP\nScore: " + score + "\nTap / Click to restart";
+        }
+    }
+
+    private void SetResultVisible(bool visible)
+    {
+        if (resultText != null)
+        {
+            resultText.enabled = visible;
+        }
+    }
+
+    private static Font GetBuiltinHudFont()
+    {
+        Font font = TryLoadBuiltinFont("LegacyRuntime.ttf");
+        if (font != null)
+        {
+            return font;
+        }
+
+        font = TryLoadBuiltinFont("Arial.ttf");
+        if (font != null)
+        {
+            return font;
+        }
+
+        Debug.LogWarning("Failed to load builtin HUD font. Text may not render correctly.");
+        return null;
+    }
+
+    private static Font TryLoadBuiltinFont(string fontPath)
+    {
+        try
+        {
+            return (Font)Resources.GetBuiltinResource(typeof(Font), fontPath);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+#else
+    private void CreateRuntimeHud() { }
+    private void UpdateHudTexts() { }
+    private void SetResultVisible(bool visible) { }
+#endif
 
     private void UpdateLayout(bool force)
     {
@@ -1187,6 +1404,24 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
     }
 
+    private static void ClearBoolGrid(bool[,] grid)
+    {
+        if (grid == null)
+        {
+            return;
+        }
+
+        int width = grid.GetLength(0);
+        int height = grid.GetLength(1);
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                grid[x, y] = false;
+            }
+        }
+    }
+
     private WaitForSeconds GetClearDelayWait()
     {
         float safeDelay = Mathf.Max(0f, clearDelaySeconds);
@@ -1201,6 +1436,11 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
     private void ApplyRendererMaterial(SpriteRenderer renderer)
     {
+        if (renderer == null)
+        {
+            return;
+        }
+
         Material selectedMaterial = GetSharedSpriteMaterial();
         if (selectedMaterial != null)
         {
@@ -1211,23 +1451,27 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private float GetGameplayZ()
     {
         float distanceFromCamera = Mathf.Max(gameplayCamera.nearClipPlane + 1f, 5f);
-        return gameplayCamera.transform.position.z + distanceFromCamera;
+        float forwardZ = gameplayCamera.transform.forward.z;
+        if (Mathf.Abs(forwardZ) < 0.0001f)
+        {
+            forwardZ = 1f;
+        }
+
+        return gameplayCamera.transform.position.z + (Mathf.Sign(forwardZ) * distanceFromCamera);
     }
 
     private Material GetSharedSpriteMaterial()
     {
-        if (spriteMaterial == null || !ShouldUseCustomMaterialForCurrentPlatform())
+        if (spriteMaterial != null && ShouldUseCustomMaterialForCurrentPlatform())
         {
-            return null;
+            Shader shader = spriteMaterial.shader;
+            if (!fallbackToDefaultIfShaderUnsupported || (shader != null && shader.isSupported))
+            {
+                return spriteMaterial;
+            }
         }
 
-        Shader shader = spriteMaterial.shader;
-        if (fallbackToDefaultIfShaderUnsupported && (shader == null || !shader.isSupported))
-        {
-            return null;
-        }
-
-        return spriteMaterial;
+        return null;
     }
 
     private bool ShouldUseCustomMaterialForCurrentPlatform()
@@ -1240,70 +1484,37 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         return useCustomMaterialInEditor;
     }
 
-    private static Sprite GetGameplaySprite()
+    private static Sprite GetGeneratedFallbackSprite()
     {
-        if (gameplaySprite != null)
+        if (generatedFallbackSprite != null)
         {
-            return gameplaySprite;
+            return generatedFallbackSprite;
         }
 
-        if (gameplayTexture == null)
+        try
         {
-            gameplayTexture = new Texture2D(2, 2, TextureFormat.RGBA32, mipChain: false);
-            gameplayTexture.SetPixel(0, 0, Color.white);
-            gameplayTexture.SetPixel(1, 0, Color.white);
-            gameplayTexture.SetPixel(0, 1, Color.white);
-            gameplayTexture.SetPixel(1, 1, Color.white);
-            gameplayTexture.Apply(updateMipmaps: false, makeNoLongerReadable: true);
-        }
-
-        gameplaySprite = Sprite.Create(
-            gameplayTexture,
-            new Rect(0f, 0f, gameplayTexture.width, gameplayTexture.height),
-            new Vector2(0.5f, 0.5f),
-            gameplayTexture.width);
-        return gameplaySprite;
-    }
-
-    private static Sprite GetOrbSprite()
-    {
-        if (orbSprite != null)
-        {
-            return orbSprite;
-        }
-
-        if (orbTexture == null)
-        {
-            const int size = 96;
-            orbTexture = new Texture2D(size, size, TextureFormat.RGBA32, mipChain: false);
-            float radius = (size - 2) * 0.5f;
-            Vector2 center = new Vector2((size - 1) * 0.5f, (size - 1) * 0.5f);
-
-            for (int y = 0; y < size; y++)
+            if (generatedFallbackTexture == null)
             {
-                for (int x = 0; x < size; x++)
-                {
-                    Vector2 p = new Vector2(x, y);
-                    float distance = Vector2.Distance(p, center);
-                    float normalized = Mathf.Clamp01(distance / radius);
-                    float alpha = 1f - Mathf.SmoothStep(0.92f, 1f, normalized);
-                    float highlight = Mathf.Clamp01(((center.y + 12f) - y) / (radius * 1.2f));
-                    float brightness = 0.85f + (highlight * 0.25f);
-                    Color color = new Color(brightness, brightness, brightness, alpha);
-                    orbTexture.SetPixel(x, y, color);
-                }
+                generatedFallbackTexture = new Texture2D(2, 2, TextureFormat.RGBA32, mipChain: false);
+                generatedFallbackTexture.SetPixel(0, 0, Color.white);
+                generatedFallbackTexture.SetPixel(1, 0, Color.white);
+                generatedFallbackTexture.SetPixel(0, 1, Color.white);
+                generatedFallbackTexture.SetPixel(1, 1, Color.white);
+                generatedFallbackTexture.Apply(updateMipmaps: false, makeNoLongerReadable: true);
             }
 
-            orbTexture.Apply(updateMipmaps: false, makeNoLongerReadable: true);
+            generatedFallbackSprite = Sprite.Create(
+                generatedFallbackTexture,
+                new Rect(0f, 0f, generatedFallbackTexture.width, generatedFallbackTexture.height),
+                new Vector2(0.5f, 0.5f),
+                generatedFallbackTexture.width);
+        }
+        catch
+        {
+            return null;
         }
 
-        orbSprite = Sprite.Create(
-            orbTexture,
-            new Rect(0f, 0f, orbTexture.width, orbTexture.height),
-            new Vector2(0.5f, 0.5f),
-            orbTexture.width);
-
-        return orbSprite;
+        return generatedFallbackSprite;
     }
 
     private static void SetTransformDiameter(Transform targetTransform, Sprite sprite, float diameter)

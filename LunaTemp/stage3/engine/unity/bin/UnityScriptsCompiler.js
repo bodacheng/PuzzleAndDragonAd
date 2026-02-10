@@ -1,151 +1,11 @@
-if ( TRACE ) { TRACE( JSON.parse( '["DodgeVisualTheme#OverrideMaterial#get","DodgeVisualTheme#PlayerSprite#get","DodgeVisualTheme#PlayerColor#get","DodgeVisualTheme#PlayerSizeMultiplier#get","DodgeVisualTheme#ObstacleColor#get","DodgeVisualTheme#ObstacleSizeMultiplier#get","DodgeVisualTheme#BackgroundSprite#get","DodgeVisualTheme#BackgroundColor#get","DodgeVisualTheme#PreserveBackgroundAspect#get","DodgeVisualTheme#BackgroundScalePadding#get","DodgeVisualTheme#BackgroundSortingOrder#get","DodgeVisualTheme#init","DodgeVisualTheme#GetObstacleSprite","PlayworksComplianceHooks#init","PlayworksComplianceHooks#Start","PlayworksComplianceHooks#TriggerInstall","PlayworksComplianceHooks#TriggerGameEnded","SimpleDodgeGame#GetGameplaySprite","SimpleDodgeGame#SetTransformDiameter","SimpleDodgeGame#GetSpriteWorldSize","SimpleDodgeGame#HasTouchBegan","SimpleDodgeGame#init","SimpleDodgeGame#Awake","SimpleDodgeGame#Update","SimpleDodgeGame#OnDestroy","SimpleDodgeGame#OnValidate","SimpleDodgeGame#HandlePlayerMovement","SimpleDodgeGame#HandleSpawning","SimpleDodgeGame#SpawnObstacle","SimpleDodgeGame#UpdateObstaclesAndCollision","SimpleDodgeGame#HandleLose","SimpleDodgeGame#ResetRun","SimpleDodgeGame#ClearObstacles","SimpleDodgeGame#UpdateBounds","SimpleDodgeGame#CreatePlayer","SimpleDodgeGame#CreateBackground","SimpleDodgeGame#ApplyPlayerVisuals","SimpleDodgeGame#ApplyObstacleVisuals","SimpleDodgeGame#ApplyBackgroundVisuals","SimpleDodgeGame#UpdateBackgroundTransform","SimpleDodgeGame#RefreshVisualsNow","SimpleDodgeGame#RefreshVisualThemeFromContextMenu","SimpleDodgeGame#RefreshObstacleVisuals","SimpleDodgeGame#ApplyRendererMaterial","SimpleDodgeGame#GetGameplayZ","SimpleDodgeGame#TryGetPointerWorldX","SimpleDodgeGame#GetPlayerCollisionRadius","SimpleDodgeGame#GetPlayerSprite","SimpleDodgeGame#GetPlayerSizeMultiplier","SimpleDodgeGame#GetPlayerColor","SimpleDodgeGame#GetObstacleSprite","SimpleDodgeGame#GetObstacleSizeMultiplier","SimpleDodgeGame#GetObstacleColor","SimpleDodgeGame#GetBackgroundSprite","SimpleDodgeGame#GetBackgroundColor","SimpleDodgeGame#GetBackgroundSortingOrder","SimpleDodgeGame#GetBackgroundScalePadding","SimpleDodgeGame#ShouldPreserveBackgroundAspect","SimpleDodgeGame#GetSharedSpriteMaterial","SimpleDodgeGame#ShouldUseCustomMaterialForCurrentPlatform","SimpleDodgeGame.Obstacle#ctor"]' ) ); }
+if ( TRACE ) { TRACE( JSON.parse( '["PlayworksComplianceHooks#init","PlayworksComplianceHooks#Start","PlayworksComplianceHooks#TriggerInstall","PlayworksComplianceHooks#TriggerGameEnded","SimpleDodgeGame#init","SimpleDodgeGame#ClearBoolGrid","SimpleDodgeGame#GetGeneratedFallbackSprite","SimpleDodgeGame#SetTransformDiameter","SimpleDodgeGame#SetTransformSize","SimpleDodgeGame#GetSpriteWorldSize","SimpleDodgeGame#init","SimpleDodgeGame#Awake","SimpleDodgeGame#Update","SimpleDodgeGame#OnDestroy","SimpleDodgeGame#OnValidate","SimpleDodgeGame#RefreshVisualsNow","SimpleDodgeGame#ApplyPlaygroundVariant","SimpleDodgeGame#RefreshVisualThemeFromContextMenu","SimpleDodgeGame#ResetRound","SimpleDodgeGame#EndRound","SimpleDodgeGame#HandleDragInput","SimpleDodgeGame#DragHeldOrbToward","SimpleDodgeGame#ResolveBoardRoutine","SimpleDodgeGame#RemoveMatchedCells","SimpleDodgeGame#CollapseColumns","SimpleDodgeGame#FillEmptyCells","SimpleDodgeGame#AnimateMoves","SimpleDodgeGame#CollectMatches","SimpleDodgeGame#CalculateScoreGain","SimpleDodgeGame#BuildInitialBoard","SimpleDodgeGame#ClearBoard","SimpleDodgeGame#CreateOrb","SimpleDodgeGame#SwapCells","SimpleDodgeGame#GetInitialOrbType","SimpleDodgeGame#GetRandomOrbType","SimpleDodgeGame#GetOrbColorCount","SimpleDodgeGame#GetOrbColor","SimpleDodgeGame#CreateRuntimeVisuals","SimpleDodgeGame#ApplyBackgroundVisuals","SimpleDodgeGame#ApplyBoardFrameVisuals","SimpleDodgeGame#ApplyOrbVisuals","SimpleDodgeGame#GetOrbSpriteForType","SimpleDodgeGame#GetBoardSprite","SimpleDodgeGame#GetAnyConfiguredOrbSprite","SimpleDodgeGame#PrepareSpriteForRuntime","SimpleDodgeGame#WarnIfMissingSpriteSetup","SimpleDodgeGame#CreateRuntimeHud","SimpleDodgeGame#UpdateHudTexts","SimpleDodgeGame#SetResultVisible","SimpleDodgeGame#UpdateLayout","SimpleDodgeGame#RepositionBoardOrbs","SimpleDodgeGame#UpdateBackgroundTransform","SimpleDodgeGame#UpdateBoardFrameTransform","SimpleDodgeGame#CellToWorld","SimpleDodgeGame#TryWorldToCell","SimpleDodgeGame#IsInsideBoard","SimpleDodgeGame#TryGetPointerDownWorld","SimpleDodgeGame#TryGetPointerHeldWorld","SimpleDodgeGame#PointerPressedThisFrame","SimpleDodgeGame#PointerReleasedThisFrame","SimpleDodgeGame#ScreenToWorld","SimpleDodgeGame#ValidateConfig","SimpleDodgeGame#EnsureMatchBuffers","SimpleDodgeGame#GetClearDelayWait","SimpleDodgeGame#ApplyRendererMaterial","SimpleDodgeGame#GetGameplayZ","SimpleDodgeGame#GetSharedSpriteMaterial","SimpleDodgeGame#ShouldUseCustomMaterialForCurrentPlatform","SimpleDodgeGame.Orb#ctor","SimpleDodgeGame.OrbMove#getDefaultValue","SimpleDodgeGame.OrbMove#init","SimpleDodgeGame.OrbMove#$ctor1","SimpleDodgeGame.OrbMove#ctor","SimpleDodgeGame.OrbMove#getHashCode","SimpleDodgeGame.OrbMove#equals","SimpleDodgeGame.OrbMove#$clone"]' ) ); }
 /**
- * @version 1.0.9533.33433
+ * @version 1.0.9537.29737
  * @copyright anton
  * @compiler Bridge.NET 17.9.42-luna
  */
 Bridge.assembly("UnityScriptsCompiler", function ($asm, globals) {
     "use strict";
-
-    /*DodgeVisualTheme start.*/
-    Bridge.define("DodgeVisualTheme", {
-        inherits: [UnityEngine.ScriptableObject],
-        fields: {
-            overrideMaterial: null,
-            playerSprite: null,
-            playerColor: null,
-            playerSizeMultiplier: 0,
-            obstacleSprite: null,
-            obstacleVariants: null,
-            randomizeObstacleVariant: false,
-            obstacleColor: null,
-            obstacleSizeMultiplier: 0,
-            backgroundSprite: null,
-            backgroundColor: null,
-            preserveBackgroundAspect: false,
-            backgroundScalePadding: 0,
-            backgroundSortingOrder: 0
-        },
-        props: {
-            OverrideMaterial: {
-                get: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#OverrideMaterial#get", this ); }
-
-                    return this.overrideMaterial;
-                }
-            },
-            PlayerSprite: {
-                get: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#PlayerSprite#get", this ); }
-
-                    return this.playerSprite;
-                }
-            },
-            PlayerColor: {
-                get: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#PlayerColor#get", this ); }
-
-                    return this.playerColor.$clone();
-                }
-            },
-            PlayerSizeMultiplier: {
-                get: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#PlayerSizeMultiplier#get", this ); }
-
-                    return this.playerSizeMultiplier;
-                }
-            },
-            ObstacleColor: {
-                get: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#ObstacleColor#get", this ); }
-
-                    return this.obstacleColor.$clone();
-                }
-            },
-            ObstacleSizeMultiplier: {
-                get: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#ObstacleSizeMultiplier#get", this ); }
-
-                    return this.obstacleSizeMultiplier;
-                }
-            },
-            BackgroundSprite: {
-                get: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#BackgroundSprite#get", this ); }
-
-                    return this.backgroundSprite;
-                }
-            },
-            BackgroundColor: {
-                get: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#BackgroundColor#get", this ); }
-
-                    return this.backgroundColor.$clone();
-                }
-            },
-            PreserveBackgroundAspect: {
-                get: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#PreserveBackgroundAspect#get", this ); }
-
-                    return this.preserveBackgroundAspect;
-                }
-            },
-            BackgroundScalePadding: {
-                get: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#BackgroundScalePadding#get", this ); }
-
-                    return this.backgroundScalePadding;
-                }
-            },
-            BackgroundSortingOrder: {
-                get: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#BackgroundSortingOrder#get", this ); }
-
-                    return this.backgroundSortingOrder;
-                }
-            }
-        },
-        ctors: {
-            init: function () {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#init", this ); }
-
-                this.playerColor = new UnityEngine.Color();
-                this.obstacleColor = new UnityEngine.Color();
-                this.backgroundColor = new UnityEngine.Color();
-                this.playerColor = new pc.Color( 0.2, 0.85, 1.0, 1.0 );
-                this.playerSizeMultiplier = 1.0;
-                this.obstacleVariants = new (System.Collections.Generic.List$1(UnityEngine.Sprite)).ctor();
-                this.randomizeObstacleVariant = true;
-                this.obstacleColor = new pc.Color( 1.0, 0.4, 0.2, 1.0 );
-                this.obstacleSizeMultiplier = 1.0;
-                this.backgroundColor = new pc.Color( 0.192156866, 0.3019608, 0.4745098, 1.0 );
-                this.preserveBackgroundAspect = true;
-                this.backgroundScalePadding = 1.02;
-                this.backgroundSortingOrder = -20;
-            }
-        },
-        methods: {
-            /*DodgeVisualTheme.GetObstacleSprite start.*/
-            GetObstacleSprite: function (sequenceIndex) {
-if ( TRACE ) { TRACE( "DodgeVisualTheme#GetObstacleSprite", this ); }
-
-                if (this.obstacleVariants != null && this.obstacleVariants.Count > 0) {
-                    if (this.randomizeObstacleVariant) {
-                        return this.obstacleVariants.getItem(UnityEngine.Random.Range(0, this.obstacleVariants.Count));
-                    }
-
-                    var clampedIndex = Math.abs(sequenceIndex) % this.obstacleVariants.Count;
-                    return this.obstacleVariants.getItem(clampedIndex);
-                }
-
-                return this.obstacleSprite;
-            },
-            /*DodgeVisualTheme.GetObstacleSprite end.*/
-
-
-        }
-    });
-    /*DodgeVisualTheme end.*/
 
     /*IAmAnEmptyScriptJustToMakeCodelessProjectsCompileProperty start.*/
     Bridge.define("IAmAnEmptyScriptJustToMakeCodelessProjectsCompileProperty", {
@@ -159,7 +19,7 @@ if ( TRACE ) { TRACE( "DodgeVisualTheme#GetObstacleSprite", this ); }
         fields: {
             iosStoreUrl: null,
             androidStoreUrl: null,
-            defaultLevel: 0,
+            gameplayVariant: 0,
             gameEnded: false
         },
         ctors: {
@@ -168,7 +28,7 @@ if ( TRACE ) { TRACE( "PlayworksComplianceHooks#init", this ); }
 
                 this.iosStoreUrl = "";
                 this.androidStoreUrl = "";
-                this.defaultLevel = 1;
+                this.gameplayVariant = 0;
             }
         },
         methods: {
@@ -184,6 +44,11 @@ if ( TRACE ) { TRACE( "PlayworksComplianceHooks#Start", this ); }
                         exception = System.Exception.create(exception);
                         UnityEngine.Debug.LogError$2("Failed to add SimpleDodgeGame: " + (exception.Message || ""));
                     }
+                }
+
+                var gameplay = this.GetComponent(SimpleDodgeGame);
+                if (UnityEngine.MonoBehaviour.op_Inequality(gameplay, null)) {
+                    gameplay.ApplyPlaygroundVariant(this.gameplayVariant);
                 }
 
                 // LP3007 custom event
@@ -232,31 +97,68 @@ if ( TRACE ) { TRACE( "PlayworksComplianceHooks#TriggerGameEnded", this ); }
         inherits: [UnityEngine.MonoBehaviour],
         statics: {
             fields: {
-                gameplaySprite: null,
-                gameplayTexture: null
+                NeighborOffsets: null,
+                generatedFallbackSprite: null,
+                generatedFallbackTexture: null
+            },
+            ctors: {
+                init: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#init", this ); }
+
+                    this.NeighborOffsets = System.Array.init([
+                        new UnityEngine.Vector2Int.$ctor1(1, 0), 
+                        new UnityEngine.Vector2Int.$ctor1(-1, 0), 
+                        new UnityEngine.Vector2Int.$ctor1(0, 1), 
+                        new UnityEngine.Vector2Int.$ctor1(0, -1)
+                    ], UnityEngine.Vector2Int);
+                }
             },
             methods: {
-                /*SimpleDodgeGame.GetGameplaySprite:static start.*/
-                GetGameplaySprite: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetGameplaySprite", this ); }
+                /*SimpleDodgeGame.ClearBoolGrid:static start.*/
+                ClearBoolGrid: function (grid) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#ClearBoolGrid", this ); }
 
-                    if (SimpleDodgeGame.gameplaySprite != null) {
-                        return SimpleDodgeGame.gameplaySprite;
+                    if (grid == null) {
+                        return;
                     }
 
-                    if (SimpleDodgeGame.gameplayTexture == null) {
-                        SimpleDodgeGame.gameplayTexture = new UnityEngine.Texture2D.$ctor1(2, 2);
-                        SimpleDodgeGame.gameplayTexture.SetPixel(0, 0, new pc.Color( 1, 1, 1, 1 ));
-                        SimpleDodgeGame.gameplayTexture.SetPixel(1, 0, new pc.Color( 1, 1, 1, 1 ));
-                        SimpleDodgeGame.gameplayTexture.SetPixel(0, 1, new pc.Color( 1, 1, 1, 1 ));
-                        SimpleDodgeGame.gameplayTexture.SetPixel(1, 1, new pc.Color( 1, 1, 1, 1 ));
-                        SimpleDodgeGame.gameplayTexture.Apply();
+                    var width = System.Array.getLength(grid, 0);
+                    var height = System.Array.getLength(grid, 1);
+                    for (var x = 0; x < width; x = (x + 1) | 0) {
+                        for (var y = 0; y < height; y = (y + 1) | 0) {
+                            grid.set([x, y], false);
+                        }
                     }
-
-                    SimpleDodgeGame.gameplaySprite = UnityEngine.Sprite.Create$1(SimpleDodgeGame.gameplayTexture, new UnityEngine.Rect.$ctor1(0.0, 0.0, SimpleDodgeGame.gameplayTexture.width, SimpleDodgeGame.gameplayTexture.height), new pc.Vec2( 0.5, 0.5 ), SimpleDodgeGame.gameplayTexture.width);
-                    return SimpleDodgeGame.gameplaySprite;
                 },
-                /*SimpleDodgeGame.GetGameplaySprite:static end.*/
+                /*SimpleDodgeGame.ClearBoolGrid:static end.*/
+
+                /*SimpleDodgeGame.GetGeneratedFallbackSprite:static start.*/
+                GetGeneratedFallbackSprite: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#GetGeneratedFallbackSprite", this ); }
+
+                    if (SimpleDodgeGame.generatedFallbackSprite != null) {
+                        return SimpleDodgeGame.generatedFallbackSprite;
+                    }
+
+                    try {
+                        if (SimpleDodgeGame.generatedFallbackTexture == null) {
+                            SimpleDodgeGame.generatedFallbackTexture = new UnityEngine.Texture2D.$ctor11(2, 2, UnityEngine.TextureFormat.RGBA32, false);
+                            SimpleDodgeGame.generatedFallbackTexture.SetPixel(0, 0, new pc.Color( 1, 1, 1, 1 ));
+                            SimpleDodgeGame.generatedFallbackTexture.SetPixel(1, 0, new pc.Color( 1, 1, 1, 1 ));
+                            SimpleDodgeGame.generatedFallbackTexture.SetPixel(0, 1, new pc.Color( 1, 1, 1, 1 ));
+                            SimpleDodgeGame.generatedFallbackTexture.SetPixel(1, 1, new pc.Color( 1, 1, 1, 1 ));
+                            SimpleDodgeGame.generatedFallbackTexture.Apply$1(false, true);
+                        }
+
+                        SimpleDodgeGame.generatedFallbackSprite = UnityEngine.Sprite.Create$1(SimpleDodgeGame.generatedFallbackTexture, new UnityEngine.Rect.$ctor1(0.0, 0.0, SimpleDodgeGame.generatedFallbackTexture.width, SimpleDodgeGame.generatedFallbackTexture.height), new pc.Vec2( 0.5, 0.5 ), SimpleDodgeGame.generatedFallbackTexture.width);
+                    } catch ($e1) {
+                        $e1 = System.Exception.create($e1);
+                        return null;
+                    }
+
+                    return SimpleDodgeGame.generatedFallbackSprite;
+                },
+                /*SimpleDodgeGame.GetGeneratedFallbackSprite:static end.*/
 
                 /*SimpleDodgeGame.SetTransformDiameter:static start.*/
                 SetTransformDiameter: function (targetTransform, sprite, diameter) {
@@ -269,6 +171,17 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#SetTransformDiameter", this ); }
                     targetTransform.localScale = new pc.Vec3( scaleX, scaleY, 1.0 );
                 },
                 /*SimpleDodgeGame.SetTransformDiameter:static end.*/
+
+                /*SimpleDodgeGame.SetTransformSize:static start.*/
+                SetTransformSize: function (targetTransform, sprite, width, height) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#SetTransformSize", this ); }
+
+                    var spriteSize = SimpleDodgeGame.GetSpriteWorldSize(sprite);
+                    var scaleX = UnityEngine.Mathf.Max(0.01, width) / spriteSize.x;
+                    var scaleY = UnityEngine.Mathf.Max(0.01, height) / spriteSize.y;
+                    targetTransform.localScale = new pc.Vec3( scaleX, scaleY, 1.0 );
+                },
+                /*SimpleDodgeGame.SetTransformSize:static end.*/
 
                 /*SimpleDodgeGame.GetSpriteWorldSize:static start.*/
                 GetSpriteWorldSize: function (sprite) {
@@ -287,88 +200,100 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetSpriteWorldSize", this ); }
                 },
                 /*SimpleDodgeGame.GetSpriteWorldSize:static end.*/
 
-                /*SimpleDodgeGame.HasTouchBegan:static start.*/
-                HasTouchBegan: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#HasTouchBegan", this ); }
-
-                    for (var i = 0; i < UnityEngine.Input.touchCount; i = (i + 1) | 0) {
-                        if (UnityEngine.Input.GetTouch(i).phase === UnityEngine.TouchPhase.Began) {
-                            return true;
-                        }
-                    }
-
-                    return false;
-                },
-                /*SimpleDodgeGame.HasTouchBegan:static end.*/
-
 
             }
         },
         fields: {
-            playerRadius: 0,
-            playerMoveSpeed: 0,
-            playerBottomOffset: 0,
-            obstacleMinRadius: 0,
-            obstacleMaxRadius: 0,
-            obstacleMinSpeed: 0,
-            obstacleMaxSpeed: 0,
-            spawnIntervalStart: 0,
-            spawnIntervalEnd: 0,
-            difficultyRampSeconds: 0,
-            visualTheme: null,
-            defaultPlayerColor: null,
-            defaultObstacleColor: null,
-            defaultBackgroundColor: null,
-            sidePadding: 0,
-            despawnPadding: 0,
+            columns: 0,
+            rows: 0,
+            boardSidePadding: 0,
+            boardBottomPadding: 0,
+            boardTopPadding: 0,
+            orbScale: 0,
+            clearDelaySeconds: 0,
+            fallDurationSeconds: 0,
+            roundDurationSeconds: 0,
+            baseScorePerOrb: 0,
+            backgroundColor: null,
+            boardColor: null,
+            boardOutlineColor: null,
+            orbColors: null,
+            orbSprites: null,
             spriteMaterial: null,
             useCustomMaterialInEditor: false,
             useCustomMaterialInWebGl: false,
             fallbackToDefaultIfShaderUnsupported: false,
-            obstacles: null,
             gameplayCamera: null,
             complianceHooks: null,
-            playerTransform: null,
-            playerRenderer: null,
+            boardRoot: null,
             backgroundTransform: null,
             backgroundRenderer: null,
-            leftBound: 0,
-            rightBound: 0,
-            topBound: 0,
-            bottomBound: 0,
+            boardFrameTransform: null,
+            boardFrameRenderer: null,
+            boardOutlineTransform: null,
+            boardOutlineRenderer: null,
+            board: null,
             gameplayZ: 0,
             pointerDepth: 0,
-            survivalTime: 0,
-            spawnTimer: 0,
-            gameOver: false,
-            obstacleSpawnCount: 0
+            cellSize: 0,
+            boardBottomLeft: null,
+            boardWorldWidth: 0,
+            boardWorldHeight: 0,
+            layoutInitialized: false,
+            isDragging: false,
+            isResolving: false,
+            roundEnded: false,
+            hasReportedGameEnded: false,
+            heldCell: null,
+            timeRemaining: 0,
+            score: 0,
+            lastMoveCombos: 0,
+            hasLoggedMissingSpriteConfig: false,
+            moveBuffer: null,
+            matchedCellsBuffer: null,
+            floodFillStackBuffer: null,
+            markedCellsBuffer: null,
+            visitedCellsBuffer: null,
+            cachedClearDelaySeconds: 0,
+            cachedClearDelayWait: null
         },
         ctors: {
             init: function () {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#init", this ); }
 
-                this.defaultPlayerColor = new UnityEngine.Color();
-                this.defaultObstacleColor = new UnityEngine.Color();
-                this.defaultBackgroundColor = new UnityEngine.Color();
-                this.playerRadius = 0.35;
-                this.playerMoveSpeed = 9.0;
-                this.playerBottomOffset = 1.1;
-                this.obstacleMinRadius = 0.2;
-                this.obstacleMaxRadius = 0.5;
-                this.obstacleMinSpeed = 3.0;
-                this.obstacleMaxSpeed = 6.0;
-                this.spawnIntervalStart = 0.9;
-                this.spawnIntervalEnd = 0.25;
-                this.difficultyRampSeconds = 40.0;
-                this.defaultPlayerColor = new pc.Color( 0.2, 0.85, 1.0, 1.0 );
-                this.defaultObstacleColor = new pc.Color( 1.0, 0.4, 0.2, 1.0 );
-                this.defaultBackgroundColor = new pc.Color( 0.192156866, 0.3019608, 0.4745098, 1.0 );
-                this.sidePadding = 0.5;
-                this.despawnPadding = 1.0;
+                this.backgroundColor = new UnityEngine.Color();
+                this.boardColor = new UnityEngine.Color();
+                this.boardOutlineColor = new UnityEngine.Color();
+                this.boardBottomLeft = new UnityEngine.Vector2();
+                this.heldCell = new UnityEngine.Vector2Int();
+                this.columns = 6;
+                this.rows = 5;
+                this.boardSidePadding = 0.45;
+                this.boardBottomPadding = 0.8;
+                this.boardTopPadding = 2.15;
+                this.orbScale = 0.9;
+                this.clearDelaySeconds = 0.08;
+                this.fallDurationSeconds = 0.12;
+                this.roundDurationSeconds = 35.0;
+                this.baseScorePerOrb = 12;
+                this.backgroundColor = new pc.Color( 0.12, 0.16, 0.25, 1.0 );
+                this.boardColor = new pc.Color( 0.05, 0.07, 0.12, 0.85 );
+                this.boardOutlineColor = new pc.Color( 0.72, 0.78, 0.9, 0.4 );
+                this.orbColors = System.Array.init([
+                    new pc.Color( 0.9, 0.33, 0.3, 1.0 ), 
+                    new pc.Color( 0.25, 0.66, 0.95, 1.0 ), 
+                    new pc.Color( 0.42, 0.86, 0.42, 1.0 ), 
+                    new pc.Color( 0.93, 0.82, 0.31, 1.0 ), 
+                    new pc.Color( 0.7, 0.48, 0.96, 1.0 ), 
+                    new pc.Color( 0.96, 0.57, 0.81, 1.0 )
+                ], UnityEngine.Color);
                 this.useCustomMaterialInEditor = true;
                 this.useCustomMaterialInWebGl = false;
                 this.fallbackToDefaultIfShaderUnsupported = true;
-                this.obstacles = new (System.Collections.Generic.List$1(SimpleDodgeGame.Obstacle)).ctor();
+                this.moveBuffer = new (System.Collections.Generic.List$1(SimpleDodgeGame.OrbMove)).$ctor2(64);
+                this.matchedCellsBuffer = new (System.Collections.Generic.List$1(UnityEngine.Vector2Int)).$ctor2(64);
+                this.floodFillStackBuffer = new (System.Collections.Generic.List$1(UnityEngine.Vector2Int)).$ctor2(64);
+                this.cachedClearDelaySeconds = -1.0;
             }
         },
         methods: {
@@ -387,13 +312,21 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#Awake", this ); }
                     return;
                 }
 
+                if (!this.gameplayCamera.orthographic) {
+                    this.gameplayCamera.orthographic = true;
+                }
+
                 this.complianceHooks = this.GetComponent(PlayworksComplianceHooks);
+                this.ValidateConfig();
+                this.WarnIfMissingSpriteSetup();
+
                 this.gameplayZ = this.GetGameplayZ();
                 this.pointerDepth = Math.abs(this.gameplayZ - this.gameplayCamera.transform.position.z);
-                this.UpdateBounds();
-                this.CreateBackground();
-                this.CreatePlayer();
-                this.ResetRun();
+
+                this.CreateRuntimeVisuals();
+                this.CreateRuntimeHud();
+                this.UpdateLayout(true);
+                this.ResetRound();
             },
             /*SimpleDodgeGame.Awake end.*/
 
@@ -401,20 +334,34 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#Awake", this ); }
             Update: function () {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#Update", this ); }
 
-                this.UpdateBounds();
-                this.UpdateBackgroundTransform();
-
-                if (!this.gameOver) {
-                    this.survivalTime += UnityEngine.Time.deltaTime;
-                    this.HandlePlayerMovement();
-                    this.HandleSpawning();
-                    this.UpdateObstaclesAndCollision();
+                if (UnityEngine.Component.op_Equality(this.gameplayCamera, null)) {
                     return;
                 }
 
-                if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.R) || UnityEngine.Input.GetMouseButtonDown(0) || SimpleDodgeGame.HasTouchBegan()) {
-                    this.ResetRun();
+                this.UpdateLayout(false);
+
+                if (this.roundEnded) {
+                    if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.R) || this.PointerPressedThisFrame()) {
+                        this.ResetRound();
+                    }
+
+                    this.UpdateHudTexts();
+                    return;
                 }
+
+                this.timeRemaining -= UnityEngine.Time.deltaTime;
+                if (this.timeRemaining <= 0.0) {
+                    this.timeRemaining = 0.0;
+                    this.EndRound();
+                    this.UpdateHudTexts();
+                    return;
+                }
+
+                if (!this.isResolving) {
+                    this.HandleDragInput();
+                }
+
+                this.UpdateHudTexts();
             },
             /*SimpleDodgeGame.Update end.*/
 
@@ -422,21 +369,25 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#Update", this ); }
             OnDestroy: function () {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#OnDestroy", this ); }
 
-                this.ClearObstacles();
+                this.ClearBoard();
 
-                if (UnityEngine.Component.op_Inequality(this.playerTransform, null)) {
-                    UnityEngine.MonoBehaviour.Destroy(this.playerTransform.gameObject);
+                if (UnityEngine.Component.op_Inequality(this.boardRoot, null)) {
+                    UnityEngine.MonoBehaviour.Destroy(this.boardRoot.gameObject);
                 }
 
                 if (UnityEngine.Component.op_Inequality(this.backgroundTransform, null)) {
                     UnityEngine.MonoBehaviour.Destroy(this.backgroundTransform.gameObject);
                 }
+
             },
             /*SimpleDodgeGame.OnDestroy end.*/
 
             /*SimpleDodgeGame.OnValidate start.*/
             OnValidate: function () {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#OnValidate", this ); }
+
+                this.ValidateConfig();
+                this.WarnIfMissingSpriteSetup();
 
                 if (!UnityEngine.Application.isPlaying) {
                     return;
@@ -446,217 +397,843 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#OnValidate", this ); }
             },
             /*SimpleDodgeGame.OnValidate end.*/
 
-            /*SimpleDodgeGame.HandlePlayerMovement start.*/
-            HandlePlayerMovement: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#HandlePlayerMovement", this ); }
+            /*SimpleDodgeGame.RefreshVisualsNow start.*/
+            RefreshVisualsNow: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#RefreshVisualsNow", this ); }
 
-                var position = this.playerTransform.position.$clone();
-                var playerCollisionRadius = this.GetPlayerCollisionRadius();
-                var targetX = position.x;
-                var pointerX = { };
+                this.ValidateConfig();
+                this.ApplyBackgroundVisuals();
+                this.ApplyBoardFrameVisuals();
+                this.UpdateHudTexts();
 
-                if (this.TryGetPointerWorldX(pointerX)) {
-                    targetX = pointerX.v;
-                    position.x = pc.math.lerp(position.x, targetX, 20.0 * UnityEngine.Time.deltaTime);
-                } else {
-                    var axis = UnityEngine.Input.GetAxisRaw("Horizontal");
-                    position.x += axis * this.playerMoveSpeed * UnityEngine.Time.deltaTime;
-                }
-
-                position.x = Math.max(this.leftBound + playerCollisionRadius, Math.min(position.x, this.rightBound - playerCollisionRadius));
-                position.y = this.bottomBound + this.playerBottomOffset;
-                position.z = this.gameplayZ;
-                this.playerTransform.position = position.$clone();
-            },
-            /*SimpleDodgeGame.HandlePlayerMovement end.*/
-
-            /*SimpleDodgeGame.HandleSpawning start.*/
-            HandleSpawning: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#HandleSpawning", this ); }
-
-                this.spawnTimer -= UnityEngine.Time.deltaTime;
-                if (this.spawnTimer > 0.0) {
+                if (this.board == null) {
                     return;
                 }
 
-                this.SpawnObstacle();
+                for (var x = 0; x < this.columns; x = (x + 1) | 0) {
+                    for (var y = 0; y < this.rows; y = (y + 1) | 0) {
+                        var orb = this.board.get([x, y]);
+                        if (orb == null || UnityEngine.GameObject.op_Equality(orb.gameObject, null)) {
+                            continue;
+                        }
 
-                var t = Math.max(0, Math.min(1, this.survivalTime / this.difficultyRampSeconds));
-                this.spawnTimer = pc.math.lerp(this.spawnIntervalStart, this.spawnIntervalEnd, t);
+                        this.ApplyOrbVisuals(orb);
+                        orb.transform.position = this.CellToWorld(x, y);
+                    }
+                }
             },
-            /*SimpleDodgeGame.HandleSpawning end.*/
+            /*SimpleDodgeGame.RefreshVisualsNow end.*/
 
-            /*SimpleDodgeGame.SpawnObstacle start.*/
-            SpawnObstacle: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#SpawnObstacle", this ); }
+            /*SimpleDodgeGame.ApplyPlaygroundVariant start.*/
+            ApplyPlaygroundVariant: function (variantIndex) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyPlaygroundVariant", this ); }
 
-                var baseRadius = UnityEngine.Random.Range$1(this.obstacleMinRadius, this.obstacleMaxRadius);
-                var radius = baseRadius * this.GetObstacleSizeMultiplier();
-                var x = UnityEngine.Random.Range$1(this.leftBound + radius, this.rightBound - radius);
-                var y = this.topBound + radius + 0.4;
-                var speed = UnityEngine.Random.Range$1(this.obstacleMinSpeed, this.obstacleMaxSpeed) + (this.survivalTime * 0.03);
+                var normalizedVariant = Math.abs(variantIndex) % 3;
+                if (normalizedVariant === 1) {
+                    this.columns = 6;
+                    this.rows = 5;
+                    this.boardSidePadding = 0.45;
+                    this.boardBottomPadding = 0.8;
+                    this.boardTopPadding = 2.15;
+                    this.orbScale = 0.88;
+                    this.clearDelaySeconds = 0.05;
+                    this.fallDurationSeconds = 0.08;
+                    this.roundDurationSeconds = 28.0;
+                    this.baseScorePerOrb = 16;
+                } else if (normalizedVariant === 2) {
+                    this.columns = 5;
+                    this.rows = 5;
+                    this.boardSidePadding = 0.55;
+                    this.boardBottomPadding = 0.8;
+                    this.boardTopPadding = 2.2;
+                    this.orbScale = 0.92;
+                    this.clearDelaySeconds = 0.12;
+                    this.fallDurationSeconds = 0.16;
+                    this.roundDurationSeconds = 45.0;
+                    this.baseScorePerOrb = 10;
+                } else {
+                    this.columns = 6;
+                    this.rows = 5;
+                    this.boardSidePadding = 0.45;
+                    this.boardBottomPadding = 0.8;
+                    this.boardTopPadding = 2.15;
+                    this.orbScale = 0.9;
+                    this.clearDelaySeconds = 0.08;
+                    this.fallDurationSeconds = 0.12;
+                    this.roundDurationSeconds = 35.0;
+                    this.baseScorePerOrb = 12;
+                }
 
-                var obstacleObject = new UnityEngine.GameObject.$ctor2("Obstacle");
-                obstacleObject.transform.position = new pc.Vec3( x, y, this.gameplayZ );
+                this.ValidateConfig();
 
-                var renderer = obstacleObject.AddComponent(UnityEngine.SpriteRenderer);
-                var obstacle = new SimpleDodgeGame.Obstacle(obstacleObject, renderer, baseRadius, radius, speed);
-                this.ApplyObstacleVisuals(obstacle, this.obstacleSpawnCount);
-                this.obstacles.add(obstacle);
-                this.obstacleSpawnCount = (this.obstacleSpawnCount + 1) | 0;
+                if (!UnityEngine.Application.isPlaying) {
+                    return;
+                }
+
+                this.UpdateLayout(true);
+                this.ResetRound();
             },
-            /*SimpleDodgeGame.SpawnObstacle end.*/
+            /*SimpleDodgeGame.ApplyPlaygroundVariant end.*/
 
-            /*SimpleDodgeGame.UpdateObstaclesAndCollision start.*/
-            UpdateObstaclesAndCollision: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateObstaclesAndCollision", this ); }
+            /*SimpleDodgeGame.RefreshVisualThemeFromContextMenu start.*/
+            RefreshVisualThemeFromContextMenu: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#RefreshVisualThemeFromContextMenu", this ); }
 
-                var playerPosition = this.playerTransform.position.$clone();
-                var playerCollisionRadius = this.GetPlayerCollisionRadius();
+                this.RefreshVisualsNow();
+            },
+            /*SimpleDodgeGame.RefreshVisualThemeFromContextMenu end.*/
 
-                for (var i = (this.obstacles.Count - 1) | 0; i >= 0; i = (i - 1) | 0) {
-                    var obstacle = this.obstacles.getItem(i);
-                    var position = obstacle.transform.position.$clone();
-                    position.y -= obstacle.speed * UnityEngine.Time.deltaTime;
-                    obstacle.transform.position = position.$clone();
+            /*SimpleDodgeGame.ResetRound start.*/
+            ResetRound: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#ResetRound", this ); }
 
-                    if (position.y < this.bottomBound - this.despawnPadding - obstacle.radius) {
-                        UnityEngine.MonoBehaviour.Destroy(obstacle.gameObject);
-                        this.obstacles.removeAt(i);
+                this.StopAllCoroutines();
+                this.isDragging = false;
+                this.isResolving = false;
+                this.roundEnded = false;
+                this.hasReportedGameEnded = false;
+
+                this.score = 0;
+                this.lastMoveCombos = 0;
+                this.timeRemaining = UnityEngine.Mathf.Max(5.0, this.roundDurationSeconds);
+
+                this.ClearBoard();
+                this.BuildInitialBoard();
+                this.SetResultVisible(false);
+                this.UpdateHudTexts();
+            },
+            /*SimpleDodgeGame.ResetRound end.*/
+
+            /*SimpleDodgeGame.EndRound start.*/
+            EndRound: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#EndRound", this ); }
+
+                if (this.roundEnded) {
+                    return;
+                }
+
+                this.roundEnded = true;
+                this.isDragging = false;
+                this.isResolving = false;
+                this.StopAllCoroutines();
+
+                if (!this.hasReportedGameEnded && UnityEngine.MonoBehaviour.op_Inequality(this.complianceHooks, null)) {
+                    this.hasReportedGameEnded = true;
+                    this.complianceHooks.TriggerGameEnded();
+                }
+
+                this.SetResultVisible(true);
+                this.UpdateHudTexts();
+            },
+            /*SimpleDodgeGame.EndRound end.*/
+
+            /*SimpleDodgeGame.HandleDragInput start.*/
+            HandleDragInput: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#HandleDragInput", this ); }
+
+                if (!this.isDragging) {
+                    var worldPosition = { v : new UnityEngine.Vector3() };
+                    var pressedCell = { v : new UnityEngine.Vector2Int() };
+                    if (this.TryGetPointerDownWorld(worldPosition) && this.TryWorldToCell(worldPosition.v, pressedCell)) {
+                        this.heldCell = pressedCell.v.$clone();
+                        this.isDragging = true;
+                    }
+
+                    return;
+                }
+                var draggedWorld = { v : new UnityEngine.Vector3() };
+                var targetCell = { v : new UnityEngine.Vector2Int() };
+
+                if (this.TryGetPointerHeldWorld(draggedWorld) && this.TryWorldToCell(draggedWorld.v, targetCell)) {
+                    this.DragHeldOrbToward(targetCell.v);
+                }
+
+                if (this.PointerReleasedThisFrame()) {
+                    this.isDragging = false;
+                    this.StartCoroutine$1(this.ResolveBoardRoutine());
+                }
+            },
+            /*SimpleDodgeGame.HandleDragInput end.*/
+
+            /*SimpleDodgeGame.DragHeldOrbToward start.*/
+            DragHeldOrbToward: function (targetCell) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#DragHeldOrbToward", this ); }
+
+                if (UnityEngine.Vector2Int.op_Equality(targetCell.$clone(), this.heldCell.$clone())) {
+                    return;
+                }
+
+                var guard = 0;
+                while (UnityEngine.Vector2Int.op_Inequality(this.heldCell.$clone(), targetCell.$clone()) && guard < ((this.columns + this.rows) | 0)) {
+                    var delta = UnityEngine.Vector2Int.op_Subtraction(targetCell.$clone(), this.heldCell.$clone());
+                    var step = new UnityEngine.Vector2Int();
+
+                    if (Math.abs(delta.x) >= Math.abs(delta.y)) {
+                        step = new UnityEngine.Vector2Int.$ctor1(delta.x > 0 ? 1 : -1, 0);
+                    } else {
+                        step = new UnityEngine.Vector2Int.$ctor1(0, delta.y > 0 ? 1 : -1);
+                    }
+
+                    var next = UnityEngine.Vector2Int.op_Addition(this.heldCell.$clone(), step.$clone());
+                    if (!this.IsInsideBoard(next)) {
+                        break;
+                    }
+
+                    this.SwapCells(this.heldCell, next);
+                    this.heldCell = next.$clone();
+                    guard = (guard + 1) | 0;
+                }
+            },
+            /*SimpleDodgeGame.DragHeldOrbToward end.*/
+
+            /*SimpleDodgeGame.ResolveBoardRoutine start.*/
+            ResolveBoardRoutine: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#ResolveBoardRoutine", this ); }
+
+                var $step = 0,
+                    $jumpFromFinally,
+                    $returnValue,
+                    totalMoveCombos,
+                    safety,
+                    matchedCells,
+                    combos,
+                    removed,
+                    $async_e;
+
+                var $enumerator = new Bridge.GeneratorEnumerator(Bridge.fn.bind(this, function () {
+                    try {
+                        for (;;) {
+                            switch ($step) {
+                                case 0: {
+                                    if (this.isResolving || this.roundEnded) {
+                                            $step = 1;
+                                            continue;
+                                        } 
+                                        $step = 2;
+                                        continue;
+                                }
+                                case 1: {
+                                    return false;
+                                }
+                                case 2: {
+                                    this.isResolving = true;
+                                        totalMoveCombos = 0;
+                                        safety = 0;
+                                    $step = 3;
+                                    continue;
+                                }
+                                case 3: {
+                                    if ( safety < 24 ) {
+                                            $step = 4;
+                                            continue;
+                                        } 
+                                        $step = 10;
+                                        continue;
+                                }
+                                case 4: {
+                                    matchedCells = { };
+                                        combos = this.CollectMatches(matchedCells);
+                                        if (combos <= 0 || matchedCells.v.Count === 0) {
+                                            $step = 10;
+                                            continue;
+                                        }
+
+                                        totalMoveCombos = (totalMoveCombos + combos) | 0;
+                                        removed = matchedCells.v.Count;
+                                        this.score = (this.score + (this.CalculateScoreGain(removed, combos, totalMoveCombos))) | 0;
+
+                                        this.RemoveMatchedCells(matchedCells.v);
+                                        if (this.clearDelaySeconds > 0.0) {
+                                            $step = 5;
+                                            continue;
+                                        } 
+                                        $step = 7;
+                                        continue;
+                                }
+                                case 5: {
+                                    $enumerator.current = this.GetClearDelayWait();
+                                        $step = 6;
+                                        return true;
+                                }
+                                case 6: {
+                                    $step = 7;
+                                    continue;
+                                }
+                                case 7: {
+                                    $enumerator.current = this.CollapseColumns();
+                                        $step = 8;
+                                        return true;
+                                }
+                                case 8: {
+                                    $enumerator.current = this.FillEmptyCells();
+                                        $step = 9;
+                                        return true;
+                                }
+                                case 9: {
+                                    safety = (safety + 1) | 0;
+
+                                        $step = 3;
+                                        continue;
+                                }
+                                case 10: {
+                                    this.lastMoveCombos = totalMoveCombos;
+                                        this.isResolving = false;
+
+                                }
+                                default: {
+                                    return false;
+                                }
+                            }
+                        }
+                    } catch($async_e1) {
+                        $async_e = System.Exception.create($async_e1);
+                        throw $async_e;
+                    }
+                }));
+                return $enumerator;
+            },
+            /*SimpleDodgeGame.ResolveBoardRoutine end.*/
+
+            /*SimpleDodgeGame.RemoveMatchedCells start.*/
+            RemoveMatchedCells: function (matchedCells) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#RemoveMatchedCells", this ); }
+
+                for (var i = 0; i < matchedCells.Count; i = (i + 1) | 0) {
+                    var cell = matchedCells.getItem(i).$clone();
+                    var orb = this.board.get([cell.x, cell.y]);
+                    if (orb == null) {
                         continue;
                     }
 
-                    var totalRadius = playerCollisionRadius + obstacle.radius;
-                    if ((position.$clone().sub( playerPosition )).lengthSq() <= totalRadius * totalRadius) {
-                        this.HandleLose();
-                        return;
+                    this.board.set([cell.x, cell.y], null);
+                    UnityEngine.MonoBehaviour.Destroy(orb.gameObject);
+                }
+            },
+            /*SimpleDodgeGame.RemoveMatchedCells end.*/
+
+            /*SimpleDodgeGame.CollapseColumns start.*/
+            CollapseColumns: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#CollapseColumns", this ); }
+
+                var $step = 0,
+                    $jumpFromFinally,
+                    $returnValue,
+                    writeY,
+                    orb,
+                    from,
+                    to,
+                    $async_e;
+
+                var $enumerator = new Bridge.GeneratorEnumerator(Bridge.fn.bind(this, function () {
+                    try {
+                        for (;;) {
+                            switch ($step) {
+                                case 0: {
+                                    this.moveBuffer.clear();
+
+                                        for (var x = 0; x < this.columns; x = (x + 1) | 0) {
+                                            writeY = 0;
+                                            for (var readY = 0; readY < this.rows; readY = (readY + 1) | 0) {
+                                                orb = this.board.get([x, readY]);
+                                                if (orb == null) {
+                                                    continue;
+                                                }
+
+                                                if (writeY !== readY) {
+                                                    this.board.set([x, writeY], orb);
+                                                    this.board.set([x, readY], null);
+
+                                                    from = orb.transform.position.$clone();
+                                                    to = this.CellToWorld(x, writeY);
+                                                    this.moveBuffer.add(new SimpleDodgeGame.OrbMove.$ctor1(orb, from.$clone(), to.$clone()));
+                                                }
+
+                                                writeY = (writeY + 1) | 0;
+                                            }
+                                        }
+
+                                        $enumerator.current = this.AnimateMoves(this.moveBuffer, this.fallDurationSeconds);
+                                        $step = 1;
+                                        return true;
+                                }
+                                case 1: {
+
+                                }
+                                default: {
+                                    return false;
+                                }
+                            }
+                        }
+                    } catch($async_e1) {
+                        $async_e = System.Exception.create($async_e1);
+                        throw $async_e;
+                    }
+                }));
+                return $enumerator;
+            },
+            /*SimpleDodgeGame.CollapseColumns end.*/
+
+            /*SimpleDodgeGame.FillEmptyCells start.*/
+            FillEmptyCells: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#FillEmptyCells", this ); }
+
+                var $step = 0,
+                    $jumpFromFinally,
+                    $returnValue,
+                    spawnOffset,
+                    orbType,
+                    spawnPosition,
+                    orb,
+                    settlePosition,
+                    $async_e;
+
+                var $enumerator = new Bridge.GeneratorEnumerator(Bridge.fn.bind(this, function () {
+                    try {
+                        for (;;) {
+                            switch ($step) {
+                                case 0: {
+                                    this.moveBuffer.clear();
+
+                                        for (var x = 0; x < this.columns; x = (x + 1) | 0) {
+                                            spawnOffset = 0;
+                                            for (var y = 0; y < this.rows; y = (y + 1) | 0) {
+                                                if (this.board.get([x, y]) != null) {
+                                                    continue;
+                                                }
+
+                                                orbType = this.GetRandomOrbType();
+                                                spawnPosition = this.CellToWorld(x, ((this.rows + spawnOffset) | 0));
+                                                orb = this.CreateOrb(orbType, spawnPosition);
+                                                this.board.set([x, y], orb);
+
+                                                settlePosition = this.CellToWorld(x, y);
+                                                this.moveBuffer.add(new SimpleDodgeGame.OrbMove.$ctor1(orb, spawnPosition.$clone(), settlePosition.$clone()));
+                                                spawnOffset = (spawnOffset + 1) | 0;
+                                            }
+                                        }
+
+                                        $enumerator.current = this.AnimateMoves(this.moveBuffer, this.fallDurationSeconds * 1.15);
+                                        $step = 1;
+                                        return true;
+                                }
+                                case 1: {
+
+                                }
+                                default: {
+                                    return false;
+                                }
+                            }
+                        }
+                    } catch($async_e1) {
+                        $async_e = System.Exception.create($async_e1);
+                        throw $async_e;
+                    }
+                }));
+                return $enumerator;
+            },
+            /*SimpleDodgeGame.FillEmptyCells end.*/
+
+            /*SimpleDodgeGame.AnimateMoves start.*/
+            AnimateMoves: function (moves, duration) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#AnimateMoves", this ); }
+
+                var $step = 0,
+                    $jumpFromFinally,
+                    $returnValue,
+                    safeDuration,
+                    elapsed,
+                    t,
+                    eased,
+                    move,
+                    move1,
+                    $async_e;
+
+                var $enumerator = new Bridge.GeneratorEnumerator(Bridge.fn.bind(this, function () {
+                    try {
+                        for (;;) {
+                            switch ($step) {
+                                case 0: {
+                                    if (moves == null || moves.Count === 0) {
+                                            $step = 1;
+                                            continue;
+                                        } 
+                                        $step = 2;
+                                        continue;
+                                }
+                                case 1: {
+                                    return false;
+                                }
+                                case 2: {
+                                    safeDuration = UnityEngine.Mathf.Max(0.01, duration);
+                                        elapsed = 0.0;
+                                    $step = 3;
+                                    continue;
+                                }
+                                case 3: {
+                                    if ( elapsed < safeDuration ) {
+                                            $step = 4;
+                                            continue;
+                                        } 
+                                        $step = 6;
+                                        continue;
+                                }
+                                case 4: {
+                                    elapsed += UnityEngine.Time.deltaTime;
+                                        t = Math.max(0, Math.min(1, elapsed / safeDuration));
+                                        eased = t * t * (3.0 - 2.0 * t);
+
+                                        for (var i = 0; i < moves.Count; i = (i + 1) | 0) {
+                                            move = moves.getItem(i).$clone();
+                                            if (move.orb == null || UnityEngine.GameObject.op_Equality(move.orb.gameObject, null)) {
+                                                continue;
+                                            }
+
+                                            move.orb.transform.position = new pc.Vec3().lerpUnclamped( move.from, move.to, eased );
+                                        }
+
+                                        $enumerator.current = null;
+                                        $step = 5;
+                                        return true;
+                                }
+                                case 5: {
+                                    
+                                        $step = 3;
+                                        continue;
+                                }
+                                case 6: {
+                                    for (var i1 = 0; i1 < moves.Count; i1 = (i1 + 1) | 0) {
+                                            move1 = moves.getItem(i1).$clone();
+                                            if (move1.orb == null || UnityEngine.GameObject.op_Equality(move1.orb.gameObject, null)) {
+                                                continue;
+                                            }
+
+                                            move1.orb.transform.position = move1.to.$clone();
+                                        }
+
+                                }
+                                default: {
+                                    return false;
+                                }
+                            }
+                        }
+                    } catch($async_e1) {
+                        $async_e = System.Exception.create($async_e1);
+                        throw $async_e;
+                    }
+                }));
+                return $enumerator;
+            },
+            /*SimpleDodgeGame.AnimateMoves end.*/
+
+            /*SimpleDodgeGame.CollectMatches start.*/
+            CollectMatches: function (matchedCells) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#CollectMatches", this ); }
+
+                this.EnsureMatchBuffers();
+                SimpleDodgeGame.ClearBoolGrid(this.markedCellsBuffer);
+                var marked = this.markedCellsBuffer;
+
+                for (var y = 0; y < this.rows; y = (y + 1) | 0) {
+                    var streakType = -1;
+                    var streakStart = 0;
+                    var streakLength = 0;
+
+                    for (var x = 0; x < this.columns; x = (x + 1) | 0) {
+                        var orb = this.board.get([x, y]);
+                        var type = orb != null ? orb.type : -1;
+
+                        if (type >= 0 && type === streakType) {
+                            streakLength = (streakLength + 1) | 0;
+                            continue;
+                        }
+
+                        if (streakLength >= 3) {
+                            for (var markX = streakStart; markX < ((streakStart + streakLength) | 0); markX = (markX + 1) | 0) {
+                                marked.set([markX, y], true);
+                            }
+                        }
+
+                        streakType = type;
+                        streakStart = x;
+                        streakLength = type >= 0 ? 1 : 0;
+                    }
+
+                    if (streakLength >= 3) {
+                        for (var markX1 = streakStart; markX1 < ((streakStart + streakLength) | 0); markX1 = (markX1 + 1) | 0) {
+                            marked.set([markX1, y], true);
+                        }
+                    }
+                }
+
+                for (var x1 = 0; x1 < this.columns; x1 = (x1 + 1) | 0) {
+                    var streakType1 = -1;
+                    var streakStart1 = 0;
+                    var streakLength1 = 0;
+
+                    for (var y1 = 0; y1 < this.rows; y1 = (y1 + 1) | 0) {
+                        var orb1 = this.board.get([x1, y1]);
+                        var type1 = orb1 != null ? orb1.type : -1;
+
+                        if (type1 >= 0 && type1 === streakType1) {
+                            streakLength1 = (streakLength1 + 1) | 0;
+                            continue;
+                        }
+
+                        if (streakLength1 >= 3) {
+                            for (var markY = streakStart1; markY < ((streakStart1 + streakLength1) | 0); markY = (markY + 1) | 0) {
+                                marked.set([x1, markY], true);
+                            }
+                        }
+
+                        streakType1 = type1;
+                        streakStart1 = y1;
+                        streakLength1 = type1 >= 0 ? 1 : 0;
+                    }
+
+                    if (streakLength1 >= 3) {
+                        for (var markY1 = streakStart1; markY1 < ((streakStart1 + streakLength1) | 0); markY1 = (markY1 + 1) | 0) {
+                            marked.set([x1, markY1], true);
+                        }
+                    }
+                }
+
+                matchedCells.v = this.matchedCellsBuffer;
+                matchedCells.v.clear();
+                for (var x2 = 0; x2 < this.columns; x2 = (x2 + 1) | 0) {
+                    for (var y2 = 0; y2 < this.rows; y2 = (y2 + 1) | 0) {
+                        if (marked.get([x2, y2])) {
+                            matchedCells.v.add(new UnityEngine.Vector2Int.$ctor1(x2, y2));
+                        }
+                    }
+                }
+
+                if (matchedCells.v.Count === 0) {
+                    return 0;
+                }
+
+                var combos = 0;
+                SimpleDodgeGame.ClearBoolGrid(this.visitedCellsBuffer);
+                var visited = this.visitedCellsBuffer;
+                var stack = this.floodFillStackBuffer;
+                stack.clear();
+
+                for (var x3 = 0; x3 < this.columns; x3 = (x3 + 1) | 0) {
+                    for (var y3 = 0; y3 < this.rows; y3 = (y3 + 1) | 0) {
+                        if (!marked.get([x3, y3]) || visited.get([x3, y3]) || this.board.get([x3, y3]) == null) {
+                            continue;
+                        }
+
+                        combos = (combos + 1) | 0;
+                        var type2 = this.board.get([x3, y3]).type;
+
+                        stack.clear();
+                        stack.add(new UnityEngine.Vector2Int.$ctor1(x3, y3));
+                        visited.set([x3, y3], true);
+
+                        while (stack.Count > 0) {
+                            var lastIndex = (stack.Count - 1) | 0;
+                            var cell = stack.getItem(lastIndex).$clone();
+                            stack.removeAt(lastIndex);
+
+                            for (var i = 0; i < SimpleDodgeGame.NeighborOffsets.length; i = (i + 1) | 0) {
+                                var next = UnityEngine.Vector2Int.op_Addition(cell.$clone(), SimpleDodgeGame.NeighborOffsets[i].$clone());
+                                if (!this.IsInsideBoard(next)) {
+                                    continue;
+                                }
+
+                                if (visited.get([next.x, next.y]) || !marked.get([next.x, next.y])) {
+                                    continue;
+                                }
+
+                                var orb2 = this.board.get([next.x, next.y]);
+                                if (orb2 == null || orb2.type !== type2) {
+                                    continue;
+                                }
+
+                                visited.set([next.x, next.y], true);
+                                stack.add(next.$clone());
+                            }
+                        }
+                    }
+                }
+
+                return combos;
+            },
+            /*SimpleDodgeGame.CollectMatches end.*/
+
+            /*SimpleDodgeGame.CalculateScoreGain start.*/
+            CalculateScoreGain: function (removedCount, stepCombos, totalCombos) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#CalculateScoreGain", this ); }
+
+                var comboBonus = (1 + UnityEngine.Mathf.Max(0, ((stepCombos - 1) | 0))) | 0;
+                var chainBonus = (1 + UnityEngine.Mathf.Max(0, ((totalCombos - 1) | 0))) | 0;
+                return Bridge.Int.mul(Bridge.Int.mul(Bridge.Int.mul(removedCount, UnityEngine.Mathf.Max(1, this.baseScorePerOrb)), comboBonus), chainBonus);
+            },
+            /*SimpleDodgeGame.CalculateScoreGain end.*/
+
+            /*SimpleDodgeGame.BuildInitialBoard start.*/
+            BuildInitialBoard: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#BuildInitialBoard", this ); }
+
+                for (var x = 0; x < this.columns; x = (x + 1) | 0) {
+                    for (var y = 0; y < this.rows; y = (y + 1) | 0) {
+                        var type = this.GetInitialOrbType(x, y);
+                        this.board.set([x, y], this.CreateOrb(type, this.CellToWorld(x, y)));
                     }
                 }
             },
-            /*SimpleDodgeGame.UpdateObstaclesAndCollision end.*/
+            /*SimpleDodgeGame.BuildInitialBoard end.*/
 
-            /*SimpleDodgeGame.HandleLose start.*/
-            HandleLose: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#HandleLose", this ); }
+            /*SimpleDodgeGame.ClearBoard start.*/
+            ClearBoard: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#ClearBoard", this ); }
 
-                this.gameOver = true;
-                this.playerRenderer.color = pc.Color.lerp( this.GetPlayerColor(), new pc.Color( 1.0, 0.3, 0.3, 1.0 ), 0.9 );
-
-                if (UnityEngine.MonoBehaviour.op_Inequality(this.complianceHooks, null)) {
-                    this.complianceHooks.TriggerGameEnded();
+                if (this.board == null) {
+                    return;
                 }
-            },
-            /*SimpleDodgeGame.HandleLose end.*/
 
-            /*SimpleDodgeGame.ResetRun start.*/
-            ResetRun: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#ResetRun", this ); }
+                for (var x = 0; x < this.columns; x = (x + 1) | 0) {
+                    for (var y = 0; y < this.rows; y = (y + 1) | 0) {
+                        var orb = this.board.get([x, y]);
+                        if (orb != null && UnityEngine.GameObject.op_Inequality(orb.gameObject, null)) {
+                            UnityEngine.MonoBehaviour.Destroy(orb.gameObject);
+                        }
 
-                this.ClearObstacles();
-                this.UpdateBounds();
-
-                this.survivalTime = 0.0;
-                this.spawnTimer = 0.25;
-                this.gameOver = false;
-                this.obstacleSpawnCount = 0;
-
-                var playerCollisionRadius = this.GetPlayerCollisionRadius();
-                var startX = Math.max(this.leftBound + playerCollisionRadius, Math.min(this.gameplayCamera.transform.position.x, this.rightBound - playerCollisionRadius));
-                var start = new pc.Vec3( startX, this.bottomBound + this.playerBottomOffset, this.gameplayZ );
-                this.playerTransform.position = start.$clone();
-                this.ApplyPlayerVisuals();
-            },
-            /*SimpleDodgeGame.ResetRun end.*/
-
-            /*SimpleDodgeGame.ClearObstacles start.*/
-            ClearObstacles: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#ClearObstacles", this ); }
-
-                for (var i = 0; i < this.obstacles.Count; i = (i + 1) | 0) {
-                    if (UnityEngine.GameObject.op_Inequality(this.obstacles.getItem(i).gameObject, null)) {
-                        UnityEngine.MonoBehaviour.Destroy(this.obstacles.getItem(i).gameObject);
+                        this.board.set([x, y], null);
                     }
                 }
-
-                this.obstacles.clear();
             },
-            /*SimpleDodgeGame.ClearObstacles end.*/
+            /*SimpleDodgeGame.ClearBoard end.*/
 
-            /*SimpleDodgeGame.UpdateBounds start.*/
-            UpdateBounds: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateBounds", this ); }
+            /*SimpleDodgeGame.CreateOrb start.*/
+            CreateOrb: function (type, worldPosition) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#CreateOrb", this ); }
 
-                var halfHeight = this.gameplayCamera.orthographicSize;
-                var halfWidth = halfHeight * this.gameplayCamera.aspect;
-                var cameraPosition = this.gameplayCamera.transform.position.$clone();
+                var orbObject = new UnityEngine.GameObject.$ctor2("Orb");
+                orbObject.transform.SetParent(this.boardRoot, true);
+                orbObject.transform.position = worldPosition.$clone();
 
-                this.leftBound = cameraPosition.x - halfWidth + this.sidePadding;
-                this.rightBound = cameraPosition.x + halfWidth - this.sidePadding;
-                this.topBound = cameraPosition.y + halfHeight;
-                this.bottomBound = cameraPosition.y - halfHeight;
+                var renderer = orbObject.AddComponent(UnityEngine.SpriteRenderer);
+                var orb = new SimpleDodgeGame.Orb(type, orbObject, renderer);
+                this.ApplyOrbVisuals(orb);
+                return orb;
             },
-            /*SimpleDodgeGame.UpdateBounds end.*/
+            /*SimpleDodgeGame.CreateOrb end.*/
 
-            /*SimpleDodgeGame.CreatePlayer start.*/
-            CreatePlayer: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#CreatePlayer", this ); }
+            /*SimpleDodgeGame.SwapCells start.*/
+            SwapCells: function (a, b) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#SwapCells", this ); }
 
-                var playerObject = new UnityEngine.GameObject.$ctor2("PlayerBall");
-                this.playerTransform = playerObject.transform;
-                this.playerTransform.position = new pc.Vec3( 0.0, 0.0, this.gameplayZ );
+                var first = this.board.get([a.x, a.y]);
+                var second = this.board.get([b.x, b.y]);
 
-                this.playerRenderer = playerObject.AddComponent(UnityEngine.SpriteRenderer);
-                this.playerRenderer.sortingOrder = 10;
-                this.ApplyPlayerVisuals();
+                this.board.set([a.x, a.y], second);
+                this.board.set([b.x, b.y], first);
+
+                if (this.board.get([a.x, a.y]) != null) {
+                    this.board.get([a.x, a.y]).transform.position = this.CellToWorld(a.x, a.y);
+                }
+
+                if (this.board.get([b.x, b.y]) != null) {
+                    this.board.get([b.x, b.y]).transform.position = this.CellToWorld(b.x, b.y);
+                }
             },
-            /*SimpleDodgeGame.CreatePlayer end.*/
+            /*SimpleDodgeGame.SwapCells end.*/
 
-            /*SimpleDodgeGame.CreateBackground start.*/
-            CreateBackground: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#CreateBackground", this ); }
+            /*SimpleDodgeGame.GetInitialOrbType start.*/
+            GetInitialOrbType: function (x, y) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#GetInitialOrbType", this ); }
 
-                var backgroundObject = new UnityEngine.GameObject.$ctor2("GameplayBackground");
-                this.backgroundTransform = backgroundObject.transform;
-                this.backgroundRenderer = backgroundObject.AddComponent(UnityEngine.SpriteRenderer);
-                this.backgroundRenderer.sortingOrder = -20;
+                var colorCount = this.GetOrbColorCount();
+                var candidate = UnityEngine.Random.Range(0, colorCount);
+                var attempts = 0;
+
+                while (attempts < 16) {
+                    var horizontalMatch = x >= 2 && this.board.get([((x - 1) | 0), y]) != null && this.board.get([((x - 2) | 0), y]) != null && this.board.get([((x - 1) | 0), y]).type === candidate && this.board.get([((x - 2) | 0), y]).type === candidate;
+
+                    var verticalMatch = y >= 2 && this.board.get([x, ((y - 1) | 0)]) != null && this.board.get([x, ((y - 2) | 0)]) != null && this.board.get([x, ((y - 1) | 0)]).type === candidate && this.board.get([x, ((y - 2) | 0)]).type === candidate;
+
+                    if (!horizontalMatch && !verticalMatch) {
+                        return candidate;
+                    }
+
+                    candidate = UnityEngine.Random.Range(0, colorCount);
+                    attempts = (attempts + 1) | 0;
+                }
+
+                return candidate;
+            },
+            /*SimpleDodgeGame.GetInitialOrbType end.*/
+
+            /*SimpleDodgeGame.GetRandomOrbType start.*/
+            GetRandomOrbType: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#GetRandomOrbType", this ); }
+
+                return UnityEngine.Random.Range(0, this.GetOrbColorCount());
+            },
+            /*SimpleDodgeGame.GetRandomOrbType end.*/
+
+            /*SimpleDodgeGame.GetOrbColorCount start.*/
+            GetOrbColorCount: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#GetOrbColorCount", this ); }
+
+                if (this.orbColors == null || this.orbColors.length === 0) {
+                    return 1;
+                }
+
+                return this.orbColors.length;
+            },
+            /*SimpleDodgeGame.GetOrbColorCount end.*/
+
+            /*SimpleDodgeGame.GetOrbColor start.*/
+            GetOrbColor: function (type) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#GetOrbColor", this ); }
+
+                if (this.orbColors == null || this.orbColors.length === 0) {
+                    return new pc.Color( 1, 1, 1, 1 );
+                }
+
+                var safeIndex = Math.abs(type) % this.orbColors.length;
+                return this.orbColors[safeIndex].$clone();
+            },
+            /*SimpleDodgeGame.GetOrbColor end.*/
+
+            /*SimpleDodgeGame.CreateRuntimeVisuals start.*/
+            CreateRuntimeVisuals: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#CreateRuntimeVisuals", this ); }
+
+                if (UnityEngine.Component.op_Equality(this.backgroundTransform, null)) {
+                    var backgroundObject = new UnityEngine.GameObject.$ctor2("GameplayBackground");
+                    this.backgroundTransform = backgroundObject.transform;
+                    this.backgroundRenderer = backgroundObject.AddComponent(UnityEngine.SpriteRenderer);
+                    this.backgroundRenderer.sortingOrder = -30;
+                }
+
+                if (UnityEngine.Component.op_Equality(this.boardRoot, null)) {
+                    var boardRootObject = new UnityEngine.GameObject.$ctor2("PuzzleBoardRoot");
+                    this.boardRoot = boardRootObject.transform;
+                }
+
+                if (UnityEngine.Component.op_Equality(this.boardFrameTransform, null)) {
+                    var frameObject = new UnityEngine.GameObject.$ctor2("PuzzleBoardFrame");
+                    frameObject.transform.SetParent(this.boardRoot, false);
+                    this.boardFrameTransform = frameObject.transform;
+                    this.boardFrameRenderer = frameObject.AddComponent(UnityEngine.SpriteRenderer);
+                    this.boardFrameRenderer.sortingOrder = -15;
+                }
+
+                if (UnityEngine.Component.op_Equality(this.boardOutlineTransform, null)) {
+                    var outlineObject = new UnityEngine.GameObject.$ctor2("PuzzleBoardOutline");
+                    outlineObject.transform.SetParent(this.boardRoot, false);
+                    this.boardOutlineTransform = outlineObject.transform;
+                    this.boardOutlineRenderer = outlineObject.AddComponent(UnityEngine.SpriteRenderer);
+                    this.boardOutlineRenderer.sortingOrder = -14;
+                }
+
                 this.ApplyBackgroundVisuals();
+                this.ApplyBoardFrameVisuals();
             },
-            /*SimpleDodgeGame.CreateBackground end.*/
-
-            /*SimpleDodgeGame.ApplyPlayerVisuals start.*/
-            ApplyPlayerVisuals: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyPlayerVisuals", this ); }
-
-                if (UnityEngine.Component.op_Equality(this.playerRenderer, null) || UnityEngine.Component.op_Equality(this.playerTransform, null)) {
-                    return;
-                }
-
-                var playerSprite = this.GetPlayerSprite();
-                this.playerRenderer.sprite = playerSprite;
-                this.playerRenderer.color = this.GetPlayerColor();
-                this.ApplyRendererMaterial(this.playerRenderer);
-                SimpleDodgeGame.SetTransformDiameter(this.playerTransform, playerSprite, this.GetPlayerCollisionRadius() * 2.0);
-            },
-            /*SimpleDodgeGame.ApplyPlayerVisuals end.*/
-
-            /*SimpleDodgeGame.ApplyObstacleVisuals start.*/
-            ApplyObstacleVisuals: function (obstacle, obstacleIndex) {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyObstacleVisuals", this ); }
-
-                if (obstacle == null || UnityEngine.Component.op_Equality(obstacle.renderer, null) || UnityEngine.Component.op_Equality(obstacle.transform, null)) {
-                    return;
-                }
-
-                var obstacleSprite = this.GetObstacleSprite(obstacleIndex);
-                obstacle.renderer.sprite = obstacleSprite;
-                obstacle.renderer.color = this.GetObstacleColor();
-                obstacle.renderer.sortingOrder = 8;
-                this.ApplyRendererMaterial(obstacle.renderer);
-
-                obstacle.radius = obstacle.baseRadius * this.GetObstacleSizeMultiplier();
-                SimpleDodgeGame.SetTransformDiameter(obstacle.transform, obstacleSprite, obstacle.radius * 2.0);
-            },
-            /*SimpleDodgeGame.ApplyObstacleVisuals end.*/
+            /*SimpleDodgeGame.CreateRuntimeVisuals end.*/
 
             /*SimpleDodgeGame.ApplyBackgroundVisuals start.*/
             ApplyBackgroundVisuals: function () {
@@ -666,19 +1243,208 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyBackgroundVisuals", this ); }
                     return;
                 }
 
-                var backgroundSprite = this.GetBackgroundSprite();
-                this.backgroundRenderer.sprite = backgroundSprite;
-                this.backgroundRenderer.color = this.GetBackgroundColor();
-                this.backgroundRenderer.sortingOrder = this.GetBackgroundSortingOrder();
+                this.backgroundRenderer.sprite = this.GetBoardSprite();
+                this.backgroundRenderer.color = this.backgroundColor.$clone();
                 this.ApplyRendererMaterial(this.backgroundRenderer);
+                this.UpdateBackgroundTransform();
 
                 if (UnityEngine.Component.op_Inequality(this.gameplayCamera, null)) {
-                    this.gameplayCamera.backgroundColor = this.GetBackgroundColor();
+                    this.gameplayCamera.backgroundColor = this.backgroundColor.$clone();
                 }
-
-                this.UpdateBackgroundTransform();
             },
             /*SimpleDodgeGame.ApplyBackgroundVisuals end.*/
+
+            /*SimpleDodgeGame.ApplyBoardFrameVisuals start.*/
+            ApplyBoardFrameVisuals: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyBoardFrameVisuals", this ); }
+
+                if (UnityEngine.Component.op_Inequality(this.boardFrameRenderer, null)) {
+                    this.boardFrameRenderer.sprite = this.GetBoardSprite();
+                    this.boardFrameRenderer.color = this.boardColor.$clone();
+                    this.ApplyRendererMaterial(this.boardFrameRenderer);
+                }
+
+                if (UnityEngine.Component.op_Inequality(this.boardOutlineRenderer, null)) {
+                    this.boardOutlineRenderer.sprite = this.GetBoardSprite();
+                    this.boardOutlineRenderer.color = this.boardOutlineColor.$clone();
+                    this.ApplyRendererMaterial(this.boardOutlineRenderer);
+                }
+
+                this.UpdateBoardFrameTransform();
+            },
+            /*SimpleDodgeGame.ApplyBoardFrameVisuals end.*/
+
+            /*SimpleDodgeGame.ApplyOrbVisuals start.*/
+            ApplyOrbVisuals: function (orb) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyOrbVisuals", this ); }
+
+                if (orb == null || UnityEngine.Component.op_Equality(orb.renderer, null) || UnityEngine.Component.op_Equality(orb.transform, null)) {
+                    return;
+                }
+
+                var orbSpriteForType = this.GetOrbSpriteForType(orb.type);
+                orb.renderer.sprite = orbSpriteForType;
+                orb.renderer.color = this.GetOrbColor(orb.type);
+                orb.renderer.sortingOrder = 10;
+                this.ApplyRendererMaterial(orb.renderer);
+                SimpleDodgeGame.SetTransformDiameter(orb.transform, orbSpriteForType, this.cellSize * this.orbScale);
+            },
+            /*SimpleDodgeGame.ApplyOrbVisuals end.*/
+
+            /*SimpleDodgeGame.GetOrbSpriteForType start.*/
+            GetOrbSpriteForType: function (type) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#GetOrbSpriteForType", this ); }
+
+                if (this.orbSprites != null && this.orbSprites.length > 0) {
+                    var safeIndex = Math.abs(type) % this.orbSprites.length;
+                    var configuredSprite = this.orbSprites[safeIndex];
+                    if (configuredSprite != null) {
+                        return this.PrepareSpriteForRuntime(configuredSprite);
+                    }
+                }
+
+                var configuredFallback = this.GetAnyConfiguredOrbSprite();
+                return this.PrepareSpriteForRuntime(configuredFallback != null ? configuredFallback : SimpleDodgeGame.GetGeneratedFallbackSprite());
+            },
+            /*SimpleDodgeGame.GetOrbSpriteForType end.*/
+
+            /*SimpleDodgeGame.GetBoardSprite start.*/
+            GetBoardSprite: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#GetBoardSprite", this ); }
+
+                return SimpleDodgeGame.GetGeneratedFallbackSprite();
+            },
+            /*SimpleDodgeGame.GetBoardSprite end.*/
+
+            /*SimpleDodgeGame.GetAnyConfiguredOrbSprite start.*/
+            GetAnyConfiguredOrbSprite: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#GetAnyConfiguredOrbSprite", this ); }
+
+                if (this.orbSprites == null) {
+                    return null;
+                }
+
+                for (var i = 0; i < this.orbSprites.length; i = (i + 1) | 0) {
+                    if (this.orbSprites[i] != null) {
+                        return this.orbSprites[i];
+                    }
+                }
+
+                return null;
+            },
+            /*SimpleDodgeGame.GetAnyConfiguredOrbSprite end.*/
+
+            /*SimpleDodgeGame.PrepareSpriteForRuntime start.*/
+            PrepareSpriteForRuntime: function (sourceSprite) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#PrepareSpriteForRuntime", this ); }
+
+                if (sourceSprite == null) {
+                    return SimpleDodgeGame.GetGeneratedFallbackSprite();
+                }
+
+                return sourceSprite;
+            },
+            /*SimpleDodgeGame.PrepareSpriteForRuntime end.*/
+
+            /*SimpleDodgeGame.WarnIfMissingSpriteSetup start.*/
+            WarnIfMissingSpriteSetup: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#WarnIfMissingSpriteSetup", this ); }
+
+                if (this.hasLoggedMissingSpriteConfig) {
+                    return;
+                }
+
+                if (this.GetAnyConfiguredOrbSprite() != null) {
+                    return;
+                }
+
+                this.hasLoggedMissingSpriteConfig = true;
+                UnityEngine.Debug.LogWarning$1("SimpleDodgeGame has no configured orb/board Sprite. Playworks visibility may fail if runtime sprite generation is unsupported.");
+            },
+            /*SimpleDodgeGame.WarnIfMissingSpriteSetup end.*/
+
+            /*SimpleDodgeGame.CreateRuntimeHud start.*/
+            CreateRuntimeHud: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#CreateRuntimeHud", this ); }
+ },
+            /*SimpleDodgeGame.CreateRuntimeHud end.*/
+
+            /*SimpleDodgeGame.UpdateHudTexts start.*/
+            UpdateHudTexts: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateHudTexts", this ); }
+ },
+            /*SimpleDodgeGame.UpdateHudTexts end.*/
+
+            /*SimpleDodgeGame.SetResultVisible start.*/
+            SetResultVisible: function (visible) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#SetResultVisible", this ); }
+ },
+            /*SimpleDodgeGame.SetResultVisible end.*/
+
+            /*SimpleDodgeGame.UpdateLayout start.*/
+            UpdateLayout: function (force) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateLayout", this ); }
+
+                if (UnityEngine.Component.op_Equality(this.gameplayCamera, null) || this.columns <= 0 || this.rows <= 0) {
+                    return;
+                }
+
+                var halfHeight = this.gameplayCamera.orthographicSize;
+                var halfWidth = halfHeight * this.gameplayCamera.aspect;
+                var cameraPosition = this.gameplayCamera.transform.position.$clone();
+
+                var safeBottom = cameraPosition.y - halfHeight + UnityEngine.Mathf.Max(0.0, this.boardBottomPadding);
+                var safeTop = cameraPosition.y + halfHeight - UnityEngine.Mathf.Max(0.5, this.boardTopPadding);
+                var availableHeight = UnityEngine.Mathf.Max(1.0, safeTop - safeBottom);
+                var availableWidth = UnityEngine.Mathf.Max(1.0, (halfWidth * 2.0) - (this.boardSidePadding * 2.0));
+
+                var newCellSize = UnityEngine.Mathf.Min(availableWidth / this.columns, availableHeight / this.rows);
+                newCellSize = UnityEngine.Mathf.Max(0.5, newCellSize);
+
+                var newBoardWidth = newCellSize * this.columns;
+                var newBoardHeight = newCellSize * this.rows;
+                var newLeft = cameraPosition.x - (newBoardWidth * 0.5);
+                var newBottom = safeBottom + UnityEngine.Mathf.Max(0.0, (availableHeight - newBoardHeight) * 0.5);
+
+                var changed = force || !this.layoutInitialized || Math.abs(newCellSize - this.cellSize) > 0.0001 || Math.abs(newLeft - this.boardBottomLeft.x) > 0.0001 || Math.abs(newBottom - this.boardBottomLeft.y) > 0.0001;
+
+                if (!changed) {
+                    return;
+                }
+
+                this.cellSize = newCellSize;
+                this.boardBottomLeft = new pc.Vec2( newLeft, newBottom );
+                this.boardWorldWidth = newBoardWidth;
+                this.boardWorldHeight = newBoardHeight;
+                this.layoutInitialized = true;
+
+                this.UpdateBackgroundTransform();
+                this.UpdateBoardFrameTransform();
+                this.RepositionBoardOrbs();
+            },
+            /*SimpleDodgeGame.UpdateLayout end.*/
+
+            /*SimpleDodgeGame.RepositionBoardOrbs start.*/
+            RepositionBoardOrbs: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#RepositionBoardOrbs", this ); }
+
+                if (this.board == null) {
+                    return;
+                }
+
+                for (var x = 0; x < this.columns; x = (x + 1) | 0) {
+                    for (var y = 0; y < this.rows; y = (y + 1) | 0) {
+                        var orb = this.board.get([x, y]);
+                        if (orb == null || UnityEngine.GameObject.op_Equality(orb.gameObject, null)) {
+                            continue;
+                        }
+
+                        orb.transform.position = this.CellToWorld(x, y);
+                        SimpleDodgeGame.SetTransformDiameter(orb.transform, orb.renderer.sprite, this.cellSize * this.orbScale);
+                    }
+                }
+            },
+            /*SimpleDodgeGame.RepositionBoardOrbs end.*/
 
             /*SimpleDodgeGame.UpdateBackgroundTransform start.*/
             UpdateBackgroundTransform: function () {
@@ -694,57 +1460,214 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateBackgroundTransform", this ); }
                 var scaleX = worldWidth / spriteSize.x;
                 var scaleY = worldHeight / spriteSize.y;
 
-                if (this.ShouldPreserveBackgroundAspect()) {
-                    var uniformScale = UnityEngine.Mathf.Max(scaleX, scaleY) * this.GetBackgroundScalePadding();
-                    this.backgroundTransform.localScale = new pc.Vec3( uniformScale, uniformScale, 1.0 );
-                } else {
-                    var padding = this.GetBackgroundScalePadding();
-                    this.backgroundTransform.localScale = new pc.Vec3( scaleX * padding, scaleY * padding, 1.0 );
-                }
-
                 this.backgroundTransform.position = new pc.Vec3( this.gameplayCamera.transform.position.x, this.gameplayCamera.transform.position.y, this.gameplayZ );
+                this.backgroundTransform.localScale = new pc.Vec3( scaleX, scaleY, 1.0 );
             },
             /*SimpleDodgeGame.UpdateBackgroundTransform end.*/
 
-            /*SimpleDodgeGame.RefreshVisualsNow start.*/
-            RefreshVisualsNow: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#RefreshVisualsNow", this ); }
+            /*SimpleDodgeGame.UpdateBoardFrameTransform start.*/
+            UpdateBoardFrameTransform: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateBoardFrameTransform", this ); }
 
-                this.ApplyBackgroundVisuals();
-                this.ApplyPlayerVisuals();
-                this.RefreshObstacleVisuals();
-            },
-            /*SimpleDodgeGame.RefreshVisualsNow end.*/
+                if (UnityEngine.Component.op_Inequality(this.boardFrameTransform, null) && UnityEngine.Component.op_Inequality(this.boardFrameRenderer, null)) {
+                    this.boardFrameTransform.position = new pc.Vec3( this.boardBottomLeft.x + (this.boardWorldWidth * 0.5), this.boardBottomLeft.y + (this.boardWorldHeight * 0.5), this.gameplayZ );
+                    SimpleDodgeGame.SetTransformSize(this.boardFrameTransform, this.boardFrameRenderer.sprite, this.boardWorldWidth * 1.02, this.boardWorldHeight * 1.02);
+                }
 
-            /*SimpleDodgeGame.RefreshVisualThemeFromContextMenu start.*/
-            RefreshVisualThemeFromContextMenu: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#RefreshVisualThemeFromContextMenu", this ); }
-
-                this.RefreshVisualsNow();
-            },
-            /*SimpleDodgeGame.RefreshVisualThemeFromContextMenu end.*/
-
-            /*SimpleDodgeGame.RefreshObstacleVisuals start.*/
-            RefreshObstacleVisuals: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#RefreshObstacleVisuals", this ); }
-
-                for (var i = 0; i < this.obstacles.Count; i = (i + 1) | 0) {
-                    var obstacle = this.obstacles.getItem(i);
-                    if (obstacle == null || UnityEngine.GameObject.op_Equality(obstacle.gameObject, null)) {
-                        continue;
-                    }
-
-                    this.ApplyObstacleVisuals(obstacle, i);
-                    var position = obstacle.transform.position.$clone();
-                    position.x = Math.max(this.leftBound + obstacle.radius, Math.min(position.x, this.rightBound - obstacle.radius));
-                    obstacle.transform.position = position.$clone();
+                if (UnityEngine.Component.op_Inequality(this.boardOutlineTransform, null) && UnityEngine.Component.op_Inequality(this.boardOutlineRenderer, null)) {
+                    this.boardOutlineTransform.position = new pc.Vec3( this.boardBottomLeft.x + (this.boardWorldWidth * 0.5), this.boardBottomLeft.y + (this.boardWorldHeight * 0.5), this.gameplayZ + 0.001 );
+                    SimpleDodgeGame.SetTransformSize(this.boardOutlineTransform, this.boardOutlineRenderer.sprite, this.boardWorldWidth * 1.08, this.boardWorldHeight * 1.08);
                 }
             },
-            /*SimpleDodgeGame.RefreshObstacleVisuals end.*/
+            /*SimpleDodgeGame.UpdateBoardFrameTransform end.*/
+
+            /*SimpleDodgeGame.CellToWorld start.*/
+            CellToWorld: function (x, y) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#CellToWorld", this ); }
+
+                return new pc.Vec3( this.boardBottomLeft.x + ((x + 0.5) * this.cellSize), this.boardBottomLeft.y + ((y + 0.5) * this.cellSize), this.gameplayZ );
+            },
+            /*SimpleDodgeGame.CellToWorld end.*/
+
+            /*SimpleDodgeGame.TryWorldToCell start.*/
+            TryWorldToCell: function (worldPosition, cell) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#TryWorldToCell", this ); }
+
+                var localX = worldPosition.x - this.boardBottomLeft.x;
+                var localY = worldPosition.y - this.boardBottomLeft.y;
+
+                var x = Math.floor(localX / this.cellSize);
+                var y = Math.floor(localY / this.cellSize);
+
+                cell.v = new UnityEngine.Vector2Int.$ctor1(x, y);
+                return this.IsInsideBoard(cell.v);
+            },
+            /*SimpleDodgeGame.TryWorldToCell end.*/
+
+            /*SimpleDodgeGame.IsInsideBoard start.*/
+            IsInsideBoard: function (cell) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#IsInsideBoard", this ); }
+
+                return cell.x >= 0 && cell.x < this.columns && cell.y >= 0 && cell.y < this.rows;
+            },
+            /*SimpleDodgeGame.IsInsideBoard end.*/
+
+            /*SimpleDodgeGame.TryGetPointerDownWorld start.*/
+            TryGetPointerDownWorld: function (worldPosition) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#TryGetPointerDownWorld", this ); }
+
+                if (UnityEngine.Input.touchCount > 0) {
+                    for (var i = 0; i < UnityEngine.Input.touchCount; i = (i + 1) | 0) {
+                        var touch = UnityEngine.Input.GetTouch(i);
+                        if (touch.phase !== UnityEngine.TouchPhase.Began) {
+                            continue;
+                        }
+
+                        worldPosition.v = this.ScreenToWorld(touch.position);
+                        return true;
+                    }
+                }
+
+                if (UnityEngine.Input.GetMouseButtonDown(0)) {
+                    worldPosition.v = this.ScreenToWorld(UnityEngine.Vector2.FromVector3(UnityEngine.Input.mousePosition));
+                    return true;
+                }
+
+                worldPosition.v = pc.Vec3.ZERO.clone();
+                return false;
+            },
+            /*SimpleDodgeGame.TryGetPointerDownWorld end.*/
+
+            /*SimpleDodgeGame.TryGetPointerHeldWorld start.*/
+            TryGetPointerHeldWorld: function (worldPosition) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#TryGetPointerHeldWorld", this ); }
+
+                if (UnityEngine.Input.touchCount > 0) {
+                    var touch = UnityEngine.Input.GetTouch(0);
+                    if (touch.phase === UnityEngine.TouchPhase.Canceled || touch.phase === UnityEngine.TouchPhase.Ended) {
+                        worldPosition.v = pc.Vec3.ZERO.clone();
+                        return false;
+                    }
+
+                    worldPosition.v = this.ScreenToWorld(touch.position);
+                    return true;
+                }
+
+                if (UnityEngine.Input.GetMouseButton(0)) {
+                    worldPosition.v = this.ScreenToWorld(UnityEngine.Vector2.FromVector3(UnityEngine.Input.mousePosition));
+                    return true;
+                }
+
+                worldPosition.v = pc.Vec3.ZERO.clone();
+                return false;
+            },
+            /*SimpleDodgeGame.TryGetPointerHeldWorld end.*/
+
+            /*SimpleDodgeGame.PointerPressedThisFrame start.*/
+            PointerPressedThisFrame: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#PointerPressedThisFrame", this ); }
+
+                if (UnityEngine.Input.GetMouseButtonDown(0)) {
+                    return true;
+                }
+
+                for (var i = 0; i < UnityEngine.Input.touchCount; i = (i + 1) | 0) {
+                    if (UnityEngine.Input.GetTouch(i).phase === UnityEngine.TouchPhase.Began) {
+                        return true;
+                    }
+                }
+
+                return false;
+            },
+            /*SimpleDodgeGame.PointerPressedThisFrame end.*/
+
+            /*SimpleDodgeGame.PointerReleasedThisFrame start.*/
+            PointerReleasedThisFrame: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#PointerReleasedThisFrame", this ); }
+
+                if (UnityEngine.Input.GetMouseButtonUp(0)) {
+                    return true;
+                }
+
+                for (var i = 0; i < UnityEngine.Input.touchCount; i = (i + 1) | 0) {
+                    var phase = UnityEngine.Input.GetTouch(i).phase;
+                    if (phase === UnityEngine.TouchPhase.Canceled || phase === UnityEngine.TouchPhase.Ended) {
+                        return true;
+                    }
+                }
+
+                return false;
+            },
+            /*SimpleDodgeGame.PointerReleasedThisFrame end.*/
+
+            /*SimpleDodgeGame.ScreenToWorld start.*/
+            ScreenToWorld: function (screenPosition) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#ScreenToWorld", this ); }
+
+                var screen = new pc.Vec3( screenPosition.x, screenPosition.y, this.pointerDepth );
+                return this.gameplayCamera.ScreenToWorldPoint(screen);
+            },
+            /*SimpleDodgeGame.ScreenToWorld end.*/
+
+            /*SimpleDodgeGame.ValidateConfig start.*/
+            ValidateConfig: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#ValidateConfig", this ); }
+
+                this.columns = UnityEngine.Mathf.Max(3, this.columns);
+                this.rows = UnityEngine.Mathf.Max(3, this.rows);
+                this.roundDurationSeconds = UnityEngine.Mathf.Max(5.0, this.roundDurationSeconds);
+                this.baseScorePerOrb = UnityEngine.Mathf.Max(1, this.baseScorePerOrb);
+                this.orbScale = Math.max(0.6, Math.min(this.orbScale, 1.0));
+                this.clearDelaySeconds = UnityEngine.Mathf.Max(0.0, this.clearDelaySeconds);
+                this.fallDurationSeconds = UnityEngine.Mathf.Max(0.01, this.fallDurationSeconds);
+
+                if (this.orbColors == null || this.orbColors.length < 4) {
+                    this.orbColors = System.Array.init([new pc.Color( 0.9, 0.33, 0.3, 1.0 ), new pc.Color( 0.25, 0.66, 0.95, 1.0 ), new pc.Color( 0.42, 0.86, 0.42, 1.0 ), new pc.Color( 0.93, 0.82, 0.31, 1.0 ), new pc.Color( 0.7, 0.48, 0.96, 1.0 ), new pc.Color( 0.96, 0.57, 0.81, 1.0 )], UnityEngine.Color);
+                }
+
+                if (this.board == null || System.Array.getLength(this.board, 0) !== this.columns || System.Array.getLength(this.board, 1) !== this.rows) {
+                    this.board = System.Array.create(null, null, SimpleDodgeGame.Orb, this.columns, this.rows);
+                }
+
+                this.EnsureMatchBuffers();
+            },
+            /*SimpleDodgeGame.ValidateConfig end.*/
+
+            /*SimpleDodgeGame.EnsureMatchBuffers start.*/
+            EnsureMatchBuffers: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#EnsureMatchBuffers", this ); }
+
+                if (this.markedCellsBuffer == null || System.Array.getLength(this.markedCellsBuffer, 0) !== this.columns || System.Array.getLength(this.markedCellsBuffer, 1) !== this.rows) {
+                    this.markedCellsBuffer = System.Array.create(false, null, System.Boolean, this.columns, this.rows);
+                }
+
+                if (this.visitedCellsBuffer == null || System.Array.getLength(this.visitedCellsBuffer, 0) !== this.columns || System.Array.getLength(this.visitedCellsBuffer, 1) !== this.rows) {
+                    this.visitedCellsBuffer = System.Array.create(false, null, System.Boolean, this.columns, this.rows);
+                }
+            },
+            /*SimpleDodgeGame.EnsureMatchBuffers end.*/
+
+            /*SimpleDodgeGame.GetClearDelayWait start.*/
+            GetClearDelayWait: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#GetClearDelayWait", this ); }
+
+                var safeDelay = UnityEngine.Mathf.Max(0.0, this.clearDelaySeconds);
+                if (this.cachedClearDelayWait == null || Math.abs(this.cachedClearDelaySeconds - safeDelay) > 0.0001) {
+                    this.cachedClearDelaySeconds = safeDelay;
+                    this.cachedClearDelayWait = new UnityEngine.WaitForSeconds(safeDelay);
+                }
+
+                return this.cachedClearDelayWait;
+            },
+            /*SimpleDodgeGame.GetClearDelayWait end.*/
 
             /*SimpleDodgeGame.ApplyRendererMaterial start.*/
             ApplyRendererMaterial: function (renderer) {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyRendererMaterial", this ); }
+
+                if (UnityEngine.Component.op_Equality(renderer, null)) {
+                    return;
+                }
 
                 var selectedMaterial = this.GetSharedSpriteMaterial();
                 if (selectedMaterial != null) {
@@ -758,204 +1681,27 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyRendererMaterial", this ); }
 if ( TRACE ) { TRACE( "SimpleDodgeGame#GetGameplayZ", this ); }
 
                 var distanceFromCamera = UnityEngine.Mathf.Max(this.gameplayCamera.nearClipPlane + 1.0, 5.0);
-                return this.gameplayCamera.transform.position.z + distanceFromCamera;
+                var forwardZ = this.gameplayCamera.transform.forward.z;
+                if (Math.abs(forwardZ) < 0.0001) {
+                    forwardZ = 1.0;
+                }
+
+                return this.gameplayCamera.transform.position.z + ((forwardZ === 0 ? 1 : Math.sign(forwardZ)) * distanceFromCamera);
             },
             /*SimpleDodgeGame.GetGameplayZ end.*/
-
-            /*SimpleDodgeGame.TryGetPointerWorldX start.*/
-            TryGetPointerWorldX: function (worldX) {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#TryGetPointerWorldX", this ); }
-
-                var screen = new UnityEngine.Vector3();
-                if (UnityEngine.Input.touchCount > 0) {
-                    var touch = UnityEngine.Input.GetTouch(0);
-                    if (touch.phase === UnityEngine.TouchPhase.Canceled || touch.phase === UnityEngine.TouchPhase.Ended) {
-                        worldX.v = 0.0;
-                        return false;
-                    }
-
-                    screen = UnityEngine.Vector3.FromVector2(touch.position.$clone());
-                } else if (UnityEngine.Input.GetMouseButton(0)) {
-                    screen = UnityEngine.Input.mousePosition.$clone();
-                } else {
-                    worldX.v = 0.0;
-                    return false;
-                }
-
-                screen.z = this.pointerDepth;
-                worldX.v = this.gameplayCamera.ScreenToWorldPoint(screen).x;
-                return true;
-            },
-            /*SimpleDodgeGame.TryGetPointerWorldX end.*/
-
-            /*SimpleDodgeGame.GetPlayerCollisionRadius start.*/
-            GetPlayerCollisionRadius: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetPlayerCollisionRadius", this ); }
-
-                return this.playerRadius * this.GetPlayerSizeMultiplier();
-            },
-            /*SimpleDodgeGame.GetPlayerCollisionRadius end.*/
-
-            /*SimpleDodgeGame.GetPlayerSprite start.*/
-            GetPlayerSprite: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetPlayerSprite", this ); }
-
-                if (this.visualTheme != null && this.visualTheme.PlayerSprite != null) {
-                    return this.visualTheme.PlayerSprite;
-                }
-
-                return SimpleDodgeGame.GetGameplaySprite();
-            },
-            /*SimpleDodgeGame.GetPlayerSprite end.*/
-
-            /*SimpleDodgeGame.GetPlayerSizeMultiplier start.*/
-            GetPlayerSizeMultiplier: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetPlayerSizeMultiplier", this ); }
-
-                if (this.visualTheme != null) {
-                    return UnityEngine.Mathf.Max(0.1, this.visualTheme.PlayerSizeMultiplier);
-                }
-
-                return 1.0;
-            },
-            /*SimpleDodgeGame.GetPlayerSizeMultiplier end.*/
-
-            /*SimpleDodgeGame.GetPlayerColor start.*/
-            GetPlayerColor: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetPlayerColor", this ); }
-
-                if (this.visualTheme != null) {
-                    return this.visualTheme.PlayerColor.$clone();
-                }
-
-                return this.defaultPlayerColor.$clone();
-            },
-            /*SimpleDodgeGame.GetPlayerColor end.*/
-
-            /*SimpleDodgeGame.GetObstacleSprite start.*/
-            GetObstacleSprite: function (obstacleIndex) {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetObstacleSprite", this ); }
-
-                if (this.visualTheme != null) {
-                    var sprite = this.visualTheme.GetObstacleSprite(obstacleIndex);
-                    if (sprite != null) {
-                        return sprite;
-                    }
-                }
-
-                return SimpleDodgeGame.GetGameplaySprite();
-            },
-            /*SimpleDodgeGame.GetObstacleSprite end.*/
-
-            /*SimpleDodgeGame.GetObstacleSizeMultiplier start.*/
-            GetObstacleSizeMultiplier: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetObstacleSizeMultiplier", this ); }
-
-                if (this.visualTheme != null) {
-                    return UnityEngine.Mathf.Max(0.1, this.visualTheme.ObstacleSizeMultiplier);
-                }
-
-                return 1.0;
-            },
-            /*SimpleDodgeGame.GetObstacleSizeMultiplier end.*/
-
-            /*SimpleDodgeGame.GetObstacleColor start.*/
-            GetObstacleColor: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetObstacleColor", this ); }
-
-                if (this.visualTheme != null) {
-                    return this.visualTheme.ObstacleColor.$clone();
-                }
-
-                return this.defaultObstacleColor.$clone();
-            },
-            /*SimpleDodgeGame.GetObstacleColor end.*/
-
-            /*SimpleDodgeGame.GetBackgroundSprite start.*/
-            GetBackgroundSprite: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetBackgroundSprite", this ); }
-
-                if (this.visualTheme != null && this.visualTheme.BackgroundSprite != null) {
-                    return this.visualTheme.BackgroundSprite;
-                }
-
-                return SimpleDodgeGame.GetGameplaySprite();
-            },
-            /*SimpleDodgeGame.GetBackgroundSprite end.*/
-
-            /*SimpleDodgeGame.GetBackgroundColor start.*/
-            GetBackgroundColor: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetBackgroundColor", this ); }
-
-                if (this.visualTheme != null) {
-                    return this.visualTheme.BackgroundColor.$clone();
-                }
-
-                return this.defaultBackgroundColor.$clone();
-            },
-            /*SimpleDodgeGame.GetBackgroundColor end.*/
-
-            /*SimpleDodgeGame.GetBackgroundSortingOrder start.*/
-            GetBackgroundSortingOrder: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetBackgroundSortingOrder", this ); }
-
-                if (this.visualTheme != null) {
-                    return this.visualTheme.BackgroundSortingOrder;
-                }
-
-                return -20;
-            },
-            /*SimpleDodgeGame.GetBackgroundSortingOrder end.*/
-
-            /*SimpleDodgeGame.GetBackgroundScalePadding start.*/
-            GetBackgroundScalePadding: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetBackgroundScalePadding", this ); }
-
-                if (this.visualTheme != null) {
-                    return UnityEngine.Mathf.Max(1.0, this.visualTheme.BackgroundScalePadding);
-                }
-
-                return 1.02;
-            },
-            /*SimpleDodgeGame.GetBackgroundScalePadding end.*/
-
-            /*SimpleDodgeGame.ShouldPreserveBackgroundAspect start.*/
-            ShouldPreserveBackgroundAspect: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#ShouldPreserveBackgroundAspect", this ); }
-
-                if (this.visualTheme != null) {
-                    return this.visualTheme.PreserveBackgroundAspect;
-                }
-
-                return true;
-            },
-            /*SimpleDodgeGame.ShouldPreserveBackgroundAspect end.*/
 
             /*SimpleDodgeGame.GetSharedSpriteMaterial start.*/
             GetSharedSpriteMaterial: function () {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#GetSharedSpriteMaterial", this ); }
 
-                var selectedMaterial = null;
-                if (this.visualTheme != null && this.visualTheme.OverrideMaterial != null) {
-                    selectedMaterial = this.visualTheme.OverrideMaterial;
-                } else {
-                    selectedMaterial = this.spriteMaterial;
+                if (this.spriteMaterial != null && this.ShouldUseCustomMaterialForCurrentPlatform()) {
+                    var shader = this.spriteMaterial.shader;
+                    if (!this.fallbackToDefaultIfShaderUnsupported || (shader != null && shader.isSupported)) {
+                        return this.spriteMaterial;
+                    }
                 }
 
-                if (selectedMaterial == null) {
-                    return null;
-                }
-
-                if (!this.ShouldUseCustomMaterialForCurrentPlatform()) {
-                    return null;
-                }
-
-                var shader = selectedMaterial.shader;
-                if (this.fallbackToDefaultIfShaderUnsupported && (shader == null || !shader.isSupported)) {
-                    return null;
-                }
-
-                return selectedMaterial;
+                return null;
             },
             /*SimpleDodgeGame.GetSharedSpriteMaterial end.*/
 
@@ -976,54 +1722,112 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ShouldUseCustomMaterialForCurrentPlatform
     });
     /*SimpleDodgeGame end.*/
 
-    /*SimpleDodgeGame+Obstacle start.*/
-    Bridge.define("SimpleDodgeGame.Obstacle", {
+    /*SimpleDodgeGame+Orb start.*/
+    Bridge.define("SimpleDodgeGame.Orb", {
         $kind: 1002,
         fields: {
+            type: 0,
             gameObject: null,
             transform: null,
-            renderer: null,
-            baseRadius: 0,
-            radius: 0,
-            speed: 0
+            renderer: null
         },
         ctors: {
-            ctor: function (gameObject, renderer, baseRadius, radius, speed) {
-if ( TRACE ) { TRACE( "SimpleDodgeGame.Obstacle#ctor", this ); }
+            ctor: function (type, gameObject, renderer) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame.Orb#ctor", this ); }
 
                 this.$initialize();
+                this.type = type;
                 this.gameObject = gameObject;
                 this.renderer = renderer;
                 this.transform = gameObject.transform;
-                this.baseRadius = baseRadius;
-                this.radius = radius;
-                this.speed = speed;
             }
         }
     });
-    /*SimpleDodgeGame+Obstacle end.*/
+    /*SimpleDodgeGame+Orb end.*/
+
+    /*SimpleDodgeGame+OrbMove start.*/
+    Bridge.define("SimpleDodgeGame.OrbMove", {
+        $kind: 1004,
+        statics: {
+            methods: {
+                getDefaultValue: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame.OrbMove#getDefaultValue", this ); }
+ return new SimpleDodgeGame.OrbMove(); }
+            }
+        },
+        fields: {
+            orb: null,
+            from: null,
+            to: null
+        },
+        ctors: {
+            init: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame.OrbMove#init", this ); }
+
+                this.from = new UnityEngine.Vector3();
+                this.to = new UnityEngine.Vector3();
+            },
+            $ctor1: function (orb, from, to) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame.OrbMove#$ctor1", this ); }
+
+                this.$initialize();
+                this.orb = orb;
+                this.from = from.$clone();
+                this.to = to.$clone();
+            },
+            ctor: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame.OrbMove#ctor", this ); }
+
+                this.$initialize();
+            }
+        },
+        methods: {
+            getHashCode: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame.OrbMove#getHashCode", this ); }
+
+                var h = Bridge.addHash([1304946878, this.orb, this.from, this.to]);
+                return h;
+            },
+            equals: function (o) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame.OrbMove#equals", this ); }
+
+                if (!Bridge.is(o, SimpleDodgeGame.OrbMove)) {
+                    return false;
+                }
+                return Bridge.equals(this.orb, o.orb) && Bridge.equals(this.from, o.from) && Bridge.equals(this.to, o.to);
+            },
+            $clone: function (to) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame.OrbMove#$clone", this ); }
+
+                var s = to || new SimpleDodgeGame.OrbMove();
+                s.orb = this.orb;
+                s.from = this.from.$clone();
+                s.to = this.to.$clone();
+                return s;
+            }
+        }
+    });
+    /*SimpleDodgeGame+OrbMove end.*/
 
     if ( MODULE_reflection ) {
     var $m = Bridge.setMetadata,
-        $n = ["System","UnityEngine","System.Collections.Generic"];
-
-    /*DodgeVisualTheme start.*/
-    $m("DodgeVisualTheme", function () { return {"att":1048833,"a":2,"at":[Bridge.apply(new UnityEngine.CreateAssetMenuAttribute(), {
-        fileName: "DodgeVisualTheme", menuName: "AdGame2/Dodge Visual Theme"
-    } )],"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"},{"a":2,"n":"GetObstacleSprite","t":8,"pi":[{"n":"sequenceIndex","pt":$n[0].Int32,"ps":0}],"sn":"GetObstacleSprite","rt":$n[1].Sprite,"p":[$n[0].Int32]},{"a":2,"n":"BackgroundColor","t":16,"rt":$n[1].Color,"g":{"a":2,"n":"get_BackgroundColor","t":8,"rt":$n[1].Color,"fg":"BackgroundColor"},"fn":"BackgroundColor"},{"a":2,"n":"BackgroundScalePadding","t":16,"rt":$n[0].Single,"g":{"a":2,"n":"get_BackgroundScalePadding","t":8,"rt":$n[0].Single,"fg":"BackgroundScalePadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},"fn":"BackgroundScalePadding"},{"a":2,"n":"BackgroundSortingOrder","t":16,"rt":$n[0].Int32,"g":{"a":2,"n":"get_BackgroundSortingOrder","t":8,"rt":$n[0].Int32,"fg":"BackgroundSortingOrder","box":function ($v) { return Bridge.box($v, System.Int32);}},"fn":"BackgroundSortingOrder"},{"a":2,"n":"BackgroundSprite","t":16,"rt":$n[1].Sprite,"g":{"a":2,"n":"get_BackgroundSprite","t":8,"rt":$n[1].Sprite,"fg":"BackgroundSprite"},"fn":"BackgroundSprite"},{"a":2,"n":"ObstacleColor","t":16,"rt":$n[1].Color,"g":{"a":2,"n":"get_ObstacleColor","t":8,"rt":$n[1].Color,"fg":"ObstacleColor"},"fn":"ObstacleColor"},{"a":2,"n":"ObstacleSizeMultiplier","t":16,"rt":$n[0].Single,"g":{"a":2,"n":"get_ObstacleSizeMultiplier","t":8,"rt":$n[0].Single,"fg":"ObstacleSizeMultiplier","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},"fn":"ObstacleSizeMultiplier"},{"a":2,"n":"OverrideMaterial","t":16,"rt":$n[1].Material,"g":{"a":2,"n":"get_OverrideMaterial","t":8,"rt":$n[1].Material,"fg":"OverrideMaterial"},"fn":"OverrideMaterial"},{"a":2,"n":"PlayerColor","t":16,"rt":$n[1].Color,"g":{"a":2,"n":"get_PlayerColor","t":8,"rt":$n[1].Color,"fg":"PlayerColor"},"fn":"PlayerColor"},{"a":2,"n":"PlayerSizeMultiplier","t":16,"rt":$n[0].Single,"g":{"a":2,"n":"get_PlayerSizeMultiplier","t":8,"rt":$n[0].Single,"fg":"PlayerSizeMultiplier","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},"fn":"PlayerSizeMultiplier"},{"a":2,"n":"PlayerSprite","t":16,"rt":$n[1].Sprite,"g":{"a":2,"n":"get_PlayerSprite","t":8,"rt":$n[1].Sprite,"fg":"PlayerSprite"},"fn":"PlayerSprite"},{"a":2,"n":"PreserveBackgroundAspect","t":16,"rt":$n[0].Boolean,"g":{"a":2,"n":"get_PreserveBackgroundAspect","t":8,"rt":$n[0].Boolean,"fg":"PreserveBackgroundAspect","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},"fn":"PreserveBackgroundAspect"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"backgroundColor","t":4,"rt":$n[1].Color,"sn":"backgroundColor"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"backgroundScalePadding","t":4,"rt":$n[0].Single,"sn":"backgroundScalePadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"backgroundSortingOrder","t":4,"rt":$n[0].Int32,"sn":"backgroundSortingOrder","box":function ($v) { return Bridge.box($v, System.Int32);}},{"at":[new UnityEngine.HeaderAttribute("Background"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"backgroundSprite","t":4,"rt":$n[1].Sprite,"sn":"backgroundSprite"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"obstacleColor","t":4,"rt":$n[1].Color,"sn":"obstacleColor"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"obstacleSizeMultiplier","t":4,"rt":$n[0].Single,"sn":"obstacleSizeMultiplier","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.HeaderAttribute("Obstacle"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"obstacleSprite","t":4,"rt":$n[1].Sprite,"sn":"obstacleSprite"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"obstacleVariants","t":4,"rt":$n[2].List$1(UnityEngine.Sprite),"sn":"obstacleVariants"},{"at":[new UnityEngine.HeaderAttribute("Shared Material"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"overrideMaterial","t":4,"rt":$n[1].Material,"sn":"overrideMaterial"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"playerColor","t":4,"rt":$n[1].Color,"sn":"playerColor"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"playerSizeMultiplier","t":4,"rt":$n[0].Single,"sn":"playerSizeMultiplier","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.HeaderAttribute("Player"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"playerSprite","t":4,"rt":$n[1].Sprite,"sn":"playerSprite"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"preserveBackgroundAspect","t":4,"rt":$n[0].Boolean,"sn":"preserveBackgroundAspect","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"randomizeObstacleVariant","t":4,"rt":$n[0].Boolean,"sn":"randomizeObstacleVariant","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}}]}; }, $n);
-    /*DodgeVisualTheme end.*/
+        $n = ["System","System.Collections.Generic","System.Collections","UnityEngine"];
 
     /*PlayworksComplianceHooks start.*/
-    $m("PlayworksComplianceHooks", function () { return {"att":1048833,"a":2,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"},{"a":1,"n":"Start","t":8,"sn":"Start","rt":$n[0].Void},{"a":2,"n":"TriggerGameEnded","t":8,"sn":"TriggerGameEnded","rt":$n[0].Void},{"a":2,"n":"TriggerInstall","t":8,"sn":"TriggerInstall","rt":$n[0].Void},{"at":[new UnityEngine.LunaPlaygroundFieldAttribute("Android Store URL", 1, "CTA", false, null),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"androidStoreUrl","t":4,"rt":$n[0].String,"sn":"androidStoreUrl"},{"at":[new UnityEngine.LunaPlaygroundFieldAttribute("Default Level", 2, "Gameplay", false, null),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"defaultLevel","t":4,"rt":$n[0].Int32,"sn":"defaultLevel","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"gameEnded","t":4,"rt":$n[0].Boolean,"sn":"gameEnded","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"at":[new UnityEngine.LunaPlaygroundFieldAttribute("iOS Store URL", 0, "CTA", false, null),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"iosStoreUrl","t":4,"rt":$n[0].String,"sn":"iosStoreUrl"}]}; }, $n);
+    $m("PlayworksComplianceHooks", function () { return {"att":1048833,"a":2,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"},{"a":1,"n":"Start","t":8,"sn":"Start","rt":$n[0].Void},{"a":2,"n":"TriggerGameEnded","t":8,"sn":"TriggerGameEnded","rt":$n[0].Void},{"a":2,"n":"TriggerInstall","t":8,"sn":"TriggerInstall","rt":$n[0].Void},{"at":[new UnityEngine.LunaPlaygroundFieldAttribute("Android Store URL", 1, "CTA", false, null),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"androidStoreUrl","t":4,"rt":$n[0].String,"sn":"androidStoreUrl"},{"a":1,"n":"gameEnded","t":4,"rt":$n[0].Boolean,"sn":"gameEnded","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"at":[new UnityEngine.LunaPlaygroundFieldAttribute("Gameplay Variant", 2, "Gameplay", false, null),new UnityEngine.SerializeFieldAttribute(),new UnityEngine.RangeAttribute(0.0, 2.0)],"a":1,"n":"gameplayVariant","t":4,"rt":$n[0].Int32,"sn":"gameplayVariant","box":function ($v) { return Bridge.box($v, System.Int32);}},{"at":[new UnityEngine.LunaPlaygroundFieldAttribute("iOS Store URL", 0, "CTA", false, null),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"iosStoreUrl","t":4,"rt":$n[0].String,"sn":"iosStoreUrl"}]}; }, $n);
     /*PlayworksComplianceHooks end.*/
 
     /*SimpleDodgeGame start.*/
-    $m("SimpleDodgeGame", function () { return {"nested":[SimpleDodgeGame.Obstacle],"att":1048833,"a":2,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"},{"a":1,"n":"ApplyBackgroundVisuals","t":8,"sn":"ApplyBackgroundVisuals","rt":$n[0].Void},{"a":1,"n":"ApplyObstacleVisuals","t":8,"pi":[{"n":"obstacle","pt":SimpleDodgeGame.Obstacle,"ps":0},{"n":"obstacleIndex","pt":$n[0].Int32,"ps":1}],"sn":"ApplyObstacleVisuals","rt":$n[0].Void,"p":[SimpleDodgeGame.Obstacle,$n[0].Int32]},{"a":1,"n":"ApplyPlayerVisuals","t":8,"sn":"ApplyPlayerVisuals","rt":$n[0].Void},{"a":1,"n":"ApplyRendererMaterial","t":8,"pi":[{"n":"renderer","pt":$n[1].SpriteRenderer,"ps":0}],"sn":"ApplyRendererMaterial","rt":$n[0].Void,"p":[$n[1].SpriteRenderer]},{"a":1,"n":"Awake","t":8,"sn":"Awake","rt":$n[0].Void},{"a":1,"n":"ClearObstacles","t":8,"sn":"ClearObstacles","rt":$n[0].Void},{"a":1,"n":"CreateBackground","t":8,"sn":"CreateBackground","rt":$n[0].Void},{"a":1,"n":"CreatePlayer","t":8,"sn":"CreatePlayer","rt":$n[0].Void},{"a":1,"n":"GetBackgroundColor","t":8,"sn":"GetBackgroundColor","rt":$n[1].Color},{"a":1,"n":"GetBackgroundScalePadding","t":8,"sn":"GetBackgroundScalePadding","rt":$n[0].Single,"box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"GetBackgroundSortingOrder","t":8,"sn":"GetBackgroundSortingOrder","rt":$n[0].Int32,"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"GetBackgroundSprite","t":8,"sn":"GetBackgroundSprite","rt":$n[1].Sprite},{"a":1,"n":"GetGameplaySprite","is":true,"t":8,"sn":"GetGameplaySprite","rt":$n[1].Sprite},{"a":1,"n":"GetGameplayZ","t":8,"sn":"GetGameplayZ","rt":$n[0].Single,"box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"GetObstacleColor","t":8,"sn":"GetObstacleColor","rt":$n[1].Color},{"a":1,"n":"GetObstacleSizeMultiplier","t":8,"sn":"GetObstacleSizeMultiplier","rt":$n[0].Single,"box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"GetObstacleSprite","t":8,"pi":[{"n":"obstacleIndex","pt":$n[0].Int32,"ps":0}],"sn":"GetObstacleSprite","rt":$n[1].Sprite,"p":[$n[0].Int32]},{"a":1,"n":"GetPlayerCollisionRadius","t":8,"sn":"GetPlayerCollisionRadius","rt":$n[0].Single,"box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"GetPlayerColor","t":8,"sn":"GetPlayerColor","rt":$n[1].Color},{"a":1,"n":"GetPlayerSizeMultiplier","t":8,"sn":"GetPlayerSizeMultiplier","rt":$n[0].Single,"box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"GetPlayerSprite","t":8,"sn":"GetPlayerSprite","rt":$n[1].Sprite},{"a":1,"n":"GetSharedSpriteMaterial","t":8,"sn":"GetSharedSpriteMaterial","rt":$n[1].Material},{"a":1,"n":"GetSpriteWorldSize","is":true,"t":8,"pi":[{"n":"sprite","pt":$n[1].Sprite,"ps":0}],"sn":"GetSpriteWorldSize","rt":$n[1].Vector2,"p":[$n[1].Sprite]},{"a":1,"n":"HandleLose","t":8,"sn":"HandleLose","rt":$n[0].Void},{"a":1,"n":"HandlePlayerMovement","t":8,"sn":"HandlePlayerMovement","rt":$n[0].Void},{"a":1,"n":"HandleSpawning","t":8,"sn":"HandleSpawning","rt":$n[0].Void},{"a":1,"n":"HasTouchBegan","is":true,"t":8,"sn":"HasTouchBegan","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"OnDestroy","t":8,"sn":"OnDestroy","rt":$n[0].Void},{"a":1,"n":"OnValidate","t":8,"sn":"OnValidate","rt":$n[0].Void},{"a":1,"n":"RefreshObstacleVisuals","t":8,"sn":"RefreshObstacleVisuals","rt":$n[0].Void},{"at":[new UnityEngine.ContextMenu.ctor("Refresh Visual Theme")],"a":1,"n":"RefreshVisualThemeFromContextMenu","t":8,"sn":"RefreshVisualThemeFromContextMenu","rt":$n[0].Void},{"a":2,"n":"RefreshVisualsNow","t":8,"sn":"RefreshVisualsNow","rt":$n[0].Void},{"a":1,"n":"ResetRun","t":8,"sn":"ResetRun","rt":$n[0].Void},{"a":1,"n":"SetTransformDiameter","is":true,"t":8,"pi":[{"n":"targetTransform","pt":$n[1].Transform,"ps":0},{"n":"sprite","pt":$n[1].Sprite,"ps":1},{"n":"diameter","pt":$n[0].Single,"ps":2}],"sn":"SetTransformDiameter","rt":$n[0].Void,"p":[$n[1].Transform,$n[1].Sprite,$n[0].Single]},{"a":1,"n":"ShouldPreserveBackgroundAspect","t":8,"sn":"ShouldPreserveBackgroundAspect","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"ShouldUseCustomMaterialForCurrentPlatform","t":8,"sn":"ShouldUseCustomMaterialForCurrentPlatform","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"SpawnObstacle","t":8,"sn":"SpawnObstacle","rt":$n[0].Void},{"a":1,"n":"TryGetPointerWorldX","t":8,"pi":[{"n":"worldX","out":true,"pt":$n[0].Single,"ps":0}],"sn":"TryGetPointerWorldX","rt":$n[0].Boolean,"p":[$n[0].Single],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"Update","t":8,"sn":"Update","rt":$n[0].Void},{"a":1,"n":"UpdateBackgroundTransform","t":8,"sn":"UpdateBackgroundTransform","rt":$n[0].Void},{"a":1,"n":"UpdateBounds","t":8,"sn":"UpdateBounds","rt":$n[0].Void},{"a":1,"n":"UpdateObstaclesAndCollision","t":8,"sn":"UpdateObstaclesAndCollision","rt":$n[0].Void},{"a":1,"n":"backgroundRenderer","t":4,"rt":$n[1].SpriteRenderer,"sn":"backgroundRenderer"},{"a":1,"n":"backgroundTransform","t":4,"rt":$n[1].Transform,"sn":"backgroundTransform"},{"a":1,"n":"bottomBound","t":4,"rt":$n[0].Single,"sn":"bottomBound","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"complianceHooks","t":4,"rt":PlayworksComplianceHooks,"sn":"complianceHooks"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"defaultBackgroundColor","t":4,"rt":$n[1].Color,"sn":"defaultBackgroundColor"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"defaultObstacleColor","t":4,"rt":$n[1].Color,"sn":"defaultObstacleColor"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"defaultPlayerColor","t":4,"rt":$n[1].Color,"sn":"defaultPlayerColor"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"despawnPadding","t":4,"rt":$n[0].Single,"sn":"despawnPadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"difficultyRampSeconds","t":4,"rt":$n[0].Single,"sn":"difficultyRampSeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"fallbackToDefaultIfShaderUnsupported","t":4,"rt":$n[0].Boolean,"sn":"fallbackToDefaultIfShaderUnsupported","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"gameOver","t":4,"rt":$n[0].Boolean,"sn":"gameOver","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"gameplayCamera","t":4,"rt":$n[1].Camera,"sn":"gameplayCamera"},{"a":1,"n":"gameplaySprite","is":true,"t":4,"rt":$n[1].Sprite,"sn":"gameplaySprite"},{"a":1,"n":"gameplayTexture","is":true,"t":4,"rt":$n[1].Texture2D,"sn":"gameplayTexture"},{"a":1,"n":"gameplayZ","t":4,"rt":$n[0].Single,"sn":"gameplayZ","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"leftBound","t":4,"rt":$n[0].Single,"sn":"leftBound","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"obstacleMaxRadius","t":4,"rt":$n[0].Single,"sn":"obstacleMaxRadius","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"obstacleMaxSpeed","t":4,"rt":$n[0].Single,"sn":"obstacleMaxSpeed","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.HeaderAttribute("Obstacles"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"obstacleMinRadius","t":4,"rt":$n[0].Single,"sn":"obstacleMinRadius","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"obstacleMinSpeed","t":4,"rt":$n[0].Single,"sn":"obstacleMinSpeed","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"obstacleSpawnCount","t":4,"rt":$n[0].Int32,"sn":"obstacleSpawnCount","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"obstacles","t":4,"rt":$n[2].List$1(SimpleDodgeGame.Obstacle),"sn":"obstacles","ro":true},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"playerBottomOffset","t":4,"rt":$n[0].Single,"sn":"playerBottomOffset","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"playerMoveSpeed","t":4,"rt":$n[0].Single,"sn":"playerMoveSpeed","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.HeaderAttribute("Player"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"playerRadius","t":4,"rt":$n[0].Single,"sn":"playerRadius","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"playerRenderer","t":4,"rt":$n[1].SpriteRenderer,"sn":"playerRenderer"},{"a":1,"n":"playerTransform","t":4,"rt":$n[1].Transform,"sn":"playerTransform"},{"a":1,"n":"pointerDepth","t":4,"rt":$n[0].Single,"sn":"pointerDepth","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"rightBound","t":4,"rt":$n[0].Single,"sn":"rightBound","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.HeaderAttribute("Play Area"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"sidePadding","t":4,"rt":$n[0].Single,"sn":"sidePadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"spawnIntervalEnd","t":4,"rt":$n[0].Single,"sn":"spawnIntervalEnd","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"spawnIntervalStart","t":4,"rt":$n[0].Single,"sn":"spawnIntervalStart","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"spawnTimer","t":4,"rt":$n[0].Single,"sn":"spawnTimer","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.HeaderAttribute("Rendering"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"spriteMaterial","t":4,"rt":$n[1].Material,"sn":"spriteMaterial"},{"a":1,"n":"survivalTime","t":4,"rt":$n[0].Single,"sn":"survivalTime","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"topBound","t":4,"rt":$n[0].Single,"sn":"topBound","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"useCustomMaterialInEditor","t":4,"rt":$n[0].Boolean,"sn":"useCustomMaterialInEditor","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"useCustomMaterialInWebGl","t":4,"rt":$n[0].Boolean,"sn":"useCustomMaterialInWebGl","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"at":[new UnityEngine.HeaderAttribute("Visual Theme"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"visualTheme","t":4,"rt":DodgeVisualTheme,"sn":"visualTheme"}]}; }, $n);
+    $m("SimpleDodgeGame", function () { return {"nested":[SimpleDodgeGame.Orb,SimpleDodgeGame.OrbMove],"att":1048833,"a":2,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"},{"a":1,"n":"AnimateMoves","t":8,"pi":[{"n":"moves","pt":$n[1].List$1(SimpleDodgeGame.OrbMove),"ps":0},{"n":"duration","pt":$n[0].Single,"ps":1}],"sn":"AnimateMoves","rt":$n[2].IEnumerator,"p":[$n[1].List$1(SimpleDodgeGame.OrbMove),$n[0].Single]},{"a":1,"n":"ApplyBackgroundVisuals","t":8,"sn":"ApplyBackgroundVisuals","rt":$n[0].Void},{"a":1,"n":"ApplyBoardFrameVisuals","t":8,"sn":"ApplyBoardFrameVisuals","rt":$n[0].Void},{"a":1,"n":"ApplyOrbVisuals","t":8,"pi":[{"n":"orb","pt":SimpleDodgeGame.Orb,"ps":0}],"sn":"ApplyOrbVisuals","rt":$n[0].Void,"p":[SimpleDodgeGame.Orb]},{"a":2,"n":"ApplyPlaygroundVariant","t":8,"pi":[{"n":"variantIndex","pt":$n[0].Int32,"ps":0}],"sn":"ApplyPlaygroundVariant","rt":$n[0].Void,"p":[$n[0].Int32]},{"a":1,"n":"ApplyRendererMaterial","t":8,"pi":[{"n":"renderer","pt":$n[3].SpriteRenderer,"ps":0}],"sn":"ApplyRendererMaterial","rt":$n[0].Void,"p":[$n[3].SpriteRenderer]},{"a":1,"n":"Awake","t":8,"sn":"Awake","rt":$n[0].Void},{"a":1,"n":"BuildInitialBoard","t":8,"sn":"BuildInitialBoard","rt":$n[0].Void},{"a":1,"n":"CalculateScoreGain","t":8,"pi":[{"n":"removedCount","pt":$n[0].Int32,"ps":0},{"n":"stepCombos","pt":$n[0].Int32,"ps":1},{"n":"totalCombos","pt":$n[0].Int32,"ps":2}],"sn":"CalculateScoreGain","rt":$n[0].Int32,"p":[$n[0].Int32,$n[0].Int32,$n[0].Int32],"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"CellToWorld","t":8,"pi":[{"n":"x","pt":$n[0].Int32,"ps":0},{"n":"y","pt":$n[0].Int32,"ps":1}],"sn":"CellToWorld","rt":$n[3].Vector3,"p":[$n[0].Int32,$n[0].Int32]},{"a":1,"n":"ClearBoard","t":8,"sn":"ClearBoard","rt":$n[0].Void},{"a":1,"n":"ClearBoolGrid","is":true,"t":8,"pi":[{"n":"grid","pt":$n[0].Array.type(System.Boolean, 2),"ps":0}],"sn":"ClearBoolGrid","rt":$n[0].Void,"p":[$n[0].Array.type(System.Boolean, 2)]},{"a":1,"n":"CollapseColumns","t":8,"sn":"CollapseColumns","rt":$n[2].IEnumerator},{"a":1,"n":"CollectMatches","t":8,"pi":[{"n":"matchedCells","out":true,"pt":$n[1].List$1(UnityEngine.Vector2Int),"ps":0}],"sn":"CollectMatches","rt":$n[0].Int32,"p":[$n[1].List$1(UnityEngine.Vector2Int)],"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"CreateOrb","t":8,"pi":[{"n":"type","pt":$n[0].Int32,"ps":0},{"n":"worldPosition","pt":$n[3].Vector3,"ps":1}],"sn":"CreateOrb","rt":SimpleDodgeGame.Orb,"p":[$n[0].Int32,$n[3].Vector3]},{"a":1,"n":"CreateRuntimeHud","t":8,"sn":"CreateRuntimeHud","rt":$n[0].Void},{"a":1,"n":"CreateRuntimeVisuals","t":8,"sn":"CreateRuntimeVisuals","rt":$n[0].Void},{"a":1,"n":"DragHeldOrbToward","t":8,"pi":[{"n":"targetCell","pt":$n[3].Vector2Int,"ps":0}],"sn":"DragHeldOrbToward","rt":$n[0].Void,"p":[$n[3].Vector2Int]},{"a":1,"n":"EndRound","t":8,"sn":"EndRound","rt":$n[0].Void},{"a":1,"n":"EnsureMatchBuffers","t":8,"sn":"EnsureMatchBuffers","rt":$n[0].Void},{"a":1,"n":"FillEmptyCells","t":8,"sn":"FillEmptyCells","rt":$n[2].IEnumerator},{"a":1,"n":"GetAnyConfiguredOrbSprite","t":8,"sn":"GetAnyConfiguredOrbSprite","rt":$n[3].Sprite},{"a":1,"n":"GetBoardSprite","t":8,"sn":"GetBoardSprite","rt":$n[3].Sprite},{"a":1,"n":"GetClearDelayWait","t":8,"sn":"GetClearDelayWait","rt":$n[3].WaitForSeconds},{"a":1,"n":"GetGameplayZ","t":8,"sn":"GetGameplayZ","rt":$n[0].Single,"box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"GetGeneratedFallbackSprite","is":true,"t":8,"sn":"GetGeneratedFallbackSprite","rt":$n[3].Sprite},{"a":1,"n":"GetInitialOrbType","t":8,"pi":[{"n":"x","pt":$n[0].Int32,"ps":0},{"n":"y","pt":$n[0].Int32,"ps":1}],"sn":"GetInitialOrbType","rt":$n[0].Int32,"p":[$n[0].Int32,$n[0].Int32],"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"GetOrbColor","t":8,"pi":[{"n":"type","pt":$n[0].Int32,"ps":0}],"sn":"GetOrbColor","rt":$n[3].Color,"p":[$n[0].Int32]},{"a":1,"n":"GetOrbColorCount","t":8,"sn":"GetOrbColorCount","rt":$n[0].Int32,"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"GetOrbSpriteForType","t":8,"pi":[{"n":"type","pt":$n[0].Int32,"ps":0}],"sn":"GetOrbSpriteForType","rt":$n[3].Sprite,"p":[$n[0].Int32]},{"a":1,"n":"GetRandomOrbType","t":8,"sn":"GetRandomOrbType","rt":$n[0].Int32,"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"GetSharedSpriteMaterial","t":8,"sn":"GetSharedSpriteMaterial","rt":$n[3].Material},{"a":1,"n":"GetSpriteWorldSize","is":true,"t":8,"pi":[{"n":"sprite","pt":$n[3].Sprite,"ps":0}],"sn":"GetSpriteWorldSize","rt":$n[3].Vector2,"p":[$n[3].Sprite]},{"a":1,"n":"HandleDragInput","t":8,"sn":"HandleDragInput","rt":$n[0].Void},{"a":1,"n":"IsInsideBoard","t":8,"pi":[{"n":"cell","pt":$n[3].Vector2Int,"ps":0}],"sn":"IsInsideBoard","rt":$n[0].Boolean,"p":[$n[3].Vector2Int],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"OnDestroy","t":8,"sn":"OnDestroy","rt":$n[0].Void},{"a":1,"n":"OnValidate","t":8,"sn":"OnValidate","rt":$n[0].Void},{"a":1,"n":"PointerPressedThisFrame","t":8,"sn":"PointerPressedThisFrame","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"PointerReleasedThisFrame","t":8,"sn":"PointerReleasedThisFrame","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"PrepareSpriteForRuntime","t":8,"pi":[{"n":"sourceSprite","pt":$n[3].Sprite,"ps":0}],"sn":"PrepareSpriteForRuntime","rt":$n[3].Sprite,"p":[$n[3].Sprite]},{"at":[new UnityEngine.ContextMenu.ctor("Refresh Visual Theme")],"a":1,"n":"RefreshVisualThemeFromContextMenu","t":8,"sn":"RefreshVisualThemeFromContextMenu","rt":$n[0].Void},{"a":2,"n":"RefreshVisualsNow","t":8,"sn":"RefreshVisualsNow","rt":$n[0].Void},{"a":1,"n":"RemoveMatchedCells","t":8,"pi":[{"n":"matchedCells","pt":$n[1].List$1(UnityEngine.Vector2Int),"ps":0}],"sn":"RemoveMatchedCells","rt":$n[0].Void,"p":[$n[1].List$1(UnityEngine.Vector2Int)]},{"a":1,"n":"RepositionBoardOrbs","t":8,"sn":"RepositionBoardOrbs","rt":$n[0].Void},{"a":1,"n":"ResetRound","t":8,"sn":"ResetRound","rt":$n[0].Void},{"a":1,"n":"ResolveBoardRoutine","t":8,"sn":"ResolveBoardRoutine","rt":$n[2].IEnumerator},{"a":1,"n":"ScreenToWorld","t":8,"pi":[{"n":"screenPosition","pt":$n[3].Vector2,"ps":0}],"sn":"ScreenToWorld","rt":$n[3].Vector3,"p":[$n[3].Vector2]},{"a":1,"n":"SetResultVisible","t":8,"pi":[{"n":"visible","pt":$n[0].Boolean,"ps":0}],"sn":"SetResultVisible","rt":$n[0].Void,"p":[$n[0].Boolean]},{"a":1,"n":"SetTransformDiameter","is":true,"t":8,"pi":[{"n":"targetTransform","pt":$n[3].Transform,"ps":0},{"n":"sprite","pt":$n[3].Sprite,"ps":1},{"n":"diameter","pt":$n[0].Single,"ps":2}],"sn":"SetTransformDiameter","rt":$n[0].Void,"p":[$n[3].Transform,$n[3].Sprite,$n[0].Single]},{"a":1,"n":"SetTransformSize","is":true,"t":8,"pi":[{"n":"targetTransform","pt":$n[3].Transform,"ps":0},{"n":"sprite","pt":$n[3].Sprite,"ps":1},{"n":"width","pt":$n[0].Single,"ps":2},{"n":"height","pt":$n[0].Single,"ps":3}],"sn":"SetTransformSize","rt":$n[0].Void,"p":[$n[3].Transform,$n[3].Sprite,$n[0].Single,$n[0].Single]},{"a":1,"n":"ShouldUseCustomMaterialForCurrentPlatform","t":8,"sn":"ShouldUseCustomMaterialForCurrentPlatform","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"SwapCells","t":8,"pi":[{"n":"a","pt":$n[3].Vector2Int,"ps":0},{"n":"b","pt":$n[3].Vector2Int,"ps":1}],"sn":"SwapCells","rt":$n[0].Void,"p":[$n[3].Vector2Int,$n[3].Vector2Int]},{"a":1,"n":"TryGetPointerDownWorld","t":8,"pi":[{"n":"worldPosition","out":true,"pt":$n[3].Vector3,"ps":0}],"sn":"TryGetPointerDownWorld","rt":$n[0].Boolean,"p":[$n[3].Vector3],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"TryGetPointerHeldWorld","t":8,"pi":[{"n":"worldPosition","out":true,"pt":$n[3].Vector3,"ps":0}],"sn":"TryGetPointerHeldWorld","rt":$n[0].Boolean,"p":[$n[3].Vector3],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"TryWorldToCell","t":8,"pi":[{"n":"worldPosition","pt":$n[3].Vector3,"ps":0},{"n":"cell","out":true,"pt":$n[3].Vector2Int,"ps":1}],"sn":"TryWorldToCell","rt":$n[0].Boolean,"p":[$n[3].Vector3,$n[3].Vector2Int],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"Update","t":8,"sn":"Update","rt":$n[0].Void},{"a":1,"n":"UpdateBackgroundTransform","t":8,"sn":"UpdateBackgroundTransform","rt":$n[0].Void},{"a":1,"n":"UpdateBoardFrameTransform","t":8,"sn":"UpdateBoardFrameTransform","rt":$n[0].Void},{"a":1,"n":"UpdateHudTexts","t":8,"sn":"UpdateHudTexts","rt":$n[0].Void},{"a":1,"n":"UpdateLayout","t":8,"pi":[{"n":"force","pt":$n[0].Boolean,"ps":0}],"sn":"UpdateLayout","rt":$n[0].Void,"p":[$n[0].Boolean]},{"a":1,"n":"ValidateConfig","t":8,"sn":"ValidateConfig","rt":$n[0].Void},{"a":1,"n":"WarnIfMissingSpriteSetup","t":8,"sn":"WarnIfMissingSpriteSetup","rt":$n[0].Void},{"a":1,"n":"NeighborOffsets","is":true,"t":4,"rt":System.Array.type(UnityEngine.Vector2Int),"sn":"NeighborOffsets","ro":true},{"at":[new UnityEngine.HeaderAttribute("Colors"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"backgroundColor","t":4,"rt":$n[3].Color,"sn":"backgroundColor"},{"a":1,"n":"backgroundRenderer","t":4,"rt":$n[3].SpriteRenderer,"sn":"backgroundRenderer"},{"a":1,"n":"backgroundTransform","t":4,"rt":$n[3].Transform,"sn":"backgroundTransform"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"baseScorePerOrb","t":4,"rt":$n[0].Int32,"sn":"baseScorePerOrb","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"board","t":4,"rt":System.Array.type(SimpleDodgeGame.Orb, 2),"sn":"board"},{"a":1,"n":"boardBottomLeft","t":4,"rt":$n[3].Vector2,"sn":"boardBottomLeft"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardBottomPadding","t":4,"rt":$n[0].Single,"sn":"boardBottomPadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardColor","t":4,"rt":$n[3].Color,"sn":"boardColor"},{"a":1,"n":"boardFrameRenderer","t":4,"rt":$n[3].SpriteRenderer,"sn":"boardFrameRenderer"},{"a":1,"n":"boardFrameTransform","t":4,"rt":$n[3].Transform,"sn":"boardFrameTransform"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardOutlineColor","t":4,"rt":$n[3].Color,"sn":"boardOutlineColor"},{"a":1,"n":"boardOutlineRenderer","t":4,"rt":$n[3].SpriteRenderer,"sn":"boardOutlineRenderer"},{"a":1,"n":"boardOutlineTransform","t":4,"rt":$n[3].Transform,"sn":"boardOutlineTransform"},{"a":1,"n":"boardRoot","t":4,"rt":$n[3].Transform,"sn":"boardRoot"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardSidePadding","t":4,"rt":$n[0].Single,"sn":"boardSidePadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardTopPadding","t":4,"rt":$n[0].Single,"sn":"boardTopPadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"boardWorldHeight","t":4,"rt":$n[0].Single,"sn":"boardWorldHeight","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"boardWorldWidth","t":4,"rt":$n[0].Single,"sn":"boardWorldWidth","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"cachedClearDelaySeconds","t":4,"rt":$n[0].Single,"sn":"cachedClearDelaySeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"cachedClearDelayWait","t":4,"rt":$n[3].WaitForSeconds,"sn":"cachedClearDelayWait"},{"a":1,"n":"cellSize","t":4,"rt":$n[0].Single,"sn":"cellSize","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"clearDelaySeconds","t":4,"rt":$n[0].Single,"sn":"clearDelaySeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.HeaderAttribute("Board"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"columns","t":4,"rt":$n[0].Int32,"sn":"columns","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"complianceHooks","t":4,"rt":PlayworksComplianceHooks,"sn":"complianceHooks"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"fallDurationSeconds","t":4,"rt":$n[0].Single,"sn":"fallDurationSeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"fallbackToDefaultIfShaderUnsupported","t":4,"rt":$n[0].Boolean,"sn":"fallbackToDefaultIfShaderUnsupported","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"floodFillStackBuffer","t":4,"rt":$n[1].List$1(UnityEngine.Vector2Int),"sn":"floodFillStackBuffer","ro":true},{"a":1,"n":"gameplayCamera","t":4,"rt":$n[3].Camera,"sn":"gameplayCamera"},{"a":1,"n":"gameplayZ","t":4,"rt":$n[0].Single,"sn":"gameplayZ","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"generatedFallbackSprite","is":true,"t":4,"rt":$n[3].Sprite,"sn":"generatedFallbackSprite"},{"a":1,"n":"generatedFallbackTexture","is":true,"t":4,"rt":$n[3].Texture2D,"sn":"generatedFallbackTexture"},{"a":1,"n":"hasLoggedMissingSpriteConfig","t":4,"rt":$n[0].Boolean,"sn":"hasLoggedMissingSpriteConfig","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"hasReportedGameEnded","t":4,"rt":$n[0].Boolean,"sn":"hasReportedGameEnded","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"heldCell","t":4,"rt":$n[3].Vector2Int,"sn":"heldCell"},{"a":1,"n":"isDragging","t":4,"rt":$n[0].Boolean,"sn":"isDragging","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"isResolving","t":4,"rt":$n[0].Boolean,"sn":"isResolving","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"lastMoveCombos","t":4,"rt":$n[0].Int32,"sn":"lastMoveCombos","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"layoutInitialized","t":4,"rt":$n[0].Boolean,"sn":"layoutInitialized","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"markedCellsBuffer","t":4,"rt":$n[0].Array.type(System.Boolean, 2),"sn":"markedCellsBuffer"},{"a":1,"n":"matchedCellsBuffer","t":4,"rt":$n[1].List$1(UnityEngine.Vector2Int),"sn":"matchedCellsBuffer","ro":true},{"a":1,"n":"moveBuffer","t":4,"rt":$n[1].List$1(SimpleDodgeGame.OrbMove),"sn":"moveBuffer","ro":true},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"orbColors","t":4,"rt":System.Array.type(UnityEngine.Color),"sn":"orbColors"},{"at":[new UnityEngine.SerializeFieldAttribute(),new UnityEngine.RangeAttribute(0.6, 1.0)],"a":1,"n":"orbScale","t":4,"rt":$n[0].Single,"sn":"orbScale","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"orbSprites","t":4,"rt":System.Array.type(UnityEngine.Sprite),"sn":"orbSprites"},{"a":1,"n":"pointerDepth","t":4,"rt":$n[0].Single,"sn":"pointerDepth","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.HeaderAttribute("Round"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"roundDurationSeconds","t":4,"rt":$n[0].Single,"sn":"roundDurationSeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"roundEnded","t":4,"rt":$n[0].Boolean,"sn":"roundEnded","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"rows","t":4,"rt":$n[0].Int32,"sn":"rows","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"score","t":4,"rt":$n[0].Int32,"sn":"score","box":function ($v) { return Bridge.box($v, System.Int32);}},{"at":[new UnityEngine.HeaderAttribute("Rendering"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"spriteMaterial","t":4,"rt":$n[3].Material,"sn":"spriteMaterial"},{"a":1,"n":"timeRemaining","t":4,"rt":$n[0].Single,"sn":"timeRemaining","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"useCustomMaterialInEditor","t":4,"rt":$n[0].Boolean,"sn":"useCustomMaterialInEditor","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"useCustomMaterialInWebGl","t":4,"rt":$n[0].Boolean,"sn":"useCustomMaterialInWebGl","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"visitedCellsBuffer","t":4,"rt":$n[0].Array.type(System.Boolean, 2),"sn":"visitedCellsBuffer"}]}; }, $n);
     /*SimpleDodgeGame end.*/
 
-    /*SimpleDodgeGame+Obstacle start.*/
-    $m("SimpleDodgeGame.Obstacle", function () { return {"td":SimpleDodgeGame,"att":1048835,"a":1,"m":[{"a":2,"n":".ctor","t":1,"p":[$n[1].GameObject,$n[1].SpriteRenderer,$n[0].Single,$n[0].Single,$n[0].Single],"pi":[{"n":"gameObject","pt":$n[1].GameObject,"ps":0},{"n":"renderer","pt":$n[1].SpriteRenderer,"ps":1},{"n":"baseRadius","pt":$n[0].Single,"ps":2},{"n":"radius","pt":$n[0].Single,"ps":3},{"n":"speed","pt":$n[0].Single,"ps":4}],"sn":"ctor"},{"a":2,"n":"baseRadius","t":4,"rt":$n[0].Single,"sn":"baseRadius","ro":true,"box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":2,"n":"gameObject","t":4,"rt":$n[1].GameObject,"sn":"gameObject","ro":true},{"a":2,"n":"radius","t":4,"rt":$n[0].Single,"sn":"radius","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":2,"n":"renderer","t":4,"rt":$n[1].SpriteRenderer,"sn":"renderer","ro":true},{"a":2,"n":"speed","t":4,"rt":$n[0].Single,"sn":"speed","ro":true,"box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":2,"n":"transform","t":4,"rt":$n[1].Transform,"sn":"transform","ro":true}]}; }, $n);
-    /*SimpleDodgeGame+Obstacle end.*/
+    /*SimpleDodgeGame+Orb start.*/
+    $m("SimpleDodgeGame.Orb", function () { return {"td":SimpleDodgeGame,"att":1048835,"a":1,"m":[{"a":2,"n":".ctor","t":1,"p":[$n[0].Int32,$n[3].GameObject,$n[3].SpriteRenderer],"pi":[{"n":"type","pt":$n[0].Int32,"ps":0},{"n":"gameObject","pt":$n[3].GameObject,"ps":1},{"n":"renderer","pt":$n[3].SpriteRenderer,"ps":2}],"sn":"ctor"},{"a":2,"n":"gameObject","t":4,"rt":$n[3].GameObject,"sn":"gameObject","ro":true},{"a":2,"n":"renderer","t":4,"rt":$n[3].SpriteRenderer,"sn":"renderer","ro":true},{"a":2,"n":"transform","t":4,"rt":$n[3].Transform,"sn":"transform","ro":true},{"a":2,"n":"type","t":4,"rt":$n[0].Int32,"sn":"type","box":function ($v) { return Bridge.box($v, System.Int32);}}]}; }, $n);
+    /*SimpleDodgeGame+Orb end.*/
+
+    /*SimpleDodgeGame+OrbMove start.*/
+    $m("SimpleDodgeGame.OrbMove", function () { return {"td":SimpleDodgeGame,"att":1048843,"a":1,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"},{"a":2,"n":".ctor","t":1,"p":[SimpleDodgeGame.Orb,$n[3].Vector3,$n[3].Vector3],"pi":[{"n":"orb","pt":SimpleDodgeGame.Orb,"ps":0},{"n":"from","pt":$n[3].Vector3,"ps":1},{"n":"to","pt":$n[3].Vector3,"ps":2}],"sn":"$ctor1"},{"a":2,"n":"from","t":4,"rt":$n[3].Vector3,"sn":"from"},{"a":2,"n":"orb","t":4,"rt":SimpleDodgeGame.Orb,"sn":"orb"},{"a":2,"n":"to","t":4,"rt":$n[3].Vector3,"sn":"to"}]}; }, $n);
+    /*SimpleDodgeGame+OrbMove end.*/
 
     /*IAmAnEmptyScriptJustToMakeCodelessProjectsCompileProperty start.*/
     $m("IAmAnEmptyScriptJustToMakeCodelessProjectsCompileProperty", function () { return {"att":1048577,"a":2,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"}]}; }, $n);

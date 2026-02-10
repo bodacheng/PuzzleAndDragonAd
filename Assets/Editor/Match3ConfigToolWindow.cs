@@ -194,7 +194,7 @@ public sealed class Match3ConfigToolWindow : EditorWindow
         EditorGUILayout.PropertyField(orbColors, new GUIContent("Orb Colors"), true);
         EditorGUILayout.PropertyField(orbSprites, new GUIContent("Orb Sprites (By Type Index)"), true);
         EditorGUILayout.HelpBox(
-            "Type index maps by array position: orbColors[i] + orbSprites[i]. Empty sprite slots fall back to the default round orb.",
+            "Type index maps by array position: orbColors[i] + orbSprites[i]. Empty orb sprite slots fall back to the first non-empty orb sprite, then generated white sprite.",
             MessageType.None);
 
         using (new EditorGUILayout.HorizontalScope())
