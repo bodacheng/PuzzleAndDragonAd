@@ -172,10 +172,24 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
         if (roundEnded)
         {
+#if UNITY_LUNA
+            if (PointerPressedThisFrame())
+            {
+                if (complianceHooks != null)
+                {
+                    complianceHooks.TriggerInstall();
+                }
+                else
+                {
+                    ResetRound();
+                }
+            }
+#else
             if (Input.GetKeyDown(KeyCode.R) || PointerPressedThisFrame())
             {
                 ResetRound();
             }
+#endif
 
             UpdateHudTexts();
             return;
@@ -1092,7 +1106,11 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
         if (resultText != null && roundEnded)
         {
+#if UNITY_LUNA
+            resultText.text = "TIME UP\nScore: " + score + "\nTap / Click to install";
+#else
             resultText.text = "TIME UP\nScore: " + score + "\nTap / Click to restart";
+#endif
         }
     }
 

@@ -250,7 +250,7 @@ MonoBehaviour:
   fallDurationSeconds: 0.12
   roundDurationSeconds: 35
   baseScorePerOrb: 12
-  backgroundColor: {r: 0, g: 0, b: 0, a: 0.6039216}
+  backgroundColor: {r: 0.317873, g: 0, b: 1, a: 0.6039216}
   boardColor: {r: 0.05, g: 0.07, b: 0.12, a: 0.85}
   boardOutlineColor: {r: 0.72, g: 0.78, b: 0.9, a: 0.4}
   orbColors:
@@ -267,9 +267,9 @@ MonoBehaviour:
   - {fileID: -2747691441948392556, guid: 00e7c6d862f3c4c19a32a7419d3ecfe5, type: 3}
   - {fileID: -2747691441948392556, guid: 00e7c6d862f3c4c19a32a7419d3ecfe5, type: 3}
   - {fileID: -2747691441948392556, guid: 00e7c6d862f3c4c19a32a7419d3ecfe5, type: 3}
-  spriteMaterial: {fileID: 0}
+  spriteMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   useCustomMaterialInEditor: 1
-  useCustomMaterialInWebGl: 0
+  useCustomMaterialInWebGl: 1
   fallbackToDefaultIfShaderUnsupported: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

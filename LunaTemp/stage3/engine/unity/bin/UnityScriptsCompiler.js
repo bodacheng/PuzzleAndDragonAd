@@ -1,17 +1,9 @@
 if ( TRACE ) { TRACE( JSON.parse( '["PlayworksComplianceHooks#init","PlayworksComplianceHooks#Start","PlayworksComplianceHooks#TriggerInstall","PlayworksComplianceHooks#TriggerGameEnded","SimpleDodgeGame#init","SimpleDodgeGame#ClearBoolGrid","SimpleDodgeGame#GetGeneratedFallbackSprite","SimpleDodgeGame#SetTransformDiameter","SimpleDodgeGame#SetTransformSize","SimpleDodgeGame#GetSpriteWorldSize","SimpleDodgeGame#init","SimpleDodgeGame#Awake","SimpleDodgeGame#Update","SimpleDodgeGame#OnDestroy","SimpleDodgeGame#OnValidate","SimpleDodgeGame#RefreshVisualsNow","SimpleDodgeGame#ApplyPlaygroundVariant","SimpleDodgeGame#RefreshVisualThemeFromContextMenu","SimpleDodgeGame#ResetRound","SimpleDodgeGame#EndRound","SimpleDodgeGame#HandleDragInput","SimpleDodgeGame#DragHeldOrbToward","SimpleDodgeGame#ResolveBoardRoutine","SimpleDodgeGame#RemoveMatchedCells","SimpleDodgeGame#CollapseColumns","SimpleDodgeGame#FillEmptyCells","SimpleDodgeGame#AnimateMoves","SimpleDodgeGame#CollectMatches","SimpleDodgeGame#CalculateScoreGain","SimpleDodgeGame#BuildInitialBoard","SimpleDodgeGame#ClearBoard","SimpleDodgeGame#CreateOrb","SimpleDodgeGame#SwapCells","SimpleDodgeGame#GetInitialOrbType","SimpleDodgeGame#GetRandomOrbType","SimpleDodgeGame#GetOrbColorCount","SimpleDodgeGame#GetOrbColor","SimpleDodgeGame#CreateRuntimeVisuals","SimpleDodgeGame#ApplyBackgroundVisuals","SimpleDodgeGame#ApplyBoardFrameVisuals","SimpleDodgeGame#ApplyOrbVisuals","SimpleDodgeGame#GetOrbSpriteForType","SimpleDodgeGame#GetBoardSprite","SimpleDodgeGame#GetAnyConfiguredOrbSprite","SimpleDodgeGame#PrepareSpriteForRuntime","SimpleDodgeGame#WarnIfMissingSpriteSetup","SimpleDodgeGame#CreateRuntimeHud","SimpleDodgeGame#UpdateHudTexts","SimpleDodgeGame#SetResultVisible","SimpleDodgeGame#UpdateLayout","SimpleDodgeGame#RepositionBoardOrbs","SimpleDodgeGame#UpdateBackgroundTransform","SimpleDodgeGame#UpdateBoardFrameTransform","SimpleDodgeGame#CellToWorld","SimpleDodgeGame#TryWorldToCell","SimpleDodgeGame#IsInsideBoard","SimpleDodgeGame#TryGetPointerDownWorld","SimpleDodgeGame#TryGetPointerHeldWorld","SimpleDodgeGame#PointerPressedThisFrame","SimpleDodgeGame#PointerReleasedThisFrame","SimpleDodgeGame#ScreenToWorld","SimpleDodgeGame#ValidateConfig","SimpleDodgeGame#EnsureMatchBuffers","SimpleDodgeGame#GetClearDelayWait","SimpleDodgeGame#ApplyRendererMaterial","SimpleDodgeGame#GetGameplayZ","SimpleDodgeGame#GetSharedSpriteMaterial","SimpleDodgeGame#ShouldUseCustomMaterialForCurrentPlatform","SimpleDodgeGame.Orb#ctor","SimpleDodgeGame.OrbMove#getDefaultValue","SimpleDodgeGame.OrbMove#init","SimpleDodgeGame.OrbMove#$ctor1","SimpleDodgeGame.OrbMove#ctor","SimpleDodgeGame.OrbMove#getHashCode","SimpleDodgeGame.OrbMove#equals","SimpleDodgeGame.OrbMove#$clone"]' ) ); }
 /**
- * @version 1.0.9537.29737
- * @copyright anton
  * @compiler Bridge.NET 17.9.42-luna
  */
 Bridge.assembly("UnityScriptsCompiler", function ($asm, globals) {
     "use strict";
-
-    /*IAmAnEmptyScriptJustToMakeCodelessProjectsCompileProperty start.*/
-    Bridge.define("IAmAnEmptyScriptJustToMakeCodelessProjectsCompileProperty", {
-        inherits: [UnityEngine.MonoBehaviour]
-    });
-    /*IAmAnEmptyScriptJustToMakeCodelessProjectsCompileProperty end.*/
 
     /*PlayworksComplianceHooks start.*/
     Bridge.define("PlayworksComplianceHooks", {
@@ -36,28 +28,23 @@ if ( TRACE ) { TRACE( "PlayworksComplianceHooks#init", this ); }
             Start: function () {
 if ( TRACE ) { TRACE( "PlayworksComplianceHooks#Start", this ); }
 
-                // Auto-bootstrap fallback if the scene is missing the gameplay component.
                 if (UnityEngine.MonoBehaviour.op_Equality(this.GetComponent(SimpleDodgeGame), null)) {
                     try {
-                        this.gameObject.AddComponent(SimpleDodgeGame);
-                    } catch (exception) {
-                        exception = System.Exception.create(exception);
-                        UnityEngine.Debug.LogError$2("Failed to add SimpleDodgeGame: " + (exception.Message || ""));
+                        Bridge.ensureBaseProperty(this, "gameObject").$UnityEngine$Component$gameObject.AddComponent(SimpleDodgeGame);
+                    } catch (exception2) {
+                        exception2 = System.Exception.create(exception2);
+                        UnityEngine.Debug.LogError$2("Failed to add SimpleDodgeGame: " + (exception2.Message || ""));
                     }
                 }
-
                 var gameplay = this.GetComponent(SimpleDodgeGame);
                 if (UnityEngine.MonoBehaviour.op_Inequality(gameplay, null)) {
                     gameplay.ApplyPlaygroundVariant(this.gameplayVariant);
                 }
-
-                // LP3007 custom event
-                // Keep gameplay initialization resilient even if analytics is unavailable in preview/runtime.
                 try {
                     Luna.Unity.Analytics.LogEvent$1("session_start", 1);
-                } catch (exception1) {
-                    exception1 = System.Exception.create(exception1);
-                    UnityEngine.Debug.LogWarning$1("Analytics.LogEvent(session_start) failed: " + (exception1.Message || ""));
+                } catch (exception) {
+                    exception = System.Exception.create(exception);
+                    UnityEngine.Debug.LogWarning$1("Analytics.LogEvent(session_start) failed: " + (exception.Message || ""));
                 }
             },
             /*PlayworksComplianceHooks.Start end.*/
@@ -66,7 +53,6 @@ if ( TRACE ) { TRACE( "PlayworksComplianceHooks#Start", this ); }
             TriggerInstall: function () {
 if ( TRACE ) { TRACE( "PlayworksComplianceHooks#TriggerInstall", this ); }
 
-                // LP3006 required API
                 Luna.Unity.Playable.InstallFullGame(this.iosStoreUrl, this.androidStoreUrl);
                 Luna.Unity.Analytics.LogEvent$1("cta_click", 1);
             },
@@ -76,14 +62,11 @@ if ( TRACE ) { TRACE( "PlayworksComplianceHooks#TriggerInstall", this ); }
             TriggerGameEnded: function () {
 if ( TRACE ) { TRACE( "PlayworksComplianceHooks#TriggerGameEnded", this ); }
 
-                if (this.gameEnded) {
-                    return;
+                if (!this.gameEnded) {
+                    this.gameEnded = true;
+                    Luna.Unity.LifeCycle.GameEnded(System.Array.init(["completed"], System.Object));
+                    Luna.Unity.Analytics.LogEvent$1("game_end", 1);
                 }
-
-                this.gameEnded = true;
-                // LP3015 required API
-                Luna.Unity.LifeCycle.GameEnded(System.Array.init(["completed"], System.Object));
-                Luna.Unity.Analytics.LogEvent$1("game_end", 1);
             },
             /*PlayworksComplianceHooks.TriggerGameEnded end.*/
 
@@ -105,12 +88,7 @@ if ( TRACE ) { TRACE( "PlayworksComplianceHooks#TriggerGameEnded", this ); }
                 init: function () {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#init", this ); }
 
-                    this.NeighborOffsets = System.Array.init([
-                        new UnityEngine.Vector2Int.$ctor1(1, 0), 
-                        new UnityEngine.Vector2Int.$ctor1(-1, 0), 
-                        new UnityEngine.Vector2Int.$ctor1(0, 1), 
-                        new UnityEngine.Vector2Int.$ctor1(0, -1)
-                    ], UnityEngine.Vector2Int);
+                    this.NeighborOffsets = System.Array.init([new UnityEngine.Vector2Int.$ctor1(1, 0), new UnityEngine.Vector2Int.$ctor1(-1, 0), new UnityEngine.Vector2Int.$ctor1(0, 1), new UnityEngine.Vector2Int.$ctor1(0, -1)], UnityEngine.Vector2Int);
                 }
             },
             methods: {
@@ -121,7 +99,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ClearBoolGrid", this ); }
                     if (grid == null) {
                         return;
                     }
-
                     var width = System.Array.getLength(grid, 0);
                     var height = System.Array.getLength(grid, 1);
                     for (var x = 0; x < width; x = (x + 1) | 0) {
@@ -139,7 +116,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetGeneratedFallbackSprite", this ); }
                     if (SimpleDodgeGame.generatedFallbackSprite != null) {
                         return SimpleDodgeGame.generatedFallbackSprite;
                     }
-
                     try {
                         if (SimpleDodgeGame.generatedFallbackTexture == null) {
                             SimpleDodgeGame.generatedFallbackTexture = new UnityEngine.Texture2D.$ctor11(2, 2, UnityEngine.TextureFormat.RGBA32, false);
@@ -149,13 +125,11 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetGeneratedFallbackSprite", this ); }
                             SimpleDodgeGame.generatedFallbackTexture.SetPixel(1, 1, new pc.Color( 1, 1, 1, 1 ));
                             SimpleDodgeGame.generatedFallbackTexture.Apply$1(false, true);
                         }
-
                         SimpleDodgeGame.generatedFallbackSprite = UnityEngine.Sprite.Create$1(SimpleDodgeGame.generatedFallbackTexture, new UnityEngine.Rect.$ctor1(0.0, 0.0, SimpleDodgeGame.generatedFallbackTexture.width, SimpleDodgeGame.generatedFallbackTexture.height), new pc.Vec2( 0.5, 0.5 ), SimpleDodgeGame.generatedFallbackTexture.width);
                     } catch ($e1) {
                         $e1 = System.Exception.create($e1);
                         return null;
                     }
-
                     return SimpleDodgeGame.generatedFallbackSprite;
                 },
                 /*SimpleDodgeGame.GetGeneratedFallbackSprite:static end.*/
@@ -190,12 +164,10 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetSpriteWorldSize", this ); }
                     if (sprite == null) {
                         return pc.Vec2.ONE.clone();
                     }
-
                     var size = UnityEngine.Vector2.FromVector3(sprite.bounds.halfExtents.$clone().scale( 2 ).$clone());
                     if (size.x <= Number.EPSILON || size.y <= Number.EPSILON) {
                         return pc.Vec2.ONE.clone();
                     }
-
                     return size.$clone();
                 },
                 /*SimpleDodgeGame.GetSpriteWorldSize:static end.*/
@@ -279,14 +251,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#init", this ); }
                 this.backgroundColor = new pc.Color( 0.12, 0.16, 0.25, 1.0 );
                 this.boardColor = new pc.Color( 0.05, 0.07, 0.12, 0.85 );
                 this.boardOutlineColor = new pc.Color( 0.72, 0.78, 0.9, 0.4 );
-                this.orbColors = System.Array.init([
-                    new pc.Color( 0.9, 0.33, 0.3, 1.0 ), 
-                    new pc.Color( 0.25, 0.66, 0.95, 1.0 ), 
-                    new pc.Color( 0.42, 0.86, 0.42, 1.0 ), 
-                    new pc.Color( 0.93, 0.82, 0.31, 1.0 ), 
-                    new pc.Color( 0.7, 0.48, 0.96, 1.0 ), 
-                    new pc.Color( 0.96, 0.57, 0.81, 1.0 )
-                ], UnityEngine.Color);
+                this.orbColors = System.Array.init([new pc.Color( 0.9, 0.33, 0.3, 1.0 ), new pc.Color( 0.25, 0.66, 0.95, 1.0 ), new pc.Color( 0.42, 0.86, 0.42, 1.0 ), new pc.Color( 0.93, 0.82, 0.31, 1.0 ), new pc.Color( 0.7, 0.48, 0.96, 1.0 ), new pc.Color( 0.96, 0.57, 0.81, 1.0 )], UnityEngine.Color);
                 this.useCustomMaterialInEditor = true;
                 this.useCustomMaterialInWebGl = false;
                 this.fallbackToDefaultIfShaderUnsupported = true;
@@ -305,24 +270,19 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#Awake", this ); }
                 if (UnityEngine.Component.op_Equality(this.gameplayCamera, null)) {
                     this.gameplayCamera = UnityEngine.Camera.main;
                 }
-
                 if (UnityEngine.Component.op_Equality(this.gameplayCamera, null)) {
                     UnityEngine.Debug.LogError$2("SimpleDodgeGame needs a Camera on scene.");
-                    this.enabled = false;
+                    Bridge.ensureBaseProperty(this, "enabled").$UnityEngine$Component$enabled = false;
                     return;
                 }
-
                 if (!this.gameplayCamera.orthographic) {
                     this.gameplayCamera.orthographic = true;
                 }
-
                 this.complianceHooks = this.GetComponent(PlayworksComplianceHooks);
                 this.ValidateConfig();
                 this.WarnIfMissingSpriteSetup();
-
                 this.gameplayZ = this.GetGameplayZ();
                 this.pointerDepth = Math.abs(this.gameplayZ - this.gameplayCamera.transform.position.z);
-
                 this.CreateRuntimeVisuals();
                 this.CreateRuntimeHud();
                 this.UpdateLayout(true);
@@ -337,18 +297,18 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#Update", this ); }
                 if (UnityEngine.Component.op_Equality(this.gameplayCamera, null)) {
                     return;
                 }
-
                 this.UpdateLayout(false);
-
                 if (this.roundEnded) {
-                    if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.R) || this.PointerPressedThisFrame()) {
-                        this.ResetRound();
+                    if (this.PointerPressedThisFrame()) {
+                        if (UnityEngine.MonoBehaviour.op_Inequality(this.complianceHooks, null)) {
+                            this.complianceHooks.TriggerInstall();
+                        } else {
+                            this.ResetRound();
+                        }
                     }
-
                     this.UpdateHudTexts();
                     return;
                 }
-
                 this.timeRemaining -= UnityEngine.Time.deltaTime;
                 if (this.timeRemaining <= 0.0) {
                     this.timeRemaining = 0.0;
@@ -356,11 +316,9 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#Update", this ); }
                     this.UpdateHudTexts();
                     return;
                 }
-
                 if (!this.isResolving) {
                     this.HandleDragInput();
                 }
-
                 this.UpdateHudTexts();
             },
             /*SimpleDodgeGame.Update end.*/
@@ -370,15 +328,12 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#Update", this ); }
 if ( TRACE ) { TRACE( "SimpleDodgeGame#OnDestroy", this ); }
 
                 this.ClearBoard();
-
                 if (UnityEngine.Component.op_Inequality(this.boardRoot, null)) {
-                    UnityEngine.MonoBehaviour.Destroy(this.boardRoot.gameObject);
+                    UnityEngine.Object.Destroy(this.boardRoot.gameObject);
                 }
-
                 if (UnityEngine.Component.op_Inequality(this.backgroundTransform, null)) {
-                    UnityEngine.MonoBehaviour.Destroy(this.backgroundTransform.gameObject);
+                    UnityEngine.Object.Destroy(this.backgroundTransform.gameObject);
                 }
-
             },
             /*SimpleDodgeGame.OnDestroy end.*/
 
@@ -388,12 +343,9 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#OnValidate", this ); }
 
                 this.ValidateConfig();
                 this.WarnIfMissingSpriteSetup();
-
-                if (!UnityEngine.Application.isPlaying) {
-                    return;
+                if (UnityEngine.Application.isPlaying) {
+                    this.RefreshVisualsNow();
                 }
-
-                this.RefreshVisualsNow();
             },
             /*SimpleDodgeGame.OnValidate end.*/
 
@@ -405,20 +357,16 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#RefreshVisualsNow", this ); }
                 this.ApplyBackgroundVisuals();
                 this.ApplyBoardFrameVisuals();
                 this.UpdateHudTexts();
-
                 if (this.board == null) {
                     return;
                 }
-
                 for (var x = 0; x < this.columns; x = (x + 1) | 0) {
                     for (var y = 0; y < this.rows; y = (y + 1) | 0) {
                         var orb = this.board.get([x, y]);
-                        if (orb == null || UnityEngine.GameObject.op_Equality(orb.gameObject, null)) {
-                            continue;
+                        if (orb != null && !(UnityEngine.GameObject.op_Equality(orb.gameObject, null))) {
+                            this.ApplyOrbVisuals(orb);
+                            orb.transform.position = this.CellToWorld(x, y);
                         }
-
-                        this.ApplyOrbVisuals(orb);
-                        orb.transform.position = this.CellToWorld(x, y);
                     }
                 }
             },
@@ -428,50 +376,49 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#RefreshVisualsNow", this ); }
             ApplyPlaygroundVariant: function (variantIndex) {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyPlaygroundVariant", this ); }
 
-                var normalizedVariant = Math.abs(variantIndex) % 3;
-                if (normalizedVariant === 1) {
-                    this.columns = 6;
-                    this.rows = 5;
-                    this.boardSidePadding = 0.45;
-                    this.boardBottomPadding = 0.8;
-                    this.boardTopPadding = 2.15;
-                    this.orbScale = 0.88;
-                    this.clearDelaySeconds = 0.05;
-                    this.fallDurationSeconds = 0.08;
-                    this.roundDurationSeconds = 28.0;
-                    this.baseScorePerOrb = 16;
-                } else if (normalizedVariant === 2) {
-                    this.columns = 5;
-                    this.rows = 5;
-                    this.boardSidePadding = 0.55;
-                    this.boardBottomPadding = 0.8;
-                    this.boardTopPadding = 2.2;
-                    this.orbScale = 0.92;
-                    this.clearDelaySeconds = 0.12;
-                    this.fallDurationSeconds = 0.16;
-                    this.roundDurationSeconds = 45.0;
-                    this.baseScorePerOrb = 10;
-                } else {
-                    this.columns = 6;
-                    this.rows = 5;
-                    this.boardSidePadding = 0.45;
-                    this.boardBottomPadding = 0.8;
-                    this.boardTopPadding = 2.15;
-                    this.orbScale = 0.9;
-                    this.clearDelaySeconds = 0.08;
-                    this.fallDurationSeconds = 0.12;
-                    this.roundDurationSeconds = 35.0;
-                    this.baseScorePerOrb = 12;
+                switch (Math.abs(variantIndex) % 3) {
+                    case 1: 
+                        this.columns = 6;
+                        this.rows = 5;
+                        this.boardSidePadding = 0.45;
+                        this.boardBottomPadding = 0.8;
+                        this.boardTopPadding = 2.15;
+                        this.orbScale = 0.88;
+                        this.clearDelaySeconds = 0.05;
+                        this.fallDurationSeconds = 0.08;
+                        this.roundDurationSeconds = 28.0;
+                        this.baseScorePerOrb = 16;
+                        break;
+                    case 2: 
+                        this.columns = 5;
+                        this.rows = 5;
+                        this.boardSidePadding = 0.55;
+                        this.boardBottomPadding = 0.8;
+                        this.boardTopPadding = 2.2;
+                        this.orbScale = 0.92;
+                        this.clearDelaySeconds = 0.12;
+                        this.fallDurationSeconds = 0.16;
+                        this.roundDurationSeconds = 45.0;
+                        this.baseScorePerOrb = 10;
+                        break;
+                    default: 
+                        this.columns = 6;
+                        this.rows = 5;
+                        this.boardSidePadding = 0.45;
+                        this.boardBottomPadding = 0.8;
+                        this.boardTopPadding = 2.15;
+                        this.orbScale = 0.9;
+                        this.clearDelaySeconds = 0.08;
+                        this.fallDurationSeconds = 0.12;
+                        this.roundDurationSeconds = 35.0;
+                        this.baseScorePerOrb = 12;
+                        break;
                 }
-
                 this.ValidateConfig();
-
-                if (!UnityEngine.Application.isPlaying) {
-                    return;
+                if (UnityEngine.Application.isPlaying) {
+                    this.UpdateLayout(true);
+                    this.ResetRound();
                 }
-
-                this.UpdateLayout(true);
-                this.ResetRound();
             },
             /*SimpleDodgeGame.ApplyPlaygroundVariant end.*/
 
@@ -492,11 +439,9 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ResetRound", this ); }
                 this.isResolving = false;
                 this.roundEnded = false;
                 this.hasReportedGameEnded = false;
-
                 this.score = 0;
                 this.lastMoveCombos = 0;
                 this.timeRemaining = UnityEngine.Mathf.Max(5.0, this.roundDurationSeconds);
-
                 this.ClearBoard();
                 this.BuildInitialBoard();
                 this.SetResultVisible(false);
@@ -508,22 +453,18 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ResetRound", this ); }
             EndRound: function () {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#EndRound", this ); }
 
-                if (this.roundEnded) {
-                    return;
+                if (!this.roundEnded) {
+                    this.roundEnded = true;
+                    this.isDragging = false;
+                    this.isResolving = false;
+                    this.StopAllCoroutines();
+                    if (!this.hasReportedGameEnded && UnityEngine.MonoBehaviour.op_Inequality(this.complianceHooks, null)) {
+                        this.hasReportedGameEnded = true;
+                        this.complianceHooks.TriggerGameEnded();
+                    }
+                    this.SetResultVisible(true);
+                    this.UpdateHudTexts();
                 }
-
-                this.roundEnded = true;
-                this.isDragging = false;
-                this.isResolving = false;
-                this.StopAllCoroutines();
-
-                if (!this.hasReportedGameEnded && UnityEngine.MonoBehaviour.op_Inequality(this.complianceHooks, null)) {
-                    this.hasReportedGameEnded = true;
-                    this.complianceHooks.TriggerGameEnded();
-                }
-
-                this.SetResultVisible(true);
-                this.UpdateHudTexts();
             },
             /*SimpleDodgeGame.EndRound end.*/
 
@@ -534,20 +475,17 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#HandleDragInput", this ); }
                 if (!this.isDragging) {
                     var worldPosition = { v : new UnityEngine.Vector3() };
                     var pressedCell = { v : new UnityEngine.Vector2Int() };
-                    if (this.TryGetPointerDownWorld(worldPosition) && this.TryWorldToCell(worldPosition.v, pressedCell)) {
+                    if (this.TryGetPointerDownWorld(worldPosition) && this.TryWorldToCell(worldPosition.v.$clone(), pressedCell)) {
                         this.heldCell = pressedCell.v.$clone();
                         this.isDragging = true;
                     }
-
                     return;
                 }
                 var draggedWorld = { v : new UnityEngine.Vector3() };
                 var targetCell = { v : new UnityEngine.Vector2Int() };
-
-                if (this.TryGetPointerHeldWorld(draggedWorld) && this.TryWorldToCell(draggedWorld.v, targetCell)) {
-                    this.DragHeldOrbToward(targetCell.v);
+                if (this.TryGetPointerHeldWorld(draggedWorld) && this.TryWorldToCell(draggedWorld.v.$clone(), targetCell)) {
+                    this.DragHeldOrbToward(targetCell.v.$clone());
                 }
-
                 if (this.PointerReleasedThisFrame()) {
                     this.isDragging = false;
                     this.StartCoroutine$1(this.ResolveBoardRoutine());
@@ -562,24 +500,15 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#DragHeldOrbToward", this ); }
                 if (UnityEngine.Vector2Int.op_Equality(targetCell.$clone(), this.heldCell.$clone())) {
                     return;
                 }
-
                 var guard = 0;
                 while (UnityEngine.Vector2Int.op_Inequality(this.heldCell.$clone(), targetCell.$clone()) && guard < ((this.columns + this.rows) | 0)) {
                     var delta = UnityEngine.Vector2Int.op_Subtraction(targetCell.$clone(), this.heldCell.$clone());
-                    var step = new UnityEngine.Vector2Int();
-
-                    if (Math.abs(delta.x) >= Math.abs(delta.y)) {
-                        step = new UnityEngine.Vector2Int.$ctor1(delta.x > 0 ? 1 : -1, 0);
-                    } else {
-                        step = new UnityEngine.Vector2Int.$ctor1(0, delta.y > 0 ? 1 : -1);
-                    }
-
+                    var step = ((Math.abs(delta.x) < Math.abs(delta.y)) ? new UnityEngine.Vector2Int.$ctor1(0, (delta.y > 0) ? 1 : (-1)) : new UnityEngine.Vector2Int.$ctor1((delta.x > 0) ? 1 : (-1), 0));
                     var next = UnityEngine.Vector2Int.op_Addition(this.heldCell.$clone(), step.$clone());
-                    if (!this.IsInsideBoard(next)) {
+                    if (!this.IsInsideBoard(next.$clone())) {
                         break;
                     }
-
-                    this.SwapCells(this.heldCell, next);
+                    this.SwapCells(this.heldCell.$clone(), next.$clone());
                     this.heldCell = next.$clone();
                     guard = (guard + 1) | 0;
                 }
@@ -637,11 +566,9 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ResolveBoardRoutine", this ); }
                                             $step = 10;
                                             continue;
                                         }
-
                                         totalMoveCombos = (totalMoveCombos + combos) | 0;
                                         removed = matchedCells.v.Count;
                                         this.score = (this.score + (this.CalculateScoreGain(removed, combos, totalMoveCombos))) | 0;
-
                                         this.RemoveMatchedCells(matchedCells.v);
                                         if (this.clearDelaySeconds > 0.0) {
                                             $step = 5;
@@ -671,6 +598,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ResolveBoardRoutine", this ); }
                                 }
                                 case 9: {
                                     safety = (safety + 1) | 0;
+                                        matchedCells.v = null;
 
                                         $step = 3;
                                         continue;
@@ -701,12 +629,10 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#RemoveMatchedCells", this ); }
                 for (var i = 0; i < matchedCells.Count; i = (i + 1) | 0) {
                     var cell = matchedCells.getItem(i).$clone();
                     var orb = this.board.get([cell.x, cell.y]);
-                    if (orb == null) {
-                        continue;
+                    if (orb != null) {
+                        this.board.set([cell.x, cell.y], null);
+                        UnityEngine.Object.Destroy(orb.gameObject);
                     }
-
-                    this.board.set([cell.x, cell.y], null);
-                    UnityEngine.MonoBehaviour.Destroy(orb.gameObject);
                 }
             },
             /*SimpleDodgeGame.RemoveMatchedCells end.*/
@@ -730,28 +656,22 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#CollapseColumns", this ); }
                             switch ($step) {
                                 case 0: {
                                     this.moveBuffer.clear();
-
                                         for (var x = 0; x < this.columns; x = (x + 1) | 0) {
                                             writeY = 0;
                                             for (var readY = 0; readY < this.rows; readY = (readY + 1) | 0) {
                                                 orb = this.board.get([x, readY]);
-                                                if (orb == null) {
-                                                    continue;
+                                                if (orb != null) {
+                                                    if (writeY !== readY) {
+                                                        this.board.set([x, writeY], orb);
+                                                        this.board.set([x, readY], null);
+                                                        from = orb.transform.position.$clone();
+                                                        to = this.CellToWorld(x, writeY);
+                                                        this.moveBuffer.add(new SimpleDodgeGame.OrbMove.$ctor1(orb, from.$clone(), to.$clone()));
+                                                    }
+                                                    writeY = (writeY + 1) | 0;
                                                 }
-
-                                                if (writeY !== readY) {
-                                                    this.board.set([x, writeY], orb);
-                                                    this.board.set([x, readY], null);
-
-                                                    from = orb.transform.position.$clone();
-                                                    to = this.CellToWorld(x, writeY);
-                                                    this.moveBuffer.add(new SimpleDodgeGame.OrbMove.$ctor1(orb, from.$clone(), to.$clone()));
-                                                }
-
-                                                writeY = (writeY + 1) | 0;
                                             }
                                         }
-
                                         $enumerator.current = this.AnimateMoves(this.moveBuffer, this.fallDurationSeconds);
                                         $step = 1;
                                         return true;
@@ -793,25 +713,20 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#FillEmptyCells", this ); }
                             switch ($step) {
                                 case 0: {
                                     this.moveBuffer.clear();
-
                                         for (var x = 0; x < this.columns; x = (x + 1) | 0) {
                                             spawnOffset = 0;
                                             for (var y = 0; y < this.rows; y = (y + 1) | 0) {
-                                                if (this.board.get([x, y]) != null) {
-                                                    continue;
+                                                if (this.board.get([x, y]) == null) {
+                                                    orbType = this.GetRandomOrbType();
+                                                    spawnPosition = this.CellToWorld(x, ((this.rows + spawnOffset) | 0));
+                                                    orb = this.CreateOrb(orbType, spawnPosition.$clone());
+                                                    this.board.set([x, y], orb);
+                                                    settlePosition = this.CellToWorld(x, y);
+                                                    this.moveBuffer.add(new SimpleDodgeGame.OrbMove.$ctor1(orb, spawnPosition.$clone(), settlePosition.$clone()));
+                                                    spawnOffset = (spawnOffset + 1) | 0;
                                                 }
-
-                                                orbType = this.GetRandomOrbType();
-                                                spawnPosition = this.CellToWorld(x, ((this.rows + spawnOffset) | 0));
-                                                orb = this.CreateOrb(orbType, spawnPosition);
-                                                this.board.set([x, y], orb);
-
-                                                settlePosition = this.CellToWorld(x, y);
-                                                this.moveBuffer.add(new SimpleDodgeGame.OrbMove.$ctor1(orb, spawnPosition.$clone(), settlePosition.$clone()));
-                                                spawnOffset = (spawnOffset + 1) | 0;
                                             }
                                         }
-
                                         $enumerator.current = this.AnimateMoves(this.moveBuffer, this.fallDurationSeconds * 1.15);
                                         $step = 1;
                                         return true;
@@ -845,7 +760,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#AnimateMoves", this ); }
                     t,
                     eased,
                     move,
-                    move1,
+                    move2,
                     $async_e;
 
                 var $enumerator = new Bridge.GeneratorEnumerator(Bridge.fn.bind(this, function () {
@@ -881,16 +796,12 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#AnimateMoves", this ); }
                                     elapsed += UnityEngine.Time.deltaTime;
                                         t = Math.max(0, Math.min(1, elapsed / safeDuration));
                                         eased = t * t * (3.0 - 2.0 * t);
-
                                         for (var i = 0; i < moves.Count; i = (i + 1) | 0) {
                                             move = moves.getItem(i).$clone();
-                                            if (move.orb == null || UnityEngine.GameObject.op_Equality(move.orb.gameObject, null)) {
-                                                continue;
+                                            if (move.orb != null && !(UnityEngine.GameObject.op_Equality(move.orb.gameObject, null))) {
+                                                move.orb.transform.position = new pc.Vec3().lerpUnclamped( move.from, move.to, eased );
                                             }
-
-                                            move.orb.transform.position = new pc.Vec3().lerpUnclamped( move.from, move.to, eased );
                                         }
-
                                         $enumerator.current = null;
                                         $step = 5;
                                         return true;
@@ -901,13 +812,11 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#AnimateMoves", this ); }
                                         continue;
                                 }
                                 case 6: {
-                                    for (var i1 = 0; i1 < moves.Count; i1 = (i1 + 1) | 0) {
-                                            move1 = moves.getItem(i1).$clone();
-                                            if (move1.orb == null || UnityEngine.GameObject.op_Equality(move1.orb.gameObject, null)) {
-                                                continue;
+                                    for (var j = 0; j < moves.Count; j = (j + 1) | 0) {
+                                            move2 = moves.getItem(j).$clone();
+                                            if (move2.orb != null && !(UnityEngine.GameObject.op_Equality(move2.orb.gameObject, null))) {
+                                                move2.orb.transform.position = move2.to.$clone();
                                             }
-
-                                            move1.orb.transform.position = move1.to.$clone();
                                         }
 
                                 }
@@ -929,134 +838,104 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#AnimateMoves", this ); }
             CollectMatches: function (matchedCells) {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#CollectMatches", this ); }
 
+                var $t, $t1, $t2, $t3;
                 this.EnsureMatchBuffers();
                 SimpleDodgeGame.ClearBoolGrid(this.markedCellsBuffer);
                 var marked = this.markedCellsBuffer;
-
                 for (var y = 0; y < this.rows; y = (y + 1) | 0) {
                     var streakType = -1;
                     var streakStart = 0;
                     var streakLength = 0;
-
                     for (var x = 0; x < this.columns; x = (x + 1) | 0) {
-                        var orb = this.board.get([x, y]);
-                        var type = orb != null ? orb.type : -1;
-
+                        var type = ($t = (($t1 = this.board.get([x, y])) != null ? $t1.type : null), $t != null ? $t : (-1));
                         if (type >= 0 && type === streakType) {
                             streakLength = (streakLength + 1) | 0;
                             continue;
                         }
-
                         if (streakLength >= 3) {
                             for (var markX = streakStart; markX < ((streakStart + streakLength) | 0); markX = (markX + 1) | 0) {
                                 marked.set([markX, y], true);
                             }
                         }
-
                         streakType = type;
                         streakStart = x;
-                        streakLength = type >= 0 ? 1 : 0;
+                        streakLength = ((type >= 0) ? 1 : 0);
                     }
-
                     if (streakLength >= 3) {
-                        for (var markX1 = streakStart; markX1 < ((streakStart + streakLength) | 0); markX1 = (markX1 + 1) | 0) {
-                            marked.set([markX1, y], true);
+                        for (var markX2 = streakStart; markX2 < ((streakStart + streakLength) | 0); markX2 = (markX2 + 1) | 0) {
+                            marked.set([markX2, y], true);
                         }
                     }
                 }
-
-                for (var x1 = 0; x1 < this.columns; x1 = (x1 + 1) | 0) {
-                    var streakType1 = -1;
-                    var streakStart1 = 0;
-                    var streakLength1 = 0;
-
-                    for (var y1 = 0; y1 < this.rows; y1 = (y1 + 1) | 0) {
-                        var orb1 = this.board.get([x1, y1]);
-                        var type1 = orb1 != null ? orb1.type : -1;
-
-                        if (type1 >= 0 && type1 === streakType1) {
-                            streakLength1 = (streakLength1 + 1) | 0;
+                for (var x2 = 0; x2 < this.columns; x2 = (x2 + 1) | 0) {
+                    var streakType2 = -1;
+                    var streakStart2 = 0;
+                    var streakLength2 = 0;
+                    for (var y2 = 0; y2 < this.rows; y2 = (y2 + 1) | 0) {
+                        var type2 = ($t2 = (($t3 = this.board.get([x2, y2])) != null ? $t3.type : null), $t2 != null ? $t2 : (-1));
+                        if (type2 >= 0 && type2 === streakType2) {
+                            streakLength2 = (streakLength2 + 1) | 0;
                             continue;
                         }
-
-                        if (streakLength1 >= 3) {
-                            for (var markY = streakStart1; markY < ((streakStart1 + streakLength1) | 0); markY = (markY + 1) | 0) {
-                                marked.set([x1, markY], true);
+                        if (streakLength2 >= 3) {
+                            for (var markY = streakStart2; markY < ((streakStart2 + streakLength2) | 0); markY = (markY + 1) | 0) {
+                                marked.set([x2, markY], true);
                             }
                         }
-
-                        streakType1 = type1;
-                        streakStart1 = y1;
-                        streakLength1 = type1 >= 0 ? 1 : 0;
+                        streakType2 = type2;
+                        streakStart2 = y2;
+                        streakLength2 = ((type2 >= 0) ? 1 : 0);
                     }
-
-                    if (streakLength1 >= 3) {
-                        for (var markY1 = streakStart1; markY1 < ((streakStart1 + streakLength1) | 0); markY1 = (markY1 + 1) | 0) {
-                            marked.set([x1, markY1], true);
+                    if (streakLength2 >= 3) {
+                        for (var markY2 = streakStart2; markY2 < ((streakStart2 + streakLength2) | 0); markY2 = (markY2 + 1) | 0) {
+                            marked.set([x2, markY2], true);
                         }
                     }
                 }
-
                 matchedCells.v = this.matchedCellsBuffer;
                 matchedCells.v.clear();
-                for (var x2 = 0; x2 < this.columns; x2 = (x2 + 1) | 0) {
-                    for (var y2 = 0; y2 < this.rows; y2 = (y2 + 1) | 0) {
-                        if (marked.get([x2, y2])) {
-                            matchedCells.v.add(new UnityEngine.Vector2Int.$ctor1(x2, y2));
+                for (var x3 = 0; x3 < this.columns; x3 = (x3 + 1) | 0) {
+                    for (var y3 = 0; y3 < this.rows; y3 = (y3 + 1) | 0) {
+                        if (marked.get([x3, y3])) {
+                            matchedCells.v.add(new UnityEngine.Vector2Int.$ctor1(x3, y3));
                         }
                     }
                 }
-
                 if (matchedCells.v.Count === 0) {
                     return 0;
                 }
-
                 var combos = 0;
                 SimpleDodgeGame.ClearBoolGrid(this.visitedCellsBuffer);
                 var visited = this.visitedCellsBuffer;
                 var stack = this.floodFillStackBuffer;
                 stack.clear();
-
-                for (var x3 = 0; x3 < this.columns; x3 = (x3 + 1) | 0) {
-                    for (var y3 = 0; y3 < this.rows; y3 = (y3 + 1) | 0) {
-                        if (!marked.get([x3, y3]) || visited.get([x3, y3]) || this.board.get([x3, y3]) == null) {
+                for (var x4 = 0; x4 < this.columns; x4 = (x4 + 1) | 0) {
+                    for (var y4 = 0; y4 < this.rows; y4 = (y4 + 1) | 0) {
+                        if (!marked.get([x4, y4]) || visited.get([x4, y4]) || this.board.get([x4, y4]) == null) {
                             continue;
                         }
-
                         combos = (combos + 1) | 0;
-                        var type2 = this.board.get([x3, y3]).type;
-
+                        var type3 = this.board.get([x4, y4]).type;
                         stack.clear();
-                        stack.add(new UnityEngine.Vector2Int.$ctor1(x3, y3));
-                        visited.set([x3, y3], true);
-
+                        stack.add(new UnityEngine.Vector2Int.$ctor1(x4, y4));
+                        visited.set([x4, y4], true);
                         while (stack.Count > 0) {
                             var lastIndex = (stack.Count - 1) | 0;
                             var cell = stack.getItem(lastIndex).$clone();
                             stack.removeAt(lastIndex);
-
                             for (var i = 0; i < SimpleDodgeGame.NeighborOffsets.length; i = (i + 1) | 0) {
                                 var next = UnityEngine.Vector2Int.op_Addition(cell.$clone(), SimpleDodgeGame.NeighborOffsets[i].$clone());
-                                if (!this.IsInsideBoard(next)) {
-                                    continue;
+                                if (this.IsInsideBoard(next.$clone()) && !visited.get([next.x, next.y]) && marked.get([next.x, next.y])) {
+                                    var orb = this.board.get([next.x, next.y]);
+                                    if (orb != null && orb.type === type3) {
+                                        visited.set([next.x, next.y], true);
+                                        stack.add(next.$clone());
+                                    }
                                 }
-
-                                if (visited.get([next.x, next.y]) || !marked.get([next.x, next.y])) {
-                                    continue;
-                                }
-
-                                var orb2 = this.board.get([next.x, next.y]);
-                                if (orb2 == null || orb2.type !== type2) {
-                                    continue;
-                                }
-
-                                visited.set([next.x, next.y], true);
-                                stack.add(next.$clone());
                             }
                         }
                     }
                 }
-
                 return combos;
             },
             /*SimpleDodgeGame.CollectMatches end.*/
@@ -1091,14 +970,12 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ClearBoard", this ); }
                 if (this.board == null) {
                     return;
                 }
-
                 for (var x = 0; x < this.columns; x = (x + 1) | 0) {
                     for (var y = 0; y < this.rows; y = (y + 1) | 0) {
                         var orb = this.board.get([x, y]);
                         if (orb != null && UnityEngine.GameObject.op_Inequality(orb.gameObject, null)) {
-                            UnityEngine.MonoBehaviour.Destroy(orb.gameObject);
+                            UnityEngine.Object.Destroy(orb.gameObject);
                         }
-
                         this.board.set([x, y], null);
                     }
                 }
@@ -1112,7 +989,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#CreateOrb", this ); }
                 var orbObject = new UnityEngine.GameObject.$ctor2("Orb");
                 orbObject.transform.SetParent(this.boardRoot, true);
                 orbObject.transform.position = worldPosition.$clone();
-
                 var renderer = orbObject.AddComponent(UnityEngine.SpriteRenderer);
                 var orb = new SimpleDodgeGame.Orb(type, orbObject, renderer);
                 this.ApplyOrbVisuals(orb);
@@ -1126,14 +1002,11 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#SwapCells", this ); }
 
                 var first = this.board.get([a.x, a.y]);
                 var second = this.board.get([b.x, b.y]);
-
                 this.board.set([a.x, a.y], second);
                 this.board.set([b.x, b.y], first);
-
                 if (this.board.get([a.x, a.y]) != null) {
                     this.board.get([a.x, a.y]).transform.position = this.CellToWorld(a.x, a.y);
                 }
-
                 if (this.board.get([b.x, b.y]) != null) {
                     this.board.get([b.x, b.y]).transform.position = this.CellToWorld(b.x, b.y);
                 }
@@ -1146,21 +1019,14 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetInitialOrbType", this ); }
 
                 var colorCount = this.GetOrbColorCount();
                 var candidate = UnityEngine.Random.Range(0, colorCount);
-                var attempts = 0;
-
-                while (attempts < 16) {
+                for (var attempts = 0; attempts < 16; attempts = (attempts + 1) | 0) {
                     var horizontalMatch = x >= 2 && this.board.get([((x - 1) | 0), y]) != null && this.board.get([((x - 2) | 0), y]) != null && this.board.get([((x - 1) | 0), y]).type === candidate && this.board.get([((x - 2) | 0), y]).type === candidate;
-
                     var verticalMatch = y >= 2 && this.board.get([x, ((y - 1) | 0)]) != null && this.board.get([x, ((y - 2) | 0)]) != null && this.board.get([x, ((y - 1) | 0)]).type === candidate && this.board.get([x, ((y - 2) | 0)]).type === candidate;
-
                     if (!horizontalMatch && !verticalMatch) {
                         return candidate;
                     }
-
                     candidate = UnityEngine.Random.Range(0, colorCount);
-                    attempts = (attempts + 1) | 0;
                 }
-
                 return candidate;
             },
             /*SimpleDodgeGame.GetInitialOrbType end.*/
@@ -1180,7 +1046,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetOrbColorCount", this ); }
                 if (this.orbColors == null || this.orbColors.length === 0) {
                     return 1;
                 }
-
                 return this.orbColors.length;
             },
             /*SimpleDodgeGame.GetOrbColorCount end.*/
@@ -1192,7 +1057,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetOrbColor", this ); }
                 if (this.orbColors == null || this.orbColors.length === 0) {
                     return new pc.Color( 1, 1, 1, 1 );
                 }
-
                 var safeIndex = Math.abs(type) % this.orbColors.length;
                 return this.orbColors[safeIndex].$clone();
             },
@@ -1208,12 +1072,10 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#CreateRuntimeVisuals", this ); }
                     this.backgroundRenderer = backgroundObject.AddComponent(UnityEngine.SpriteRenderer);
                     this.backgroundRenderer.sortingOrder = -30;
                 }
-
                 if (UnityEngine.Component.op_Equality(this.boardRoot, null)) {
                     var boardRootObject = new UnityEngine.GameObject.$ctor2("PuzzleBoardRoot");
                     this.boardRoot = boardRootObject.transform;
                 }
-
                 if (UnityEngine.Component.op_Equality(this.boardFrameTransform, null)) {
                     var frameObject = new UnityEngine.GameObject.$ctor2("PuzzleBoardFrame");
                     frameObject.transform.SetParent(this.boardRoot, false);
@@ -1221,7 +1083,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#CreateRuntimeVisuals", this ); }
                     this.boardFrameRenderer = frameObject.AddComponent(UnityEngine.SpriteRenderer);
                     this.boardFrameRenderer.sortingOrder = -15;
                 }
-
                 if (UnityEngine.Component.op_Equality(this.boardOutlineTransform, null)) {
                     var outlineObject = new UnityEngine.GameObject.$ctor2("PuzzleBoardOutline");
                     outlineObject.transform.SetParent(this.boardRoot, false);
@@ -1229,7 +1090,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#CreateRuntimeVisuals", this ); }
                     this.boardOutlineRenderer = outlineObject.AddComponent(UnityEngine.SpriteRenderer);
                     this.boardOutlineRenderer.sortingOrder = -14;
                 }
-
                 this.ApplyBackgroundVisuals();
                 this.ApplyBoardFrameVisuals();
             },
@@ -1239,17 +1099,14 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#CreateRuntimeVisuals", this ); }
             ApplyBackgroundVisuals: function () {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyBackgroundVisuals", this ); }
 
-                if (UnityEngine.Component.op_Equality(this.backgroundRenderer, null)) {
-                    return;
-                }
-
-                this.backgroundRenderer.sprite = this.GetBoardSprite();
-                this.backgroundRenderer.color = this.backgroundColor.$clone();
-                this.ApplyRendererMaterial(this.backgroundRenderer);
-                this.UpdateBackgroundTransform();
-
-                if (UnityEngine.Component.op_Inequality(this.gameplayCamera, null)) {
-                    this.gameplayCamera.backgroundColor = this.backgroundColor.$clone();
+                if (!(UnityEngine.Component.op_Equality(this.backgroundRenderer, null))) {
+                    this.backgroundRenderer.sprite = this.GetBoardSprite();
+                    this.backgroundRenderer.color = this.backgroundColor.$clone();
+                    this.ApplyRendererMaterial(this.backgroundRenderer);
+                    this.UpdateBackgroundTransform();
+                    if (UnityEngine.Component.op_Inequality(this.gameplayCamera, null)) {
+                        this.gameplayCamera.backgroundColor = this.backgroundColor.$clone();
+                    }
                 }
             },
             /*SimpleDodgeGame.ApplyBackgroundVisuals end.*/
@@ -1263,13 +1120,11 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyBoardFrameVisuals", this ); }
                     this.boardFrameRenderer.color = this.boardColor.$clone();
                     this.ApplyRendererMaterial(this.boardFrameRenderer);
                 }
-
                 if (UnityEngine.Component.op_Inequality(this.boardOutlineRenderer, null)) {
                     this.boardOutlineRenderer.sprite = this.GetBoardSprite();
                     this.boardOutlineRenderer.color = this.boardOutlineColor.$clone();
                     this.ApplyRendererMaterial(this.boardOutlineRenderer);
                 }
-
                 this.UpdateBoardFrameTransform();
             },
             /*SimpleDodgeGame.ApplyBoardFrameVisuals end.*/
@@ -1278,16 +1133,14 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyBoardFrameVisuals", this ); }
             ApplyOrbVisuals: function (orb) {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyOrbVisuals", this ); }
 
-                if (orb == null || UnityEngine.Component.op_Equality(orb.renderer, null) || UnityEngine.Component.op_Equality(orb.transform, null)) {
-                    return;
+                if (orb != null && !(UnityEngine.Component.op_Equality(orb.renderer, null)) && !(UnityEngine.Component.op_Equality(orb.transform, null))) {
+                    var orbSpriteForType = this.GetOrbSpriteForType(orb.type);
+                    orb.renderer.sprite = orbSpriteForType;
+                    orb.renderer.color = this.GetOrbColor(orb.type);
+                    orb.renderer.sortingOrder = 10;
+                    this.ApplyRendererMaterial(orb.renderer);
+                    SimpleDodgeGame.SetTransformDiameter(orb.transform, orbSpriteForType, this.cellSize * this.orbScale);
                 }
-
-                var orbSpriteForType = this.GetOrbSpriteForType(orb.type);
-                orb.renderer.sprite = orbSpriteForType;
-                orb.renderer.color = this.GetOrbColor(orb.type);
-                orb.renderer.sortingOrder = 10;
-                this.ApplyRendererMaterial(orb.renderer);
-                SimpleDodgeGame.SetTransformDiameter(orb.transform, orbSpriteForType, this.cellSize * this.orbScale);
             },
             /*SimpleDodgeGame.ApplyOrbVisuals end.*/
 
@@ -1295,16 +1148,15 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyOrbVisuals", this ); }
             GetOrbSpriteForType: function (type) {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#GetOrbSpriteForType", this ); }
 
-                if (this.orbSprites != null && this.orbSprites.length > 0) {
+                if (this.orbSprites != null && this.orbSprites.length !== 0) {
                     var safeIndex = Math.abs(type) % this.orbSprites.length;
                     var configuredSprite = this.orbSprites[safeIndex];
                     if (configuredSprite != null) {
                         return this.PrepareSpriteForRuntime(configuredSprite);
                     }
                 }
-
                 var configuredFallback = this.GetAnyConfiguredOrbSprite();
-                return this.PrepareSpriteForRuntime(configuredFallback != null ? configuredFallback : SimpleDodgeGame.GetGeneratedFallbackSprite());
+                return this.PrepareSpriteForRuntime((configuredFallback != null) ? configuredFallback : SimpleDodgeGame.GetGeneratedFallbackSprite());
             },
             /*SimpleDodgeGame.GetOrbSpriteForType end.*/
 
@@ -1323,13 +1175,11 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetAnyConfiguredOrbSprite", this ); }
                 if (this.orbSprites == null) {
                     return null;
                 }
-
                 for (var i = 0; i < this.orbSprites.length; i = (i + 1) | 0) {
                     if (this.orbSprites[i] != null) {
                         return this.orbSprites[i];
                     }
                 }
-
                 return null;
             },
             /*SimpleDodgeGame.GetAnyConfiguredOrbSprite end.*/
@@ -1341,7 +1191,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#PrepareSpriteForRuntime", this ); }
                 if (sourceSprite == null) {
                     return SimpleDodgeGame.GetGeneratedFallbackSprite();
                 }
-
                 return sourceSprite;
             },
             /*SimpleDodgeGame.PrepareSpriteForRuntime end.*/
@@ -1350,16 +1199,10 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#PrepareSpriteForRuntime", this ); }
             WarnIfMissingSpriteSetup: function () {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#WarnIfMissingSpriteSetup", this ); }
 
-                if (this.hasLoggedMissingSpriteConfig) {
-                    return;
+                if (!this.hasLoggedMissingSpriteConfig && !(this.GetAnyConfiguredOrbSprite() != null)) {
+                    this.hasLoggedMissingSpriteConfig = true;
+                    UnityEngine.Debug.LogWarning$1("SimpleDodgeGame has no configured orb/board Sprite. Playworks visibility may fail if runtime sprite generation is unsupported.");
                 }
-
-                if (this.GetAnyConfiguredOrbSprite() != null) {
-                    return;
-                }
-
-                this.hasLoggedMissingSpriteConfig = true;
-                UnityEngine.Debug.LogWarning$1("SimpleDodgeGame has no configured orb/board Sprite. Playworks visibility may fail if runtime sprite generation is unsupported.");
             },
             /*SimpleDodgeGame.WarnIfMissingSpriteSetup end.*/
 
@@ -1385,42 +1228,31 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#SetResultVisible", this ); }
             UpdateLayout: function (force) {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateLayout", this ); }
 
-                if (UnityEngine.Component.op_Equality(this.gameplayCamera, null) || this.columns <= 0 || this.rows <= 0) {
-                    return;
+                if (!(UnityEngine.Component.op_Equality(this.gameplayCamera, null)) && this.columns > 0 && this.rows > 0) {
+                    var halfHeight = this.gameplayCamera.orthographicSize;
+                    var halfWidth = halfHeight * this.gameplayCamera.aspect;
+                    var cameraPosition = this.gameplayCamera.transform.position.$clone();
+                    var safeBottom = cameraPosition.y - halfHeight + UnityEngine.Mathf.Max(0.0, this.boardBottomPadding);
+                    var safeTop = cameraPosition.y + halfHeight - UnityEngine.Mathf.Max(0.5, this.boardTopPadding);
+                    var availableHeight = UnityEngine.Mathf.Max(1.0, safeTop - safeBottom);
+                    var availableWidth = UnityEngine.Mathf.Max(1.0, halfWidth * 2.0 - this.boardSidePadding * 2.0);
+                    var newCellSize = UnityEngine.Mathf.Min(availableWidth / this.columns, availableHeight / this.rows);
+                    newCellSize = UnityEngine.Mathf.Max(0.5, newCellSize);
+                    var newBoardWidth = newCellSize * this.columns;
+                    var newBoardHeight = newCellSize * this.rows;
+                    var newLeft = cameraPosition.x - newBoardWidth * 0.5;
+                    var newBottom = safeBottom + UnityEngine.Mathf.Max(0.0, (availableHeight - newBoardHeight) * 0.5);
+                    if (force || !this.layoutInitialized || Math.abs(newCellSize - this.cellSize) > 0.0001 || Math.abs(newLeft - this.boardBottomLeft.x) > 0.0001 || Math.abs(newBottom - this.boardBottomLeft.y) > 0.0001) {
+                        this.cellSize = newCellSize;
+                        this.boardBottomLeft = new pc.Vec2( newLeft, newBottom );
+                        this.boardWorldWidth = newBoardWidth;
+                        this.boardWorldHeight = newBoardHeight;
+                        this.layoutInitialized = true;
+                        this.UpdateBackgroundTransform();
+                        this.UpdateBoardFrameTransform();
+                        this.RepositionBoardOrbs();
+                    }
                 }
-
-                var halfHeight = this.gameplayCamera.orthographicSize;
-                var halfWidth = halfHeight * this.gameplayCamera.aspect;
-                var cameraPosition = this.gameplayCamera.transform.position.$clone();
-
-                var safeBottom = cameraPosition.y - halfHeight + UnityEngine.Mathf.Max(0.0, this.boardBottomPadding);
-                var safeTop = cameraPosition.y + halfHeight - UnityEngine.Mathf.Max(0.5, this.boardTopPadding);
-                var availableHeight = UnityEngine.Mathf.Max(1.0, safeTop - safeBottom);
-                var availableWidth = UnityEngine.Mathf.Max(1.0, (halfWidth * 2.0) - (this.boardSidePadding * 2.0));
-
-                var newCellSize = UnityEngine.Mathf.Min(availableWidth / this.columns, availableHeight / this.rows);
-                newCellSize = UnityEngine.Mathf.Max(0.5, newCellSize);
-
-                var newBoardWidth = newCellSize * this.columns;
-                var newBoardHeight = newCellSize * this.rows;
-                var newLeft = cameraPosition.x - (newBoardWidth * 0.5);
-                var newBottom = safeBottom + UnityEngine.Mathf.Max(0.0, (availableHeight - newBoardHeight) * 0.5);
-
-                var changed = force || !this.layoutInitialized || Math.abs(newCellSize - this.cellSize) > 0.0001 || Math.abs(newLeft - this.boardBottomLeft.x) > 0.0001 || Math.abs(newBottom - this.boardBottomLeft.y) > 0.0001;
-
-                if (!changed) {
-                    return;
-                }
-
-                this.cellSize = newCellSize;
-                this.boardBottomLeft = new pc.Vec2( newLeft, newBottom );
-                this.boardWorldWidth = newBoardWidth;
-                this.boardWorldHeight = newBoardHeight;
-                this.layoutInitialized = true;
-
-                this.UpdateBackgroundTransform();
-                this.UpdateBoardFrameTransform();
-                this.RepositionBoardOrbs();
             },
             /*SimpleDodgeGame.UpdateLayout end.*/
 
@@ -1431,16 +1263,13 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#RepositionBoardOrbs", this ); }
                 if (this.board == null) {
                     return;
                 }
-
                 for (var x = 0; x < this.columns; x = (x + 1) | 0) {
                     for (var y = 0; y < this.rows; y = (y + 1) | 0) {
                         var orb = this.board.get([x, y]);
-                        if (orb == null || UnityEngine.GameObject.op_Equality(orb.gameObject, null)) {
-                            continue;
+                        if (orb != null && !(UnityEngine.GameObject.op_Equality(orb.gameObject, null))) {
+                            orb.transform.position = this.CellToWorld(x, y);
+                            SimpleDodgeGame.SetTransformDiameter(orb.transform, orb.renderer.sprite, this.cellSize * this.orbScale);
                         }
-
-                        orb.transform.position = this.CellToWorld(x, y);
-                        SimpleDodgeGame.SetTransformDiameter(orb.transform, orb.renderer.sprite, this.cellSize * this.orbScale);
                     }
                 }
             },
@@ -1450,18 +1279,15 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#RepositionBoardOrbs", this ); }
             UpdateBackgroundTransform: function () {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateBackgroundTransform", this ); }
 
-                if (UnityEngine.Component.op_Equality(this.backgroundTransform, null) || UnityEngine.Component.op_Equality(this.backgroundRenderer, null) || UnityEngine.Component.op_Equality(this.gameplayCamera, null)) {
-                    return;
+                if (!(UnityEngine.Component.op_Equality(this.backgroundTransform, null)) && !(UnityEngine.Component.op_Equality(this.backgroundRenderer, null)) && !(UnityEngine.Component.op_Equality(this.gameplayCamera, null))) {
+                    var worldHeight = this.gameplayCamera.orthographicSize * 2.0;
+                    var worldWidth = worldHeight * this.gameplayCamera.aspect;
+                    var spriteSize = SimpleDodgeGame.GetSpriteWorldSize(this.backgroundRenderer.sprite);
+                    var scaleX = worldWidth / spriteSize.x;
+                    var scaleY = worldHeight / spriteSize.y;
+                    this.backgroundTransform.position = new pc.Vec3( this.gameplayCamera.transform.position.x, this.gameplayCamera.transform.position.y, this.gameplayZ );
+                    this.backgroundTransform.localScale = new pc.Vec3( scaleX, scaleY, 1.0 );
                 }
-
-                var worldHeight = this.gameplayCamera.orthographicSize * 2.0;
-                var worldWidth = worldHeight * this.gameplayCamera.aspect;
-                var spriteSize = SimpleDodgeGame.GetSpriteWorldSize(this.backgroundRenderer.sprite);
-                var scaleX = worldWidth / spriteSize.x;
-                var scaleY = worldHeight / spriteSize.y;
-
-                this.backgroundTransform.position = new pc.Vec3( this.gameplayCamera.transform.position.x, this.gameplayCamera.transform.position.y, this.gameplayZ );
-                this.backgroundTransform.localScale = new pc.Vec3( scaleX, scaleY, 1.0 );
             },
             /*SimpleDodgeGame.UpdateBackgroundTransform end.*/
 
@@ -1470,12 +1296,11 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateBackgroundTransform", this ); }
 if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateBoardFrameTransform", this ); }
 
                 if (UnityEngine.Component.op_Inequality(this.boardFrameTransform, null) && UnityEngine.Component.op_Inequality(this.boardFrameRenderer, null)) {
-                    this.boardFrameTransform.position = new pc.Vec3( this.boardBottomLeft.x + (this.boardWorldWidth * 0.5), this.boardBottomLeft.y + (this.boardWorldHeight * 0.5), this.gameplayZ );
+                    this.boardFrameTransform.position = new pc.Vec3( this.boardBottomLeft.x + this.boardWorldWidth * 0.5, this.boardBottomLeft.y + this.boardWorldHeight * 0.5, this.gameplayZ );
                     SimpleDodgeGame.SetTransformSize(this.boardFrameTransform, this.boardFrameRenderer.sprite, this.boardWorldWidth * 1.02, this.boardWorldHeight * 1.02);
                 }
-
                 if (UnityEngine.Component.op_Inequality(this.boardOutlineTransform, null) && UnityEngine.Component.op_Inequality(this.boardOutlineRenderer, null)) {
-                    this.boardOutlineTransform.position = new pc.Vec3( this.boardBottomLeft.x + (this.boardWorldWidth * 0.5), this.boardBottomLeft.y + (this.boardWorldHeight * 0.5), this.gameplayZ + 0.001 );
+                    this.boardOutlineTransform.position = new pc.Vec3( this.boardBottomLeft.x + this.boardWorldWidth * 0.5, this.boardBottomLeft.y + this.boardWorldHeight * 0.5, this.gameplayZ + 0.001 );
                     SimpleDodgeGame.SetTransformSize(this.boardOutlineTransform, this.boardOutlineRenderer.sprite, this.boardWorldWidth * 1.08, this.boardWorldHeight * 1.08);
                 }
             },
@@ -1485,7 +1310,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateBoardFrameTransform", this ); }
             CellToWorld: function (x, y) {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#CellToWorld", this ); }
 
-                return new pc.Vec3( this.boardBottomLeft.x + ((x + 0.5) * this.cellSize), this.boardBottomLeft.y + ((y + 0.5) * this.cellSize), this.gameplayZ );
+                return new pc.Vec3( this.boardBottomLeft.x + (x + 0.5) * this.cellSize, this.boardBottomLeft.y + (y + 0.5) * this.cellSize, this.gameplayZ );
             },
             /*SimpleDodgeGame.CellToWorld end.*/
 
@@ -1495,12 +1320,10 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#TryWorldToCell", this ); }
 
                 var localX = worldPosition.x - this.boardBottomLeft.x;
                 var localY = worldPosition.y - this.boardBottomLeft.y;
-
                 var x = Math.floor(localX / this.cellSize);
                 var y = Math.floor(localY / this.cellSize);
-
                 cell.v = new UnityEngine.Vector2Int.$ctor1(x, y);
-                return this.IsInsideBoard(cell.v);
+                return this.IsInsideBoard(cell.v.$clone());
             },
             /*SimpleDodgeGame.TryWorldToCell end.*/
 
@@ -1519,20 +1342,16 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#TryGetPointerDownWorld", this ); }
                 if (UnityEngine.Input.touchCount > 0) {
                     for (var i = 0; i < UnityEngine.Input.touchCount; i = (i + 1) | 0) {
                         var touch = UnityEngine.Input.GetTouch(i);
-                        if (touch.phase !== UnityEngine.TouchPhase.Began) {
-                            continue;
+                        if (touch.phase === UnityEngine.TouchPhase.Began) {
+                            worldPosition.v = this.ScreenToWorld(touch.position.$clone());
+                            return true;
                         }
-
-                        worldPosition.v = this.ScreenToWorld(touch.position);
-                        return true;
                     }
                 }
-
                 if (UnityEngine.Input.GetMouseButtonDown(0)) {
-                    worldPosition.v = this.ScreenToWorld(UnityEngine.Vector2.FromVector3(UnityEngine.Input.mousePosition));
+                    worldPosition.v = this.ScreenToWorld(UnityEngine.Vector2.FromVector3(UnityEngine.Input.mousePosition.$clone()));
                     return true;
                 }
-
                 worldPosition.v = pc.Vec3.ZERO.clone();
                 return false;
             },
@@ -1548,16 +1367,13 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#TryGetPointerHeldWorld", this ); }
                         worldPosition.v = pc.Vec3.ZERO.clone();
                         return false;
                     }
-
-                    worldPosition.v = this.ScreenToWorld(touch.position);
+                    worldPosition.v = this.ScreenToWorld(touch.position.$clone());
                     return true;
                 }
-
                 if (UnityEngine.Input.GetMouseButton(0)) {
-                    worldPosition.v = this.ScreenToWorld(UnityEngine.Vector2.FromVector3(UnityEngine.Input.mousePosition));
+                    worldPosition.v = this.ScreenToWorld(UnityEngine.Vector2.FromVector3(UnityEngine.Input.mousePosition.$clone()));
                     return true;
                 }
-
                 worldPosition.v = pc.Vec3.ZERO.clone();
                 return false;
             },
@@ -1570,13 +1386,11 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#PointerPressedThisFrame", this ); }
                 if (UnityEngine.Input.GetMouseButtonDown(0)) {
                     return true;
                 }
-
                 for (var i = 0; i < UnityEngine.Input.touchCount; i = (i + 1) | 0) {
                     if (UnityEngine.Input.GetTouch(i).phase === UnityEngine.TouchPhase.Began) {
                         return true;
                     }
                 }
-
                 return false;
             },
             /*SimpleDodgeGame.PointerPressedThisFrame end.*/
@@ -1588,14 +1402,12 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#PointerReleasedThisFrame", this ); }
                 if (UnityEngine.Input.GetMouseButtonUp(0)) {
                     return true;
                 }
-
                 for (var i = 0; i < UnityEngine.Input.touchCount; i = (i + 1) | 0) {
                     var phase = UnityEngine.Input.GetTouch(i).phase;
                     if (phase === UnityEngine.TouchPhase.Canceled || phase === UnityEngine.TouchPhase.Ended) {
                         return true;
                     }
                 }
-
                 return false;
             },
             /*SimpleDodgeGame.PointerReleasedThisFrame end.*/
@@ -1620,15 +1432,12 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ValidateConfig", this ); }
                 this.orbScale = Math.max(0.6, Math.min(this.orbScale, 1.0));
                 this.clearDelaySeconds = UnityEngine.Mathf.Max(0.0, this.clearDelaySeconds);
                 this.fallDurationSeconds = UnityEngine.Mathf.Max(0.01, this.fallDurationSeconds);
-
                 if (this.orbColors == null || this.orbColors.length < 4) {
                     this.orbColors = System.Array.init([new pc.Color( 0.9, 0.33, 0.3, 1.0 ), new pc.Color( 0.25, 0.66, 0.95, 1.0 ), new pc.Color( 0.42, 0.86, 0.42, 1.0 ), new pc.Color( 0.93, 0.82, 0.31, 1.0 ), new pc.Color( 0.7, 0.48, 0.96, 1.0 ), new pc.Color( 0.96, 0.57, 0.81, 1.0 )], UnityEngine.Color);
                 }
-
                 if (this.board == null || System.Array.getLength(this.board, 0) !== this.columns || System.Array.getLength(this.board, 1) !== this.rows) {
                     this.board = System.Array.create(null, null, SimpleDodgeGame.Orb, this.columns, this.rows);
                 }
-
                 this.EnsureMatchBuffers();
             },
             /*SimpleDodgeGame.ValidateConfig end.*/
@@ -1640,7 +1449,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#EnsureMatchBuffers", this ); }
                 if (this.markedCellsBuffer == null || System.Array.getLength(this.markedCellsBuffer, 0) !== this.columns || System.Array.getLength(this.markedCellsBuffer, 1) !== this.rows) {
                     this.markedCellsBuffer = System.Array.create(false, null, System.Boolean, this.columns, this.rows);
                 }
-
                 if (this.visitedCellsBuffer == null || System.Array.getLength(this.visitedCellsBuffer, 0) !== this.columns || System.Array.getLength(this.visitedCellsBuffer, 1) !== this.rows) {
                     this.visitedCellsBuffer = System.Array.create(false, null, System.Boolean, this.columns, this.rows);
                 }
@@ -1656,7 +1464,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetClearDelayWait", this ); }
                     this.cachedClearDelaySeconds = safeDelay;
                     this.cachedClearDelayWait = new UnityEngine.WaitForSeconds(safeDelay);
                 }
-
                 return this.cachedClearDelayWait;
             },
             /*SimpleDodgeGame.GetClearDelayWait end.*/
@@ -1665,13 +1472,11 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetClearDelayWait", this ); }
             ApplyRendererMaterial: function (renderer) {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#ApplyRendererMaterial", this ); }
 
-                if (UnityEngine.Component.op_Equality(renderer, null)) {
-                    return;
-                }
-
-                var selectedMaterial = this.GetSharedSpriteMaterial();
-                if (selectedMaterial != null) {
-                    renderer.material = selectedMaterial;
+                if (!(UnityEngine.Component.op_Equality(renderer, null))) {
+                    var selectedMaterial = this.GetSharedSpriteMaterial();
+                    if (selectedMaterial != null) {
+                        renderer.material = selectedMaterial;
+                    }
                 }
             },
             /*SimpleDodgeGame.ApplyRendererMaterial end.*/
@@ -1685,8 +1490,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetGameplayZ", this ); }
                 if (Math.abs(forwardZ) < 0.0001) {
                     forwardZ = 1.0;
                 }
-
-                return this.gameplayCamera.transform.position.z + ((forwardZ === 0 ? 1 : Math.sign(forwardZ)) * distanceFromCamera);
+                return this.gameplayCamera.transform.position.z + (forwardZ === 0 ? 1 : Math.sign(forwardZ)) * distanceFromCamera;
             },
             /*SimpleDodgeGame.GetGameplayZ end.*/
 
@@ -1700,7 +1504,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetSharedSpriteMaterial", this ); }
                         return this.spriteMaterial;
                     }
                 }
-
                 return null;
             },
             /*SimpleDodgeGame.GetSharedSpriteMaterial end.*/
@@ -1712,7 +1515,6 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ShouldUseCustomMaterialForCurrentPlatform
                 if (UnityEngine.Application.platform === UnityEngine.RuntimePlatform.WebGLPlayer) {
                     return this.useCustomMaterialInWebGl;
                 }
-
                 return this.useCustomMaterialInEditor;
             },
             /*SimpleDodgeGame.ShouldUseCustomMaterialForCurrentPlatform end.*/
@@ -1828,9 +1630,5 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame.OrbMove#$clone", this ); }
     /*SimpleDodgeGame+OrbMove start.*/
     $m("SimpleDodgeGame.OrbMove", function () { return {"td":SimpleDodgeGame,"att":1048843,"a":1,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"},{"a":2,"n":".ctor","t":1,"p":[SimpleDodgeGame.Orb,$n[3].Vector3,$n[3].Vector3],"pi":[{"n":"orb","pt":SimpleDodgeGame.Orb,"ps":0},{"n":"from","pt":$n[3].Vector3,"ps":1},{"n":"to","pt":$n[3].Vector3,"ps":2}],"sn":"$ctor1"},{"a":2,"n":"from","t":4,"rt":$n[3].Vector3,"sn":"from"},{"a":2,"n":"orb","t":4,"rt":SimpleDodgeGame.Orb,"sn":"orb"},{"a":2,"n":"to","t":4,"rt":$n[3].Vector3,"sn":"to"}]}; }, $n);
     /*SimpleDodgeGame+OrbMove end.*/
-
-    /*IAmAnEmptyScriptJustToMakeCodelessProjectsCompileProperty start.*/
-    $m("IAmAnEmptyScriptJustToMakeCodelessProjectsCompileProperty", function () { return {"att":1048577,"a":2,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"}]}; }, $n);
-    /*IAmAnEmptyScriptJustToMakeCodelessProjectsCompileProperty end.*/
 
     }});
