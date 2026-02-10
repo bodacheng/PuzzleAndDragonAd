@@ -2443,10 +2443,6 @@
                 "excluded": true
             },
             {
-                "name": "UnityEngine.TextMesh",
-                "excluded": true
-            },
-            {
                 "name": "AdFormat",
                 "excluded": true
             },
@@ -5260,7 +5256,7 @@
             },
             {
                 "name": "UnityEngine.TextAlignment",
-                "excluded": true
+                "excluded": false
             },
             {
                 "name": "UnityEngine.TextAnchor",
@@ -17352,7 +17348,7 @@
                     },
                     {
                         "name": "rotation#set",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "forward#get",
@@ -17372,7 +17368,7 @@
                     },
                     {
                         "name": "up#get",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "up#set",
@@ -24170,11 +24166,11 @@
                 "instanceMethods": [
                     {
                         "name": "init",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "ctor",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "OnDidApplyAnimationProperties",
@@ -24530,7 +24526,7 @@
                     },
                     {
                         "name": "ctor",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "RequestCharactersInTexture",
@@ -29618,7 +29614,7 @@
                     },
                     {
                         "name": "FillEmptyCells",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "AnimateMoves",
@@ -29654,7 +29650,7 @@
                     },
                     {
                         "name": "GetRandomOrbType",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "GetOrbColorCount",
@@ -29787,6 +29783,38 @@
                     {
                         "name": "ShouldUseCustomMaterialForCurrentPlatform",
                         "excluded": false
+                    },
+                    {
+                        "name": "CreateHudText",
+                        "excluded": false
+                    },
+                    {
+                        "name": "TryLoadBuiltinFont",
+                        "excluded": false
+                    },
+                    {
+                        "name": "HasAnyEmptyCell",
+                        "excluded": false
+                    },
+                    {
+                        "name": "RecoverFromResolveStallIfNeeded",
+                        "excluded": false
+                    },
+                    {
+                        "name": "IsPointerCurrentlyHeld",
+                        "excluded": false
+                    },
+                    {
+                        "name": "TryLoadResourceFont",
+                        "excluded": true
+                    },
+                    {
+                        "name": "FillAnyEmptyCellsImmediate",
+                        "excluded": false
+                    },
+                    {
+                        "name": "GetHudFont",
+                        "excluded": false
                     }
                 ]
             },
@@ -29830,6 +29858,104 @@
                     },
                     {
                         "name": "$clone",
+                        "excluded": false
+                    }
+                ]
+            },
+            {
+                "className": "UnityEngine.TextMesh",
+                "staticMethods": [],
+                "instanceMethods": [
+                    {
+                        "name": "anchor#get",
+                        "excluded": true
+                    },
+                    {
+                        "name": "anchor#set",
+                        "excluded": false
+                    },
+                    {
+                        "name": "characterSize#get",
+                        "excluded": true
+                    },
+                    {
+                        "name": "characterSize#set",
+                        "excluded": false
+                    },
+                    {
+                        "name": "color#get",
+                        "excluded": true
+                    },
+                    {
+                        "name": "color#set",
+                        "excluded": false
+                    },
+                    {
+                        "name": "font#get",
+                        "excluded": true
+                    },
+                    {
+                        "name": "font#set",
+                        "excluded": true
+                    },
+                    {
+                        "name": "fontSize#get",
+                        "excluded": true
+                    },
+                    {
+                        "name": "fontSize#set",
+                        "excluded": false
+                    },
+                    {
+                        "name": "alignment#get",
+                        "excluded": true
+                    },
+                    {
+                        "name": "alignment#set",
+                        "excluded": false
+                    },
+                    {
+                        "name": "lineSpacing#get",
+                        "excluded": true
+                    },
+                    {
+                        "name": "lineSpacing#set",
+                        "excluded": true
+                    },
+                    {
+                        "name": "offsetZ#get",
+                        "excluded": true
+                    },
+                    {
+                        "name": "offsetZ#set",
+                        "excluded": true
+                    },
+                    {
+                        "name": "text#get",
+                        "excluded": true
+                    },
+                    {
+                        "name": "text#set",
+                        "excluded": false
+                    },
+                    {
+                        "name": "init",
+                        "excluded": false
+                    },
+                    {
+                        "name": "ConfigureForEntity",
+                        "excluded": false
+                    },
+                    {
+                        "name": "Awake",
+                        "excluded": false
+                    },
+                    {
+                        "name": "UpdateTextMesh",
+                        "excluded": false
+                    },
+                    {
+                        "name": "UpdateTextGeneratorSettings",
                         "excluded": false
                     }
                 ]

@@ -248,6 +248,7 @@ MonoBehaviour:
   orbScale: 0.9
   clearDelaySeconds: 0.08
   fallDurationSeconds: 0.12
+  resolveStallTimeoutSeconds: 3
   roundDurationSeconds: 35
   baseScorePerOrb: 12
   backgroundColor: {r: 0.317873, g: 0, b: 1, a: 0.6039216}
@@ -271,6 +272,7 @@ MonoBehaviour:
   useCustomMaterialInEditor: 1
   useCustomMaterialInWebGl: 1
   fallbackToDefaultIfShaderUnsupported: 1
+  hudFontOverride: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public sealed class SimpleDodgeGame : MonoBehaviour
 {
@@ -65,6 +66,9 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 	[SerializeField]
 	private float fallDurationSeconds = 0.12f;
 
+	[SerializeField]
+	private float resolveStallTimeoutSeconds = 3f;
+
 	[Header("Round")]
 	[SerializeField]
 	private float roundDurationSeconds = 35f;
@@ -109,6 +113,9 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 	[SerializeField]
 	private bool fallbackToDefaultIfShaderUnsupported = true;
 
+	[SerializeField]
+	private Font hudFontOverride;
+
 	private static readonly Vector2Int[] NeighborOffsets = new Vector2Int[4]
 	{
 		new Vector2Int(1, 0),
@@ -116,6 +123,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		new Vector2Int(0, 1),
 		new Vector2Int(0, -1)
 	};
+
+	private const string HudFontResourceName = "HudFont";
 
 	private static Sprite generatedFallbackSprite;
 
@@ -173,6 +182,16 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
 	private bool hasLoggedMissingSpriteConfig;
 
+	private Transform hudRootTransform;
+
+	private Text scoreText;
+
+	private Text timeText;
+
+	private Text comboText;
+
+	private Text resultText;
+
 	private readonly List<OrbMove> moveBuffer = new List<OrbMove>(64);
 
 	private readonly List<Vector2Int> matchedCellsBuffer = new List<Vector2Int>(64);
@@ -186,6 +205,12 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 	private float cachedClearDelaySeconds = -1f;
 
 	private WaitForSeconds cachedClearDelayWait;
+
+	private float resolveStartedAt = -1f;
+
+	private int resolveRecoveryAttempts;
+
+	private bool hasLoggedMissingHudFont;
 
 	private void Awake()
 	{
@@ -222,6 +247,11 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			return;
 		}
 		UpdateLayout(false);
+		RecoverFromResolveStallIfNeeded();
+		if (!roundEnded && !isResolving && HasAnyEmptyCell())
+		{
+			StartCoroutine(ResolveBoardRoutine());
+		}
 		if (roundEnded)
 		{
 			if (PointerPressedThisFrame())
@@ -263,6 +293,10 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		if (backgroundTransform != null)
 		{
 			Object.Destroy(backgroundTransform.gameObject);
+		}
+		if (hudRootTransform != null)
+		{
+			Object.Destroy(hudRootTransform.gameObject);
 		}
 	}
 
@@ -360,6 +394,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		StopAllCoroutines();
 		isDragging = false;
 		isResolving = false;
+		resolveStartedAt = -1f;
+		resolveRecoveryAttempts = 0;
 		roundEnded = false;
 		hasReportedGameEnded = false;
 		score = 0;
@@ -404,11 +440,33 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		{
 			DragHeldOrbToward(targetCell);
 		}
-		if (PointerReleasedThisFrame())
+		bool released = PointerReleasedThisFrame();
+		if (!released && !IsPointerCurrentlyHeld())
+		{
+			released = true;
+		}
+		if (released)
 		{
 			isDragging = false;
 			StartCoroutine(ResolveBoardRoutine());
 		}
+	}
+
+	private static bool IsPointerCurrentlyHeld()
+	{
+		if (Input.GetMouseButton(0))
+		{
+			return true;
+		}
+		for (int i = 0; i < Input.touchCount; i++)
+		{
+			TouchPhase phase = Input.GetTouch(i).phase;
+			if (phase != TouchPhase.Ended && phase != TouchPhase.Canceled)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void DragHeldOrbToward(Vector2Int targetCell)
@@ -440,31 +498,48 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			yield break;
 		}
 		isResolving = true;
+		resolveStartedAt = Time.unscaledTime;
 		int totalMoveCombos = 0;
 		int safety = 0;
-		while (safety < 24)
+		try
 		{
-			List<Vector2Int> matchedCells;
-			int combos = CollectMatches(out matchedCells);
-			if (combos <= 0 || matchedCells.Count == 0)
+			while (safety < 24)
 			{
-				break;
+				List<Vector2Int> matchedCells;
+				int combos = CollectMatches(out matchedCells);
+				if (combos <= 0 || matchedCells.Count == 0)
+				{
+					break;
+				}
+				totalMoveCombos += combos;
+				int removed = matchedCells.Count;
+				score += CalculateScoreGain(removed, combos, totalMoveCombos);
+				RemoveMatchedCells(matchedCells);
+				if (clearDelaySeconds > 0f)
+				{
+					yield return GetClearDelayWait();
+				}
+				yield return CollapseColumns();
+				yield return FillEmptyCells();
+				safety++;
+				matchedCells = null;
 			}
-			totalMoveCombos += combos;
-			int removed = matchedCells.Count;
-			score += CalculateScoreGain(removed, combos, totalMoveCombos);
-			RemoveMatchedCells(matchedCells);
-			if (clearDelaySeconds > 0f)
+			if (HasAnyEmptyCell())
 			{
-				yield return GetClearDelayWait();
+				yield return FillEmptyCells();
 			}
-			yield return CollapseColumns();
-			yield return FillEmptyCells();
-			safety++;
-			matchedCells = null;
 		}
-		lastMoveCombos = totalMoveCombos;
-		isResolving = false;
+		finally
+		{
+			if (HasAnyEmptyCell())
+			{
+				FillAnyEmptyCellsImmediate();
+			}
+			lastMoveCombos = totalMoveCombos;
+			isResolving = false;
+			resolveStartedAt = -1f;
+			resolveRecoveryAttempts = 0;
+		}
 	}
 
 	private void RemoveMatchedCells(List<Vector2Int> matchedCells)
@@ -530,6 +605,25 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		yield return AnimateMoves(moveBuffer, fallDurationSeconds * 1.15f);
 	}
 
+	private bool HasAnyEmptyCell()
+	{
+		if (board == null)
+		{
+			return false;
+		}
+		for (int x = 0; x < columns; x++)
+		{
+			for (int y = 0; y < rows; y++)
+			{
+				if (board[x, y] == null)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	private IEnumerator AnimateMoves(List<OrbMove> moves, float duration)
 	{
 		if (moves == null || moves.Count == 0)
@@ -559,6 +653,53 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			if (move2.orb != null && !(move2.orb.gameObject == null))
 			{
 				move2.orb.transform.position = move2.to;
+			}
+		}
+	}
+
+	private void RecoverFromResolveStallIfNeeded()
+	{
+		if (!isResolving || resolveStartedAt < 0f)
+		{
+			return;
+		}
+		float timeout = Mathf.Max(1f, resolveStallTimeoutSeconds);
+		if (!(Time.unscaledTime - resolveStartedAt < timeout))
+		{
+			Debug.LogWarning("Resolve routine stalled. Attempting recovery.");
+			StopAllCoroutines();
+			isResolving = false;
+			isDragging = false;
+			resolveStartedAt = -1f;
+			resolveRecoveryAttempts++;
+			FillAnyEmptyCellsImmediate();
+			if (resolveRecoveryAttempts > 2)
+			{
+				Debug.LogWarning("Resolve recovery exceeded retry limit. Resetting round.");
+				ResetRound();
+			}
+			else
+			{
+				StartCoroutine(ResolveBoardRoutine());
+			}
+		}
+	}
+
+	private void FillAnyEmptyCellsImmediate()
+	{
+		if (board == null)
+		{
+			return;
+		}
+		for (int x = 0; x < columns; x++)
+		{
+			for (int y = 0; y < rows; y++)
+			{
+				if (board[x, y] == null)
+				{
+					int orbType = GetRandomOrbType();
+					board[x, y] = CreateOrb(orbType, CellToWorld(x, y));
+				}
 			}
 		}
 	}
@@ -932,14 +1073,132 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
 	private void CreateRuntimeHud()
 	{
+		if (!(hudRootTransform != null))
+		{
+			GameObject canvasObject = new GameObject("RuntimeHud");
+			hudRootTransform = canvasObject.transform;
+			Canvas canvas = canvasObject.AddComponent<Canvas>();
+			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+			canvasObject.AddComponent<CanvasScaler>();
+			canvasObject.AddComponent<GraphicRaycaster>();
+			Font font = GetHudFont();
+			scoreText = CreateHudText(canvasObject.transform, "ScoreText", font, 28, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -16f), new Vector2(460f, 42f), TextAnchor.MiddleLeft);
+			timeText = CreateHudText(canvasObject.transform, "TimeText", font, 28, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -54f), new Vector2(460f, 42f), TextAnchor.MiddleLeft);
+			comboText = CreateHudText(canvasObject.transform, "ComboText", font, 28, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -92f), new Vector2(560f, 42f), TextAnchor.MiddleLeft);
+			resultText = CreateHudText(canvasObject.transform, "ResultText", font, 34, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(700f, 220f), TextAnchor.MiddleCenter);
+			SetResultVisible(false);
+			UpdateHudTexts();
+		}
+	}
+
+	private static Text CreateHudText(Transform parent, string objectName, Font font, int fontSize, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 anchoredPosition, Vector2 sizeDelta, TextAnchor alignment)
+	{
+		GameObject textObject = new GameObject(objectName);
+		textObject.transform.SetParent(parent, false);
+		Text text = textObject.AddComponent<Text>();
+		if (font != null)
+		{
+			text.font = font;
+		}
+		text.fontSize = fontSize;
+		text.fontStyle = FontStyle.Bold;
+		text.color = Color.white;
+		text.horizontalOverflow = HorizontalWrapMode.Overflow;
+		text.verticalOverflow = VerticalWrapMode.Overflow;
+		text.raycastTarget = false;
+		RectTransform rectTransform = text.rectTransform;
+		rectTransform.anchorMin = anchorMin;
+		rectTransform.anchorMax = anchorMax;
+		rectTransform.pivot = pivot;
+		rectTransform.anchoredPosition = anchoredPosition;
+		rectTransform.sizeDelta = sizeDelta;
+		return text;
 	}
 
 	private void UpdateHudTexts()
 	{
+		if (scoreText != null)
+		{
+			scoreText.text = "Score: " + score;
+		}
+		if (timeText != null)
+		{
+			timeText.text = "Time: " + timeRemaining.ToString("0.0");
+		}
+		if (comboText != null)
+		{
+			comboText.text = "Last Combo: x" + lastMoveCombos;
+		}
+		if (resultText != null && roundEnded)
+		{
+			resultText.text = "TIME UP\nScore: " + score + "\nTap / Click to install";
+		}
 	}
 
 	private void SetResultVisible(bool visible)
 	{
+		if (resultText != null)
+		{
+			resultText.enabled = visible;
+		}
+	}
+
+	private Font GetHudFont()
+	{
+		if (hudFontOverride != null)
+		{
+			return hudFontOverride;
+		}
+		Font font = TryLoadResourceFont("HudFont");
+		if (font != null)
+		{
+			return font;
+		}
+		Font[] loadedFonts = Resources.FindObjectsOfTypeAll<Font>();
+		if (loadedFonts != null)
+		{
+			foreach (Font candidate in loadedFonts)
+			{
+				if (candidate != null)
+				{
+					return candidate;
+				}
+			}
+		}
+		if (!hasLoggedMissingHudFont)
+		{
+			hasLoggedMissingHudFont = true;
+			Debug.LogWarning("Failed to load HUD font. Assign hudFontOverride or put Font at Assets/Resources/HudFont.ttf.");
+		}
+		return null;
+	}
+
+	private static Font TryLoadResourceFont(string resourceName)
+	{
+		if (string.IsNullOrEmpty(resourceName))
+		{
+			return null;
+		}
+		try
+		{
+			return Resources.Load<Font>(resourceName);
+		}
+		catch
+		{
+			return null;
+		}
+	}
+
+	private static Font TryLoadBuiltinFont(string fontPath)
+	{
+		try
+		{
+			return (Font)Resources.GetBuiltinResource(typeof(Font), fontPath);
+		}
+		catch
+		{
+			return null;
+		}
 	}
 
 	private void UpdateLayout(bool force)
@@ -1134,6 +1393,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		orbScale = Mathf.Clamp(orbScale, 0.6f, 1f);
 		clearDelaySeconds = Mathf.Max(0f, clearDelaySeconds);
 		fallDurationSeconds = Mathf.Max(0.01f, fallDurationSeconds);
+		resolveStallTimeoutSeconds = Mathf.Max(1f, resolveStallTimeoutSeconds);
 		if (orbColors == null || orbColors.Length < 4)
 		{
 			orbColors = new Color[6]
@@ -1231,11 +1491,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
 	private bool ShouldUseCustomMaterialForCurrentPlatform()
 	{
-		if (Application.platform == RuntimePlatform.WebGLPlayer)
-		{
-			return useCustomMaterialInWebGl;
-		}
-		return useCustomMaterialInEditor;
+		return false;
 	}
 
 	private static Sprite GetGeneratedFallbackSprite()

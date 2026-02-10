@@ -128,9 +128,10 @@ public sealed class Match3ConfigToolWindow : EditorWindow
         SerializedProperty orbScale = FindProperty("orbScale");
         SerializedProperty clearDelaySeconds = FindProperty("clearDelaySeconds");
         SerializedProperty fallDurationSeconds = FindProperty("fallDurationSeconds");
+        SerializedProperty resolveStallTimeoutSeconds = FindProperty("resolveStallTimeoutSeconds");
 
         if (columns == null || rows == null || sidePadding == null || bottomPadding == null || topPadding == null ||
-            orbScale == null || clearDelaySeconds == null || fallDurationSeconds == null)
+            orbScale == null || clearDelaySeconds == null || fallDurationSeconds == null || resolveStallTimeoutSeconds == null)
         {
             DrawMissingFieldWarning("board settings");
             return;
@@ -153,6 +154,7 @@ public sealed class Match3ConfigToolWindow : EditorWindow
         orbScale.floatValue = EditorGUILayout.Slider("Orb Scale", orbScale.floatValue, 0.6f, 1f);
         clearDelaySeconds.floatValue = EditorGUILayout.Slider("Clear Delay", clearDelaySeconds.floatValue, 0f, 0.35f);
         fallDurationSeconds.floatValue = EditorGUILayout.Slider("Fall Duration", fallDurationSeconds.floatValue, 0.01f, 0.4f);
+        resolveStallTimeoutSeconds.floatValue = EditorGUILayout.Slider("Resolve Stall Timeout", resolveStallTimeoutSeconds.floatValue, 1f, 8f);
     }
 
     private void DrawRoundSection()
@@ -220,8 +222,9 @@ public sealed class Match3ConfigToolWindow : EditorWindow
         SerializedProperty useMaterialInEditor = FindProperty("useCustomMaterialInEditor");
         SerializedProperty useMaterialInWebGl = FindProperty("useCustomMaterialInWebGl");
         SerializedProperty fallback = FindProperty("fallbackToDefaultIfShaderUnsupported");
+        SerializedProperty hudFontOverride = FindProperty("hudFontOverride");
 
-        if (spriteMaterial == null || useMaterialInEditor == null || useMaterialInWebGl == null || fallback == null)
+        if (spriteMaterial == null || useMaterialInEditor == null || useMaterialInWebGl == null || fallback == null || hudFontOverride == null)
         {
             DrawMissingFieldWarning("render settings");
             return;
@@ -231,6 +234,8 @@ public sealed class Match3ConfigToolWindow : EditorWindow
         EditorGUILayout.PropertyField(useMaterialInEditor, new GUIContent("Use Material In Editor"));
         EditorGUILayout.PropertyField(useMaterialInWebGl, new GUIContent("Use Material In WebGL"));
         EditorGUILayout.PropertyField(fallback, new GUIContent("Fallback On Unsupported Shader"));
+        EditorGUILayout.PropertyField(hudFontOverride, new GUIContent("HUD Font Override"));
+        EditorGUILayout.HelpBox("For Playworks, assign a Font asset or place one at Assets/Resources/HudFont.ttf.", MessageType.None);
     }
 
     private void DrawPresetSection()
