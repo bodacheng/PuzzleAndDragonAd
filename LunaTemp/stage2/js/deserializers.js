@@ -1212,7 +1212,7 @@ Deserializers.productName = "AdGame2";
 
 Deserializers.lunaInitializationTime = "02/09/2026 07:18:22";
 
-Deserializers.lunaDaysRunning = "1.1";
+Deserializers.lunaDaysRunning = "2.8";
 
 Deserializers.lunaVersion = "7.0.0";
 
@@ -1244,7 +1244,7 @@ Deserializers.isRuntimeAnalysisEnabledForCode = "True";
 
 Deserializers.runtimeAnalysisExcludedClassesCount = "1717";
 
-Deserializers.runtimeAnalysisExcludedMethodsCount = "4362";
+Deserializers.runtimeAnalysisExcludedMethodsCount = "4361";
 
 Deserializers.runtimeAnalysisExcludedModules = "physics3d, physics2d, particle-system, reflection, prefabs, mecanim-wasm";
 
@@ -1268,7 +1268,7 @@ Deserializers.graphicsConstraint = 24;
 
 Deserializers.linearColorSpace = false;
 
-Deserializers.buildID = "43a1fc72-52da-4e6d-83df-2363c0f6b9b4";
+Deserializers.buildID = "ebedb1ee-f7e4-4723-b46f-24b617410cc7";
 
 Deserializers.runtimeInitializeOnLoadInfos = [[["UnityEngine","U2D","Animation","GpuDeformationSystem","CreateFallbackBuffer"],["UnityEngine","Experimental","Rendering","ScriptableRuntimeReflectionSystemSettings","ScriptingDirtyReflectionSystemInstance"]],[["UnityEngine","InputSystem","InputSystem","RunInitialUpdate"],["UnityEngine","AI","NavMesh","ClearPreUpdateListeners"]],[["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"]],[],[["UnityEngine","InputSystem","Plugins","InputForUI","InputSystemProvider","Bootstrap"],["UnityEngine","InputSystem","UI","InputSystemUIInputModule","ResetDefaultActions"],["UnityEngine","InputSystem","InputSystem","RunInitializeInPlayer"]]];
 

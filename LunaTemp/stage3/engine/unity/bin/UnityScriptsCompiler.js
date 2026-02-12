@@ -1,4 +1,4 @@
-if ( TRACE ) { TRACE( JSON.parse( '["PlayworksComplianceHooks#init","PlayworksComplianceHooks#Start","PlayworksComplianceHooks#TriggerInstall","PlayworksComplianceHooks#TriggerGameEnded","SimpleDodgeGame#init","SimpleDodgeGame#IsPointerCurrentlyHeld","SimpleDodgeGame#CreateHudText","SimpleDodgeGame#TryLoadResourceFont","SimpleDodgeGame#TryLoadBuiltinFont","SimpleDodgeGame#ClearBoolGrid","SimpleDodgeGame#GetGeneratedFallbackSprite","SimpleDodgeGame#SetTransformDiameter","SimpleDodgeGame#SetTransformSize","SimpleDodgeGame#GetSpriteWorldSize","SimpleDodgeGame#init","SimpleDodgeGame#Awake","SimpleDodgeGame#Update","SimpleDodgeGame#OnDestroy","SimpleDodgeGame#OnValidate","SimpleDodgeGame#RefreshVisualsNow","SimpleDodgeGame#ApplyPlaygroundVariant","SimpleDodgeGame#RefreshVisualThemeFromContextMenu","SimpleDodgeGame#ResetRound","SimpleDodgeGame#EndRound","SimpleDodgeGame#HandleDragInput","SimpleDodgeGame#DragHeldOrbToward","SimpleDodgeGame#ResolveBoardRoutine","SimpleDodgeGame#RemoveMatchedCells","SimpleDodgeGame#CollapseColumns","SimpleDodgeGame#FillEmptyCells","SimpleDodgeGame#HasAnyEmptyCell","SimpleDodgeGame#AnimateMoves","SimpleDodgeGame#RecoverFromResolveStallIfNeeded","SimpleDodgeGame#FillAnyEmptyCellsImmediate","SimpleDodgeGame#CollectMatches","SimpleDodgeGame#CalculateScoreGain","SimpleDodgeGame#BuildInitialBoard","SimpleDodgeGame#ClearBoard","SimpleDodgeGame#CreateOrb","SimpleDodgeGame#SwapCells","SimpleDodgeGame#GetInitialOrbType","SimpleDodgeGame#GetRandomOrbType","SimpleDodgeGame#GetOrbColorCount","SimpleDodgeGame#GetOrbColor","SimpleDodgeGame#CreateRuntimeVisuals","SimpleDodgeGame#ApplyBackgroundVisuals","SimpleDodgeGame#ApplyBoardFrameVisuals","SimpleDodgeGame#ApplyOrbVisuals","SimpleDodgeGame#GetOrbSpriteForType","SimpleDodgeGame#GetBoardSprite","SimpleDodgeGame#GetAnyConfiguredOrbSprite","SimpleDodgeGame#PrepareSpriteForRuntime","SimpleDodgeGame#WarnIfMissingSpriteSetup","SimpleDodgeGame#CreateRuntimeHud","SimpleDodgeGame#UpdateHudTexts","SimpleDodgeGame#SetResultVisible","SimpleDodgeGame#GetHudFont","SimpleDodgeGame#UpdateLayout","SimpleDodgeGame#RepositionBoardOrbs","SimpleDodgeGame#UpdateBackgroundTransform","SimpleDodgeGame#UpdateBoardFrameTransform","SimpleDodgeGame#CellToWorld","SimpleDodgeGame#TryWorldToCell","SimpleDodgeGame#IsInsideBoard","SimpleDodgeGame#TryGetPointerDownWorld","SimpleDodgeGame#TryGetPointerHeldWorld","SimpleDodgeGame#PointerPressedThisFrame","SimpleDodgeGame#PointerReleasedThisFrame","SimpleDodgeGame#ScreenToWorld","SimpleDodgeGame#ValidateConfig","SimpleDodgeGame#EnsureMatchBuffers","SimpleDodgeGame#GetClearDelayWait","SimpleDodgeGame#ApplyRendererMaterial","SimpleDodgeGame#GetGameplayZ","SimpleDodgeGame#GetSharedSpriteMaterial","SimpleDodgeGame#ShouldUseCustomMaterialForCurrentPlatform","SimpleDodgeGame.Orb#ctor","SimpleDodgeGame.OrbMove#getDefaultValue","SimpleDodgeGame.OrbMove#init","SimpleDodgeGame.OrbMove#$ctor1","SimpleDodgeGame.OrbMove#ctor","SimpleDodgeGame.OrbMove#getHashCode","SimpleDodgeGame.OrbMove#equals","SimpleDodgeGame.OrbMove#$clone"]' ) ); }
+if ( TRACE ) { TRACE( JSON.parse( '["PlayworksComplianceHooks#init","PlayworksComplianceHooks#Start","PlayworksComplianceHooks#TriggerInstall","PlayworksComplianceHooks#TriggerGameEnded","SimpleDodgeGame#init","SimpleDodgeGame#IsPointerCurrentlyHeld","SimpleDodgeGame#CreateHudText","SimpleDodgeGame#TryLoadResourceFont","SimpleDodgeGame#TryLoadBuiltinFont","SimpleDodgeGame#ClearBoolGrid","SimpleDodgeGame#GetGeneratedFallbackSprite","SimpleDodgeGame#SetTransformDiameter","SimpleDodgeGame#SetTransformSize","SimpleDodgeGame#GetSpriteWorldSize","SimpleDodgeGame#GetSafeUnscaledDeltaTime","SimpleDodgeGame#init","SimpleDodgeGame#Awake","SimpleDodgeGame#Update","SimpleDodgeGame#OnDestroy","SimpleDodgeGame#OnValidate","SimpleDodgeGame#RefreshVisualsNow","SimpleDodgeGame#ApplyPlaygroundVariant","SimpleDodgeGame#RefreshVisualThemeFromContextMenu","SimpleDodgeGame#ResetRound","SimpleDodgeGame#EndRound","SimpleDodgeGame#HandleDragInput","SimpleDodgeGame#DragHeldOrbToward","SimpleDodgeGame#ResolveBoardRoutine","SimpleDodgeGame#RemoveMatchedCells","SimpleDodgeGame#CollapseColumns","SimpleDodgeGame#FillEmptyCells","SimpleDodgeGame#HasAnyEmptyCell","SimpleDodgeGame#AnimateMoves","SimpleDodgeGame#RecoverFromResolveStallIfNeeded","SimpleDodgeGame#FillAnyEmptyCellsImmediate","SimpleDodgeGame#BuildCollapseMoves","SimpleDodgeGame#BuildFillMoves","SimpleDodgeGame#StartImmediateResolve","SimpleDodgeGame#UpdateImmediateResolve","SimpleDodgeGame#EvaluateImmediateResolveStep","SimpleDodgeGame#BeginImmediateCollapsePhase","SimpleDodgeGame#BeginImmediateFillPhase","SimpleDodgeGame#StartImmediateMoveAnimation","SimpleDodgeGame#UpdateImmediateMoveAnimation","SimpleDodgeGame#FinishImmediateResolve","SimpleDodgeGame#ResetImmediateResolveState","SimpleDodgeGame#TriggerResolve","SimpleDodgeGame#ShouldUseImmediateResolve","SimpleDodgeGame#CountEmptyCells","SimpleDodgeGame#CollectMatches","SimpleDodgeGame#CalculateScoreGain","SimpleDodgeGame#BuildInitialBoard","SimpleDodgeGame#ClearBoard","SimpleDodgeGame#CreateOrb","SimpleDodgeGame#SwapCells","SimpleDodgeGame#GetInitialOrbType","SimpleDodgeGame#GetRandomOrbType","SimpleDodgeGame#GetOrbColorCount","SimpleDodgeGame#GetOrbColor","SimpleDodgeGame#CreateRuntimeVisuals","SimpleDodgeGame#ApplyBackgroundVisuals","SimpleDodgeGame#ApplyBoardFrameVisuals","SimpleDodgeGame#ApplyOrbVisuals","SimpleDodgeGame#GetOrbSpriteForType","SimpleDodgeGame#GetBoardSprite","SimpleDodgeGame#GetAnyConfiguredOrbSprite","SimpleDodgeGame#PrepareSpriteForRuntime","SimpleDodgeGame#WarnIfMissingSpriteSetup","SimpleDodgeGame#CreateRuntimeHud","SimpleDodgeGame#UpdateHudTexts","SimpleDodgeGame#SetResultVisible","SimpleDodgeGame#GetHudFont","SimpleDodgeGame#UpdateLayout","SimpleDodgeGame#RepositionBoardOrbs","SimpleDodgeGame#UpdateBackgroundTransform","SimpleDodgeGame#UpdateBoardFrameTransform","SimpleDodgeGame#CellToWorld","SimpleDodgeGame#TryWorldToCell","SimpleDodgeGame#IsInsideBoard","SimpleDodgeGame#TryGetPointerDownWorld","SimpleDodgeGame#TryGetPointerHeldWorld","SimpleDodgeGame#PointerPressedThisFrame","SimpleDodgeGame#PointerReleasedThisFrame","SimpleDodgeGame#ScreenToWorld","SimpleDodgeGame#ValidateConfig","SimpleDodgeGame#EnsureMatchBuffers","SimpleDodgeGame#WaitForSecondsUnscaled","SimpleDodgeGame#MarkResolveProgress","SimpleDodgeGame#ApplyRendererMaterial","SimpleDodgeGame#GetGameplayZ","SimpleDodgeGame#GetSharedSpriteMaterial","SimpleDodgeGame#ShouldUseCustomMaterialForCurrentPlatform","SimpleDodgeGame.Orb#ctor","SimpleDodgeGame.OrbMove#getDefaultValue","SimpleDodgeGame.OrbMove#init","SimpleDodgeGame.OrbMove#$ctor1","SimpleDodgeGame.OrbMove#ctor","SimpleDodgeGame.OrbMove#getHashCode","SimpleDodgeGame.OrbMove#equals","SimpleDodgeGame.OrbMove#$clone"]' ) ); }
 /**
  * @compiler Bridge.NET 17.9.42-luna
  */
@@ -246,6 +246,18 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetSpriteWorldSize", this ); }
                 },
                 /*SimpleDodgeGame.GetSpriteWorldSize:static end.*/
 
+                /*SimpleDodgeGame.GetSafeUnscaledDeltaTime:static start.*/
+                GetSafeUnscaledDeltaTime: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#GetSafeUnscaledDeltaTime", this ); }
+
+                    var delta = UnityEngine.Time.unscaledDeltaTime;
+                    if (delta > 0.0 && !isNaN(delta) && !(Math.abs(delta) === Number.POSITIVE_INFINITY)) {
+                        return delta;
+                    }
+                    return 0.0166666675;
+                },
+                /*SimpleDodgeGame.GetSafeUnscaledDeltaTime:static end.*/
+
 
             }
         },
@@ -307,10 +319,13 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#GetSpriteWorldSize", this ); }
             floodFillStackBuffer: null,
             markedCellsBuffer: null,
             visitedCellsBuffer: null,
-            cachedClearDelaySeconds: 0,
-            cachedClearDelayWait: null,
             resolveStartedAt: 0,
             resolveRecoveryAttempts: 0,
+            resolveStage: null,
+            immediateResolvePhase: 0,
+            immediatePhaseTimer: 0,
+            immediateMoveDuration: 0,
+            immediateTotalMoveCombos: 0,
             hasLoggedMissingHudFont: false
         },
         ctors: {
@@ -330,7 +345,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#init", this ); }
                 this.orbScale = 0.9;
                 this.clearDelaySeconds = 0.08;
                 this.fallDurationSeconds = 0.12;
-                this.resolveStallTimeoutSeconds = 3.0;
+                this.resolveStallTimeoutSeconds = 8.0;
                 this.roundDurationSeconds = 35.0;
                 this.baseScorePerOrb = 12;
                 this.backgroundColor = new pc.Color( 0.12, 0.16, 0.25, 1.0 );
@@ -343,8 +358,9 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#init", this ); }
                 this.moveBuffer = new (System.Collections.Generic.List$1(SimpleDodgeGame.OrbMove)).$ctor2(64);
                 this.matchedCellsBuffer = new (System.Collections.Generic.List$1(UnityEngine.Vector2Int)).$ctor2(64);
                 this.floodFillStackBuffer = new (System.Collections.Generic.List$1(UnityEngine.Vector2Int)).$ctor2(64);
-                this.cachedClearDelaySeconds = -1.0;
                 this.resolveStartedAt = -1.0;
+                this.resolveStage = "idle";
+                this.immediateResolvePhase = SimpleDodgeGame.ImmediateResolvePhase.Idle;
             }
         },
         methods: {
@@ -386,7 +402,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#Update", this ); }
                 this.UpdateLayout(false);
                 this.RecoverFromResolveStallIfNeeded();
                 if (!this.roundEnded && !this.isResolving && this.HasAnyEmptyCell()) {
-                    this.StartCoroutine$1(this.ResolveBoardRoutine());
+                    this.TriggerResolve();
                 }
                 if (this.roundEnded) {
                     if (this.PointerPressedThisFrame()) {
@@ -399,12 +415,15 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#Update", this ); }
                     this.UpdateHudTexts();
                     return;
                 }
-                this.timeRemaining -= UnityEngine.Time.deltaTime;
+                this.timeRemaining -= SimpleDodgeGame.GetSafeUnscaledDeltaTime();
                 if (this.timeRemaining <= 0.0) {
                     this.timeRemaining = 0.0;
                     this.EndRound();
                     this.UpdateHudTexts();
                     return;
+                }
+                if (this.ShouldUseImmediateResolve() && this.isResolving) {
+                    this.UpdateImmediateResolve();
                 }
                 if (!this.isResolving) {
                     this.HandleDragInput();
@@ -530,6 +549,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ResetRound", this ); }
                 this.StopAllCoroutines();
                 this.isDragging = false;
                 this.isResolving = false;
+                this.ResetImmediateResolveState();
                 this.resolveStartedAt = -1.0;
                 this.resolveRecoveryAttempts = 0;
                 this.roundEnded = false;
@@ -552,6 +572,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#EndRound", this ); }
                     this.roundEnded = true;
                     this.isDragging = false;
                     this.isResolving = false;
+                    this.ResetImmediateResolveState();
                     this.StopAllCoroutines();
                     if (!this.hasReportedGameEnded && UnityEngine.MonoBehaviour.op_Inequality(this.complianceHooks, null)) {
                         this.hasReportedGameEnded = true;
@@ -587,7 +608,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#HandleDragInput", this ); }
                 }
                 if (released) {
                     this.isDragging = false;
-                    this.StartCoroutine$1(this.ResolveBoardRoutine());
+                    this.TriggerResolve();
                 }
             },
             /*SimpleDodgeGame.HandleDragInput end.*/
@@ -645,26 +666,43 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ResolveBoardRoutine", this ); }
                                     return false;
                                 }
                                 case 2: {
-                                    this.isResolving = true;
-                                        this.resolveStartedAt = UnityEngine.Time.unscaledTime;
-                                        totalMoveCombos = 0;
-                                        safety = 0;
-                                    $step = 3;
-                                    continue;
-                                }
-                                case 3: {
-                                    if ( safety < 24 ) {
-                                            $step = 4;
+                                    if (this.ShouldUseImmediateResolve()) {
+                                            $step = 3;
                                             continue;
                                         } 
-                                        $step = 10;
+                                        $step = 4;
                                         continue;
                                 }
+                                case 3: {
+                                    this.StartImmediateResolve();
+                                        return false;
+                                    $step = 4;
+                                    continue;
+                                }
                                 case 4: {
-                                    matchedCells = { };
+                                    this.isResolving = true;
+                                        this.MarkResolveProgress();
+                                        this.resolveStage = "collect";
+                                        totalMoveCombos = 0;
+                                        safety = 0;
+                                    $step = 5;
+                                    continue;
+                                }
+                                case 5: {
+                                    if ( safety < 24 ) {
+                                            $step = 6;
+                                            continue;
+                                        } 
+                                        $step = 12;
+                                        continue;
+                                }
+                                case 6: {
+                                    this.MarkResolveProgress();
+                                        this.resolveStage = "collect";
+                                        matchedCells = { };
                                         combos = this.CollectMatches(matchedCells);
                                         if (combos <= 0 || matchedCells.v.Count === 0) {
-                                            $step = 10;
+                                            $step = 12;
                                             continue;
                                         }
                                         totalMoveCombos = (totalMoveCombos + combos) | 0;
@@ -672,66 +710,75 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ResolveBoardRoutine", this ); }
                                         this.score = (this.score + (this.CalculateScoreGain(removed, combos, totalMoveCombos))) | 0;
                                         this.RemoveMatchedCells(matchedCells.v);
                                         if (this.clearDelaySeconds > 0.0) {
-                                            $step = 5;
+                                            $step = 7;
                                             continue;
                                         } 
-                                        $step = 7;
+                                        $step = 9;
                                         continue;
                                 }
-                                case 5: {
-                                    $enumerator.current = this.GetClearDelayWait();
-                                        $step = 6;
-                                        return true;
-                                }
-                                case 6: {
-                                    $step = 7;
-                                    continue;
-                                }
                                 case 7: {
-                                    $enumerator.current = this.CollapseColumns();
+                                    this.resolveStage = "clear-delay";
+                                        $enumerator.current = this.WaitForSecondsUnscaled(this.clearDelaySeconds);
                                         $step = 8;
                                         return true;
                                 }
                                 case 8: {
-                                    $enumerator.current = this.FillEmptyCells();
-                                        $step = 9;
-                                        return true;
+                                    this.MarkResolveProgress();
+                                    $step = 9;
+                                    continue;
                                 }
                                 case 9: {
-                                    safety = (safety + 1) | 0;
-                                        matchedCells.v = null;
-
-                                        $step = 3;
-                                        continue;
-                                }
-                                case 10: {
-                                    if (this.HasAnyEmptyCell()) {
-                                            $step = 11;
-                                            continue;
-                                        } 
-                                        $step = 13;
-                                        continue;
-                                }
-                                case 11: {
-                                    $enumerator.current = this.FillEmptyCells();
-                                        $step = 12;
+                                    this.resolveStage = "collapse";
+                                        $enumerator.current = this.CollapseColumns();
+                                        $step = 10;
                                         return true;
                                 }
+                                case 10: {
+                                    this.MarkResolveProgress();
+                                        this.resolveStage = "fill";
+                                        $enumerator.current = this.FillEmptyCells();
+                                        $step = 11;
+                                        return true;
+                                }
+                                case 11: {
+                                    this.MarkResolveProgress();
+                                        safety = (safety + 1) | 0;
+                                        matchedCells.v = null;
+
+                                        $step = 5;
+                                        continue;
+                                }
                                 case 12: {
-                                    $step = 13;
-                                    continue;
+                                    if (this.HasAnyEmptyCell()) {
+                                            $step = 13;
+                                            continue;
+                                        } 
+                                        $step = 15;
+                                        continue;
                                 }
                                 case 13: {
-                                    $step = 14;
-                                    continue;
+                                    this.resolveStage = "final-fill";
+                                        $enumerator.current = this.FillEmptyCells();
+                                        $step = 14;
+                                        return true;
                                 }
                                 case 14: {
+                                    this.MarkResolveProgress();
+                                    $step = 15;
+                                    continue;
+                                }
+                                case 15: {
+                                    $step = 16;
+                                    continue;
+                                }
+                                case 16: {
                                     if (this.HasAnyEmptyCell()) {
                                             this.FillAnyEmptyCellsImmediate();
                                         }
                                         this.lastMoveCombos = totalMoveCombos;
                                         this.isResolving = false;
                                         this.resolveStartedAt = -1.0;
+                                        this.resolveStage = "idle";
                                         this.resolveRecoveryAttempts = 0;
 
                                         if ($jumpFromFinally > -1) {
@@ -744,10 +791,10 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ResolveBoardRoutine", this ); }
                                             $tcs.setResult($returnValue);
                                             return;
                                         }
-                                    $step = 15;
+                                    $step = 17;
                                     continue;
                                 }
-                                case 15: {
+                                case 17: {
 
                                 }
                                 default: {
@@ -757,18 +804,18 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ResolveBoardRoutine", this ); }
                         }
                     } catch($async_e1) {
                         $async_e = System.Exception.create($async_e1);
-                        if ($step >= 3 && $step <= 13){
+                        if ($step >= 5 && $step <= 15){
 
-                            $step = 14;
+                            $step = 16;
                             $enumerator.moveNext();
                             return;
                         }
                         throw $async_e;
                     }
                 }), function () {
-                    if ($step >= 3 && $step <= 13){
+                    if ($step >= 5 && $step <= 15){
 
-                        $step = 14;
+                        $step = 16;
                         $enumerator.moveNext();
                         return;
                     }
@@ -967,9 +1014,10 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#AnimateMoves", this ); }
                                         continue;
                                 }
                                 case 4: {
-                                    elapsed += UnityEngine.Time.deltaTime;
+                                    elapsed += SimpleDodgeGame.GetSafeUnscaledDeltaTime();
                                         t = Math.max(0, Math.min(1, elapsed / safeDuration));
                                         eased = t * t * (3.0 - 2.0 * t);
+                                        this.MarkResolveProgress();
                                         for (var i = 0; i < moves.Count; i = (i + 1) | 0) {
                                             move = moves.getItem(i).$clone();
                                             if (move.orb != null && !(UnityEngine.GameObject.op_Equality(move.orb.gameObject, null))) {
@@ -992,6 +1040,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#AnimateMoves", this ); }
                                                 move2.orb.transform.position = move2.to.$clone();
                                             }
                                         }
+                                        this.MarkResolveProgress();
 
                                 }
                                 default: {
@@ -1012,23 +1061,24 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#AnimateMoves", this ); }
             RecoverFromResolveStallIfNeeded: function () {
 if ( TRACE ) { TRACE( "SimpleDodgeGame#RecoverFromResolveStallIfNeeded", this ); }
 
-                if (!this.isResolving || this.resolveStartedAt < 0.0) {
+                if (this.ShouldUseImmediateResolve() || !this.isResolving || this.resolveStartedAt < 0.0) {
                     return;
                 }
                 var timeout = UnityEngine.Mathf.Max(1.0, this.resolveStallTimeoutSeconds);
                 if (!(UnityEngine.Time.unscaledTime - this.resolveStartedAt < timeout)) {
-                    UnityEngine.Debug.LogWarning$1("Resolve routine stalled. Attempting recovery.");
+                    UnityEngine.Debug.LogWarning$1("Resolve routine stalled at stage '" + (this.resolveStage || "") + "' with emptyCells=" + this.CountEmptyCells() + ". Attempting recovery.");
                     this.StopAllCoroutines();
                     this.isResolving = false;
                     this.isDragging = false;
                     this.resolveStartedAt = -1.0;
+                    this.resolveStage = "idle";
                     this.resolveRecoveryAttempts = (this.resolveRecoveryAttempts + 1) | 0;
                     this.FillAnyEmptyCellsImmediate();
                     if (this.resolveRecoveryAttempts > 2) {
                         UnityEngine.Debug.LogWarning$1("Resolve recovery exceeded retry limit. Resetting round.");
                         this.ResetRound();
                     } else {
-                        this.StartCoroutine$1(this.ResolveBoardRoutine());
+                        this.TriggerResolve();
                     }
                 }
             },
@@ -1051,6 +1101,267 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#FillAnyEmptyCellsImmediate", this ); }
                 }
             },
             /*SimpleDodgeGame.FillAnyEmptyCellsImmediate end.*/
+
+            /*SimpleDodgeGame.BuildCollapseMoves start.*/
+            BuildCollapseMoves: function (targetMoves) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#BuildCollapseMoves", this ); }
+
+                targetMoves.clear();
+                for (var x = 0; x < this.columns; x = (x + 1) | 0) {
+                    var writeY = 0;
+                    for (var readY = 0; readY < this.rows; readY = (readY + 1) | 0) {
+                        var orb = this.board.get([x, readY]);
+                        if (orb != null) {
+                            if (writeY !== readY) {
+                                this.board.set([x, writeY], orb);
+                                this.board.set([x, readY], null);
+                                var from = orb.transform.position.$clone();
+                                var to = this.CellToWorld(x, writeY);
+                                targetMoves.add(new SimpleDodgeGame.OrbMove.$ctor1(orb, from.$clone(), to.$clone()));
+                            }
+                            writeY = (writeY + 1) | 0;
+                        }
+                    }
+                }
+                return targetMoves.Count;
+            },
+            /*SimpleDodgeGame.BuildCollapseMoves end.*/
+
+            /*SimpleDodgeGame.BuildFillMoves start.*/
+            BuildFillMoves: function (targetMoves) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#BuildFillMoves", this ); }
+
+                targetMoves.clear();
+                for (var x = 0; x < this.columns; x = (x + 1) | 0) {
+                    var spawnOffset = 0;
+                    for (var y = 0; y < this.rows; y = (y + 1) | 0) {
+                        if (this.board.get([x, y]) == null) {
+                            var orbType = this.GetRandomOrbType();
+                            var spawnPosition = this.CellToWorld(x, ((this.rows + spawnOffset) | 0));
+                            var orb = this.CreateOrb(orbType, spawnPosition.$clone());
+                            this.board.set([x, y], orb);
+                            var settlePosition = this.CellToWorld(x, y);
+                            targetMoves.add(new SimpleDodgeGame.OrbMove.$ctor1(orb, spawnPosition.$clone(), settlePosition.$clone()));
+                            spawnOffset = (spawnOffset + 1) | 0;
+                        }
+                    }
+                }
+                return targetMoves.Count;
+            },
+            /*SimpleDodgeGame.BuildFillMoves end.*/
+
+            /*SimpleDodgeGame.StartImmediateResolve start.*/
+            StartImmediateResolve: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#StartImmediateResolve", this ); }
+
+                if (!this.isResolving && !this.roundEnded) {
+                    this.isResolving = true;
+                    this.ResetImmediateResolveState();
+                    this.resolveStage = "collect";
+                    this.MarkResolveProgress();
+                    this.EvaluateImmediateResolveStep();
+                }
+            },
+            /*SimpleDodgeGame.StartImmediateResolve end.*/
+
+            /*SimpleDodgeGame.UpdateImmediateResolve start.*/
+            UpdateImmediateResolve: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateImmediateResolve", this ); }
+
+                if (!this.isResolving) {
+                    return;
+                }
+                var dt = SimpleDodgeGame.GetSafeUnscaledDeltaTime();
+                switch (this.immediateResolvePhase) {
+                    case SimpleDodgeGame.ImmediateResolvePhase.ClearDelay: 
+                        this.immediatePhaseTimer -= dt;
+                        this.MarkResolveProgress();
+                        if (this.immediatePhaseTimer <= 0.0) {
+                            this.BeginImmediateCollapsePhase();
+                        }
+                        break;
+                    case SimpleDodgeGame.ImmediateResolvePhase.CollapseAnim: 
+                    case SimpleDodgeGame.ImmediateResolvePhase.FillAnim: 
+                        this.UpdateImmediateMoveAnimation(dt);
+                        break;
+                    default: 
+                        this.EvaluateImmediateResolveStep();
+                        break;
+                }
+            },
+            /*SimpleDodgeGame.UpdateImmediateResolve end.*/
+
+            /*SimpleDodgeGame.EvaluateImmediateResolveStep start.*/
+            EvaluateImmediateResolveStep: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#EvaluateImmediateResolveStep", this ); }
+
+                if (!this.isResolving || this.roundEnded) {
+                    return;
+                }
+                this.resolveStage = "collect";
+                this.MarkResolveProgress();
+                var matchedCells = { };
+                var combos = this.CollectMatches(matchedCells);
+                if (combos <= 0 || matchedCells.v.Count === 0) {
+                    if (this.HasAnyEmptyCell()) {
+                        this.BeginImmediateFillPhase();
+                    } else {
+                        this.FinishImmediateResolve();
+                    }
+                    return;
+                }
+                this.immediateTotalMoveCombos = (this.immediateTotalMoveCombos + combos) | 0;
+                var removed = matchedCells.v.Count;
+                this.score = (this.score + (this.CalculateScoreGain(removed, combos, this.immediateTotalMoveCombos))) | 0;
+                this.RemoveMatchedCells(matchedCells.v);
+                if (this.clearDelaySeconds > 0.0) {
+                    this.resolveStage = "clear-delay";
+                    this.immediateResolvePhase = SimpleDodgeGame.ImmediateResolvePhase.ClearDelay;
+                    this.immediatePhaseTimer = this.clearDelaySeconds;
+                } else {
+                    this.BeginImmediateCollapsePhase();
+                }
+            },
+            /*SimpleDodgeGame.EvaluateImmediateResolveStep end.*/
+
+            /*SimpleDodgeGame.BeginImmediateCollapsePhase start.*/
+            BeginImmediateCollapsePhase: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#BeginImmediateCollapsePhase", this ); }
+
+                this.resolveStage = "collapse";
+                var moveCount = this.BuildCollapseMoves(this.moveBuffer);
+                if (moveCount <= 0) {
+                    this.BeginImmediateFillPhase();
+                } else {
+                    this.StartImmediateMoveAnimation(SimpleDodgeGame.ImmediateResolvePhase.CollapseAnim, this.fallDurationSeconds);
+                }
+            },
+            /*SimpleDodgeGame.BeginImmediateCollapsePhase end.*/
+
+            /*SimpleDodgeGame.BeginImmediateFillPhase start.*/
+            BeginImmediateFillPhase: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#BeginImmediateFillPhase", this ); }
+
+                this.resolveStage = "fill";
+                var moveCount = this.BuildFillMoves(this.moveBuffer);
+                if (moveCount <= 0) {
+                    this.EvaluateImmediateResolveStep();
+                } else {
+                    this.StartImmediateMoveAnimation(SimpleDodgeGame.ImmediateResolvePhase.FillAnim, this.fallDurationSeconds * 1.15);
+                }
+            },
+            /*SimpleDodgeGame.BeginImmediateFillPhase end.*/
+
+            /*SimpleDodgeGame.StartImmediateMoveAnimation start.*/
+            StartImmediateMoveAnimation: function (phase, duration) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#StartImmediateMoveAnimation", this ); }
+
+                this.immediateResolvePhase = phase;
+                this.immediatePhaseTimer = 0.0;
+                this.immediateMoveDuration = UnityEngine.Mathf.Max(0.01, duration);
+                this.MarkResolveProgress();
+            },
+            /*SimpleDodgeGame.StartImmediateMoveAnimation end.*/
+
+            /*SimpleDodgeGame.UpdateImmediateMoveAnimation start.*/
+            UpdateImmediateMoveAnimation: function (dt) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#UpdateImmediateMoveAnimation", this ); }
+
+                this.immediatePhaseTimer += UnityEngine.Mathf.Max(0.0, dt);
+                var t = Math.max(0, Math.min(1, this.immediatePhaseTimer / this.immediateMoveDuration));
+                var eased = t * t * (3.0 - 2.0 * t);
+                for (var j = 0; j < this.moveBuffer.Count; j = (j + 1) | 0) {
+                    var move = this.moveBuffer.getItem(j).$clone();
+                    if (move.orb != null && !(UnityEngine.GameObject.op_Equality(move.orb.gameObject, null))) {
+                        move.orb.transform.position = new pc.Vec3().lerpUnclamped( move.from, move.to, eased );
+                    }
+                }
+                this.MarkResolveProgress();
+                if (t < 1.0) {
+                    return;
+                }
+                for (var i = 0; i < this.moveBuffer.Count; i = (i + 1) | 0) {
+                    var move2 = this.moveBuffer.getItem(i).$clone();
+                    if (move2.orb != null && !(UnityEngine.GameObject.op_Equality(move2.orb.gameObject, null))) {
+                        move2.orb.transform.position = move2.to.$clone();
+                    }
+                }
+                var completedPhase = this.immediateResolvePhase;
+                this.immediateResolvePhase = SimpleDodgeGame.ImmediateResolvePhase.Idle;
+                if (completedPhase === SimpleDodgeGame.ImmediateResolvePhase.CollapseAnim) {
+                    this.BeginImmediateFillPhase();
+                } else {
+                    this.EvaluateImmediateResolveStep();
+                }
+            },
+            /*SimpleDodgeGame.UpdateImmediateMoveAnimation end.*/
+
+            /*SimpleDodgeGame.FinishImmediateResolve start.*/
+            FinishImmediateResolve: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#FinishImmediateResolve", this ); }
+
+                if (this.HasAnyEmptyCell()) {
+                    this.FillAnyEmptyCellsImmediate();
+                }
+                this.lastMoveCombos = this.immediateTotalMoveCombos;
+                this.isResolving = false;
+                this.resolveStartedAt = -1.0;
+                this.resolveStage = "idle";
+                this.resolveRecoveryAttempts = 0;
+                this.ResetImmediateResolveState();
+            },
+            /*SimpleDodgeGame.FinishImmediateResolve end.*/
+
+            /*SimpleDodgeGame.ResetImmediateResolveState start.*/
+            ResetImmediateResolveState: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#ResetImmediateResolveState", this ); }
+
+                this.immediateResolvePhase = SimpleDodgeGame.ImmediateResolvePhase.Idle;
+                this.immediatePhaseTimer = 0.0;
+                this.immediateMoveDuration = 0.0;
+                this.immediateTotalMoveCombos = 0;
+                this.moveBuffer.clear();
+            },
+            /*SimpleDodgeGame.ResetImmediateResolveState end.*/
+
+            /*SimpleDodgeGame.TriggerResolve start.*/
+            TriggerResolve: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#TriggerResolve", this ); }
+
+                if (this.ShouldUseImmediateResolve()) {
+                    this.StartImmediateResolve();
+                } else {
+                    this.StartCoroutine$1(this.ResolveBoardRoutine());
+                }
+            },
+            /*SimpleDodgeGame.TriggerResolve end.*/
+
+            /*SimpleDodgeGame.ShouldUseImmediateResolve start.*/
+            ShouldUseImmediateResolve: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#ShouldUseImmediateResolve", this ); }
+
+                return true;
+            },
+            /*SimpleDodgeGame.ShouldUseImmediateResolve end.*/
+
+            /*SimpleDodgeGame.CountEmptyCells start.*/
+            CountEmptyCells: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#CountEmptyCells", this ); }
+
+                if (this.board == null) {
+                    return 0;
+                }
+                var count = 0;
+                for (var x = 0; x < this.columns; x = (x + 1) | 0) {
+                    for (var y = 0; y < this.rows; y = (y + 1) | 0) {
+                        if (this.board.get([x, y]) == null) {
+                            count = (count + 1) | 0;
+                        }
+                    }
+                }
+                return count;
+            },
+            /*SimpleDodgeGame.CountEmptyCells end.*/
 
             /*SimpleDodgeGame.CollectMatches start.*/
             CollectMatches: function (matchedCells) {
@@ -1743,18 +2054,71 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#EnsureMatchBuffers", this ); }
             },
             /*SimpleDodgeGame.EnsureMatchBuffers end.*/
 
-            /*SimpleDodgeGame.GetClearDelayWait start.*/
-            GetClearDelayWait: function () {
-if ( TRACE ) { TRACE( "SimpleDodgeGame#GetClearDelayWait", this ); }
+            /*SimpleDodgeGame.WaitForSecondsUnscaled start.*/
+            WaitForSecondsUnscaled: function (seconds) {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#WaitForSecondsUnscaled", this ); }
 
-                var safeDelay = UnityEngine.Mathf.Max(0.0, this.clearDelaySeconds);
-                if (this.cachedClearDelayWait == null || Math.abs(this.cachedClearDelaySeconds - safeDelay) > 0.0001) {
-                    this.cachedClearDelaySeconds = safeDelay;
-                    this.cachedClearDelayWait = new UnityEngine.WaitForSeconds(safeDelay);
-                }
-                return this.cachedClearDelayWait;
+                var $step = 0,
+                    $jumpFromFinally,
+                    $returnValue,
+                    remaining,
+                    $async_e;
+
+                var $enumerator = new Bridge.GeneratorEnumerator(Bridge.fn.bind(this, function () {
+                    try {
+                        for (;;) {
+                            switch ($step) {
+                                case 0: {
+                                    remaining = UnityEngine.Mathf.Max(0.0, seconds);
+                                    $step = 1;
+                                    continue;
+                                }
+                                case 1: {
+                                    if ( remaining > 0.0 ) {
+                                            $step = 2;
+                                            continue;
+                                        } 
+                                        $step = 4;
+                                        continue;
+                                }
+                                case 2: {
+                                    remaining -= SimpleDodgeGame.GetSafeUnscaledDeltaTime();
+                                        this.MarkResolveProgress();
+                                        $enumerator.current = null;
+                                        $step = 3;
+                                        return true;
+                                }
+                                case 3: {
+                                    
+                                        $step = 1;
+                                        continue;
+                                }
+                                case 4: {
+
+                                }
+                                default: {
+                                    return false;
+                                }
+                            }
+                        }
+                    } catch($async_e1) {
+                        $async_e = System.Exception.create($async_e1);
+                        throw $async_e;
+                    }
+                }));
+                return $enumerator;
             },
-            /*SimpleDodgeGame.GetClearDelayWait end.*/
+            /*SimpleDodgeGame.WaitForSecondsUnscaled end.*/
+
+            /*SimpleDodgeGame.MarkResolveProgress start.*/
+            MarkResolveProgress: function () {
+if ( TRACE ) { TRACE( "SimpleDodgeGame#MarkResolveProgress", this ); }
+
+                if (this.isResolving) {
+                    this.resolveStartedAt = UnityEngine.Time.unscaledTime;
+                }
+            },
+            /*SimpleDodgeGame.MarkResolveProgress end.*/
 
             /*SimpleDodgeGame.ApplyRendererMaterial start.*/
             ApplyRendererMaterial: function (renderer) {
@@ -1808,6 +2172,20 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame#ShouldUseCustomMaterialForCurrentPlatform
         }
     });
     /*SimpleDodgeGame end.*/
+
+    /*SimpleDodgeGame+ImmediateResolvePhase start.*/
+    Bridge.define("SimpleDodgeGame.ImmediateResolvePhase", {
+        $kind: 1006,
+        statics: {
+            fields: {
+                Idle: 0,
+                ClearDelay: 1,
+                CollapseAnim: 2,
+                FillAnim: 3
+            }
+        }
+    });
+    /*SimpleDodgeGame+ImmediateResolvePhase end.*/
 
     /*SimpleDodgeGame+Orb start.*/
     Bridge.define("SimpleDodgeGame.Orb", {
@@ -1905,7 +2283,7 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame.OrbMove#$clone", this ); }
     /*PlayworksComplianceHooks end.*/
 
     /*SimpleDodgeGame start.*/
-    $m("SimpleDodgeGame", function () { return {"nested":[SimpleDodgeGame.Orb,SimpleDodgeGame.OrbMove],"att":1048833,"a":2,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"},{"a":1,"n":"AnimateMoves","t":8,"pi":[{"n":"moves","pt":$n[1].List$1(SimpleDodgeGame.OrbMove),"ps":0},{"n":"duration","pt":$n[0].Single,"ps":1}],"sn":"AnimateMoves","rt":$n[2].IEnumerator,"p":[$n[1].List$1(SimpleDodgeGame.OrbMove),$n[0].Single]},{"a":1,"n":"ApplyBackgroundVisuals","t":8,"sn":"ApplyBackgroundVisuals","rt":$n[0].Void},{"a":1,"n":"ApplyBoardFrameVisuals","t":8,"sn":"ApplyBoardFrameVisuals","rt":$n[0].Void},{"a":1,"n":"ApplyOrbVisuals","t":8,"pi":[{"n":"orb","pt":SimpleDodgeGame.Orb,"ps":0}],"sn":"ApplyOrbVisuals","rt":$n[0].Void,"p":[SimpleDodgeGame.Orb]},{"a":2,"n":"ApplyPlaygroundVariant","t":8,"pi":[{"n":"variantIndex","pt":$n[0].Int32,"ps":0}],"sn":"ApplyPlaygroundVariant","rt":$n[0].Void,"p":[$n[0].Int32]},{"a":1,"n":"ApplyRendererMaterial","t":8,"pi":[{"n":"renderer","pt":$n[3].SpriteRenderer,"ps":0}],"sn":"ApplyRendererMaterial","rt":$n[0].Void,"p":[$n[3].SpriteRenderer]},{"a":1,"n":"Awake","t":8,"sn":"Awake","rt":$n[0].Void},{"a":1,"n":"BuildInitialBoard","t":8,"sn":"BuildInitialBoard","rt":$n[0].Void},{"a":1,"n":"CalculateScoreGain","t":8,"pi":[{"n":"removedCount","pt":$n[0].Int32,"ps":0},{"n":"stepCombos","pt":$n[0].Int32,"ps":1},{"n":"totalCombos","pt":$n[0].Int32,"ps":2}],"sn":"CalculateScoreGain","rt":$n[0].Int32,"p":[$n[0].Int32,$n[0].Int32,$n[0].Int32],"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"CellToWorld","t":8,"pi":[{"n":"x","pt":$n[0].Int32,"ps":0},{"n":"y","pt":$n[0].Int32,"ps":1}],"sn":"CellToWorld","rt":$n[3].Vector3,"p":[$n[0].Int32,$n[0].Int32]},{"a":1,"n":"ClearBoard","t":8,"sn":"ClearBoard","rt":$n[0].Void},{"a":1,"n":"ClearBoolGrid","is":true,"t":8,"pi":[{"n":"grid","pt":$n[0].Array.type(System.Boolean, 2),"ps":0}],"sn":"ClearBoolGrid","rt":$n[0].Void,"p":[$n[0].Array.type(System.Boolean, 2)]},{"a":1,"n":"CollapseColumns","t":8,"sn":"CollapseColumns","rt":$n[2].IEnumerator},{"a":1,"n":"CollectMatches","t":8,"pi":[{"n":"matchedCells","out":true,"pt":$n[1].List$1(UnityEngine.Vector2Int),"ps":0}],"sn":"CollectMatches","rt":$n[0].Int32,"p":[$n[1].List$1(UnityEngine.Vector2Int)],"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"CreateHudText","is":true,"t":8,"pi":[{"n":"parent","pt":$n[3].Transform,"ps":0},{"n":"objectName","pt":$n[0].String,"ps":1},{"n":"font","pt":$n[3].Font,"ps":2},{"n":"fontSize","pt":$n[0].Int32,"ps":3},{"n":"anchorMin","pt":$n[3].Vector2,"ps":4},{"n":"anchorMax","pt":$n[3].Vector2,"ps":5},{"n":"pivot","pt":$n[3].Vector2,"ps":6},{"n":"anchoredPosition","pt":$n[3].Vector2,"ps":7},{"n":"sizeDelta","pt":$n[3].Vector2,"ps":8},{"n":"alignment","pt":$n[3].TextAnchor,"ps":9}],"sn":"CreateHudText","rt":$n[4].Text,"p":[$n[3].Transform,$n[0].String,$n[3].Font,$n[0].Int32,$n[3].Vector2,$n[3].Vector2,$n[3].Vector2,$n[3].Vector2,$n[3].Vector2,$n[3].TextAnchor]},{"a":1,"n":"CreateOrb","t":8,"pi":[{"n":"type","pt":$n[0].Int32,"ps":0},{"n":"worldPosition","pt":$n[3].Vector3,"ps":1}],"sn":"CreateOrb","rt":SimpleDodgeGame.Orb,"p":[$n[0].Int32,$n[3].Vector3]},{"a":1,"n":"CreateRuntimeHud","t":8,"sn":"CreateRuntimeHud","rt":$n[0].Void},{"a":1,"n":"CreateRuntimeVisuals","t":8,"sn":"CreateRuntimeVisuals","rt":$n[0].Void},{"a":1,"n":"DragHeldOrbToward","t":8,"pi":[{"n":"targetCell","pt":$n[3].Vector2Int,"ps":0}],"sn":"DragHeldOrbToward","rt":$n[0].Void,"p":[$n[3].Vector2Int]},{"a":1,"n":"EndRound","t":8,"sn":"EndRound","rt":$n[0].Void},{"a":1,"n":"EnsureMatchBuffers","t":8,"sn":"EnsureMatchBuffers","rt":$n[0].Void},{"a":1,"n":"FillAnyEmptyCellsImmediate","t":8,"sn":"FillAnyEmptyCellsImmediate","rt":$n[0].Void},{"a":1,"n":"FillEmptyCells","t":8,"sn":"FillEmptyCells","rt":$n[2].IEnumerator},{"a":1,"n":"GetAnyConfiguredOrbSprite","t":8,"sn":"GetAnyConfiguredOrbSprite","rt":$n[3].Sprite},{"a":1,"n":"GetBoardSprite","t":8,"sn":"GetBoardSprite","rt":$n[3].Sprite},{"a":1,"n":"GetClearDelayWait","t":8,"sn":"GetClearDelayWait","rt":$n[3].WaitForSeconds},{"a":1,"n":"GetGameplayZ","t":8,"sn":"GetGameplayZ","rt":$n[0].Single,"box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"GetGeneratedFallbackSprite","is":true,"t":8,"sn":"GetGeneratedFallbackSprite","rt":$n[3].Sprite},{"a":1,"n":"GetHudFont","t":8,"sn":"GetHudFont","rt":$n[3].Font},{"a":1,"n":"GetInitialOrbType","t":8,"pi":[{"n":"x","pt":$n[0].Int32,"ps":0},{"n":"y","pt":$n[0].Int32,"ps":1}],"sn":"GetInitialOrbType","rt":$n[0].Int32,"p":[$n[0].Int32,$n[0].Int32],"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"GetOrbColor","t":8,"pi":[{"n":"type","pt":$n[0].Int32,"ps":0}],"sn":"GetOrbColor","rt":$n[3].Color,"p":[$n[0].Int32]},{"a":1,"n":"GetOrbColorCount","t":8,"sn":"GetOrbColorCount","rt":$n[0].Int32,"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"GetOrbSpriteForType","t":8,"pi":[{"n":"type","pt":$n[0].Int32,"ps":0}],"sn":"GetOrbSpriteForType","rt":$n[3].Sprite,"p":[$n[0].Int32]},{"a":1,"n":"GetRandomOrbType","t":8,"sn":"GetRandomOrbType","rt":$n[0].Int32,"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"GetSharedSpriteMaterial","t":8,"sn":"GetSharedSpriteMaterial","rt":$n[3].Material},{"a":1,"n":"GetSpriteWorldSize","is":true,"t":8,"pi":[{"n":"sprite","pt":$n[3].Sprite,"ps":0}],"sn":"GetSpriteWorldSize","rt":$n[3].Vector2,"p":[$n[3].Sprite]},{"a":1,"n":"HandleDragInput","t":8,"sn":"HandleDragInput","rt":$n[0].Void},{"a":1,"n":"HasAnyEmptyCell","t":8,"sn":"HasAnyEmptyCell","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"IsInsideBoard","t":8,"pi":[{"n":"cell","pt":$n[3].Vector2Int,"ps":0}],"sn":"IsInsideBoard","rt":$n[0].Boolean,"p":[$n[3].Vector2Int],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"IsPointerCurrentlyHeld","is":true,"t":8,"sn":"IsPointerCurrentlyHeld","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"OnDestroy","t":8,"sn":"OnDestroy","rt":$n[0].Void},{"a":1,"n":"OnValidate","t":8,"sn":"OnValidate","rt":$n[0].Void},{"a":1,"n":"PointerPressedThisFrame","t":8,"sn":"PointerPressedThisFrame","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"PointerReleasedThisFrame","t":8,"sn":"PointerReleasedThisFrame","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"PrepareSpriteForRuntime","t":8,"pi":[{"n":"sourceSprite","pt":$n[3].Sprite,"ps":0}],"sn":"PrepareSpriteForRuntime","rt":$n[3].Sprite,"p":[$n[3].Sprite]},{"a":1,"n":"RecoverFromResolveStallIfNeeded","t":8,"sn":"RecoverFromResolveStallIfNeeded","rt":$n[0].Void},{"at":[new UnityEngine.ContextMenu.ctor("Refresh Visual Theme")],"a":1,"n":"RefreshVisualThemeFromContextMenu","t":8,"sn":"RefreshVisualThemeFromContextMenu","rt":$n[0].Void},{"a":2,"n":"RefreshVisualsNow","t":8,"sn":"RefreshVisualsNow","rt":$n[0].Void},{"a":1,"n":"RemoveMatchedCells","t":8,"pi":[{"n":"matchedCells","pt":$n[1].List$1(UnityEngine.Vector2Int),"ps":0}],"sn":"RemoveMatchedCells","rt":$n[0].Void,"p":[$n[1].List$1(UnityEngine.Vector2Int)]},{"a":1,"n":"RepositionBoardOrbs","t":8,"sn":"RepositionBoardOrbs","rt":$n[0].Void},{"a":1,"n":"ResetRound","t":8,"sn":"ResetRound","rt":$n[0].Void},{"a":1,"n":"ResolveBoardRoutine","t":8,"sn":"ResolveBoardRoutine","rt":$n[2].IEnumerator},{"a":1,"n":"ScreenToWorld","t":8,"pi":[{"n":"screenPosition","pt":$n[3].Vector2,"ps":0}],"sn":"ScreenToWorld","rt":$n[3].Vector3,"p":[$n[3].Vector2]},{"a":1,"n":"SetResultVisible","t":8,"pi":[{"n":"visible","pt":$n[0].Boolean,"ps":0}],"sn":"SetResultVisible","rt":$n[0].Void,"p":[$n[0].Boolean]},{"a":1,"n":"SetTransformDiameter","is":true,"t":8,"pi":[{"n":"targetTransform","pt":$n[3].Transform,"ps":0},{"n":"sprite","pt":$n[3].Sprite,"ps":1},{"n":"diameter","pt":$n[0].Single,"ps":2}],"sn":"SetTransformDiameter","rt":$n[0].Void,"p":[$n[3].Transform,$n[3].Sprite,$n[0].Single]},{"a":1,"n":"SetTransformSize","is":true,"t":8,"pi":[{"n":"targetTransform","pt":$n[3].Transform,"ps":0},{"n":"sprite","pt":$n[3].Sprite,"ps":1},{"n":"width","pt":$n[0].Single,"ps":2},{"n":"height","pt":$n[0].Single,"ps":3}],"sn":"SetTransformSize","rt":$n[0].Void,"p":[$n[3].Transform,$n[3].Sprite,$n[0].Single,$n[0].Single]},{"a":1,"n":"ShouldUseCustomMaterialForCurrentPlatform","t":8,"sn":"ShouldUseCustomMaterialForCurrentPlatform","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"SwapCells","t":8,"pi":[{"n":"a","pt":$n[3].Vector2Int,"ps":0},{"n":"b","pt":$n[3].Vector2Int,"ps":1}],"sn":"SwapCells","rt":$n[0].Void,"p":[$n[3].Vector2Int,$n[3].Vector2Int]},{"a":1,"n":"TryGetPointerDownWorld","t":8,"pi":[{"n":"worldPosition","out":true,"pt":$n[3].Vector3,"ps":0}],"sn":"TryGetPointerDownWorld","rt":$n[0].Boolean,"p":[$n[3].Vector3],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"TryGetPointerHeldWorld","t":8,"pi":[{"n":"worldPosition","out":true,"pt":$n[3].Vector3,"ps":0}],"sn":"TryGetPointerHeldWorld","rt":$n[0].Boolean,"p":[$n[3].Vector3],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"TryLoadBuiltinFont","is":true,"t":8,"pi":[{"n":"fontPath","pt":$n[0].String,"ps":0}],"sn":"TryLoadBuiltinFont","rt":$n[3].Font,"p":[$n[0].String]},{"a":1,"n":"TryLoadResourceFont","is":true,"t":8,"pi":[{"n":"resourceName","pt":$n[0].String,"ps":0}],"sn":"TryLoadResourceFont","rt":$n[3].Font,"p":[$n[0].String]},{"a":1,"n":"TryWorldToCell","t":8,"pi":[{"n":"worldPosition","pt":$n[3].Vector3,"ps":0},{"n":"cell","out":true,"pt":$n[3].Vector2Int,"ps":1}],"sn":"TryWorldToCell","rt":$n[0].Boolean,"p":[$n[3].Vector3,$n[3].Vector2Int],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"Update","t":8,"sn":"Update","rt":$n[0].Void},{"a":1,"n":"UpdateBackgroundTransform","t":8,"sn":"UpdateBackgroundTransform","rt":$n[0].Void},{"a":1,"n":"UpdateBoardFrameTransform","t":8,"sn":"UpdateBoardFrameTransform","rt":$n[0].Void},{"a":1,"n":"UpdateHudTexts","t":8,"sn":"UpdateHudTexts","rt":$n[0].Void},{"a":1,"n":"UpdateLayout","t":8,"pi":[{"n":"force","pt":$n[0].Boolean,"ps":0}],"sn":"UpdateLayout","rt":$n[0].Void,"p":[$n[0].Boolean]},{"a":1,"n":"ValidateConfig","t":8,"sn":"ValidateConfig","rt":$n[0].Void},{"a":1,"n":"WarnIfMissingSpriteSetup","t":8,"sn":"WarnIfMissingSpriteSetup","rt":$n[0].Void},{"a":1,"n":"HudFontResourceName","is":true,"t":4,"rt":$n[0].String,"sn":"HudFontResourceName"},{"a":1,"n":"NeighborOffsets","is":true,"t":4,"rt":System.Array.type(UnityEngine.Vector2Int),"sn":"NeighborOffsets","ro":true},{"at":[new UnityEngine.HeaderAttribute("Colors"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"backgroundColor","t":4,"rt":$n[3].Color,"sn":"backgroundColor"},{"a":1,"n":"backgroundRenderer","t":4,"rt":$n[3].SpriteRenderer,"sn":"backgroundRenderer"},{"a":1,"n":"backgroundTransform","t":4,"rt":$n[3].Transform,"sn":"backgroundTransform"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"baseScorePerOrb","t":4,"rt":$n[0].Int32,"sn":"baseScorePerOrb","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"board","t":4,"rt":System.Array.type(SimpleDodgeGame.Orb, 2),"sn":"board"},{"a":1,"n":"boardBottomLeft","t":4,"rt":$n[3].Vector2,"sn":"boardBottomLeft"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardBottomPadding","t":4,"rt":$n[0].Single,"sn":"boardBottomPadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardColor","t":4,"rt":$n[3].Color,"sn":"boardColor"},{"a":1,"n":"boardFrameRenderer","t":4,"rt":$n[3].SpriteRenderer,"sn":"boardFrameRenderer"},{"a":1,"n":"boardFrameTransform","t":4,"rt":$n[3].Transform,"sn":"boardFrameTransform"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardOutlineColor","t":4,"rt":$n[3].Color,"sn":"boardOutlineColor"},{"a":1,"n":"boardOutlineRenderer","t":4,"rt":$n[3].SpriteRenderer,"sn":"boardOutlineRenderer"},{"a":1,"n":"boardOutlineTransform","t":4,"rt":$n[3].Transform,"sn":"boardOutlineTransform"},{"a":1,"n":"boardRoot","t":4,"rt":$n[3].Transform,"sn":"boardRoot"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardSidePadding","t":4,"rt":$n[0].Single,"sn":"boardSidePadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardTopPadding","t":4,"rt":$n[0].Single,"sn":"boardTopPadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"boardWorldHeight","t":4,"rt":$n[0].Single,"sn":"boardWorldHeight","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"boardWorldWidth","t":4,"rt":$n[0].Single,"sn":"boardWorldWidth","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"cachedClearDelaySeconds","t":4,"rt":$n[0].Single,"sn":"cachedClearDelaySeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"cachedClearDelayWait","t":4,"rt":$n[3].WaitForSeconds,"sn":"cachedClearDelayWait"},{"a":1,"n":"cellSize","t":4,"rt":$n[0].Single,"sn":"cellSize","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"clearDelaySeconds","t":4,"rt":$n[0].Single,"sn":"clearDelaySeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.HeaderAttribute("Board"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"columns","t":4,"rt":$n[0].Int32,"sn":"columns","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"comboText","t":4,"rt":$n[4].Text,"sn":"comboText"},{"a":1,"n":"complianceHooks","t":4,"rt":PlayworksComplianceHooks,"sn":"complianceHooks"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"fallDurationSeconds","t":4,"rt":$n[0].Single,"sn":"fallDurationSeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"fallbackToDefaultIfShaderUnsupported","t":4,"rt":$n[0].Boolean,"sn":"fallbackToDefaultIfShaderUnsupported","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"floodFillStackBuffer","t":4,"rt":$n[1].List$1(UnityEngine.Vector2Int),"sn":"floodFillStackBuffer","ro":true},{"a":1,"n":"gameplayCamera","t":4,"rt":$n[3].Camera,"sn":"gameplayCamera"},{"a":1,"n":"gameplayZ","t":4,"rt":$n[0].Single,"sn":"gameplayZ","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"generatedFallbackSprite","is":true,"t":4,"rt":$n[3].Sprite,"sn":"generatedFallbackSprite"},{"a":1,"n":"generatedFallbackTexture","is":true,"t":4,"rt":$n[3].Texture2D,"sn":"generatedFallbackTexture"},{"a":1,"n":"hasLoggedMissingHudFont","t":4,"rt":$n[0].Boolean,"sn":"hasLoggedMissingHudFont","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"hasLoggedMissingSpriteConfig","t":4,"rt":$n[0].Boolean,"sn":"hasLoggedMissingSpriteConfig","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"hasReportedGameEnded","t":4,"rt":$n[0].Boolean,"sn":"hasReportedGameEnded","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"heldCell","t":4,"rt":$n[3].Vector2Int,"sn":"heldCell"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"hudFontOverride","t":4,"rt":$n[3].Font,"sn":"hudFontOverride"},{"a":1,"n":"hudRootTransform","t":4,"rt":$n[3].Transform,"sn":"hudRootTransform"},{"a":1,"n":"isDragging","t":4,"rt":$n[0].Boolean,"sn":"isDragging","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"isResolving","t":4,"rt":$n[0].Boolean,"sn":"isResolving","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"lastMoveCombos","t":4,"rt":$n[0].Int32,"sn":"lastMoveCombos","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"layoutInitialized","t":4,"rt":$n[0].Boolean,"sn":"layoutInitialized","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"markedCellsBuffer","t":4,"rt":$n[0].Array.type(System.Boolean, 2),"sn":"markedCellsBuffer"},{"a":1,"n":"matchedCellsBuffer","t":4,"rt":$n[1].List$1(UnityEngine.Vector2Int),"sn":"matchedCellsBuffer","ro":true},{"a":1,"n":"moveBuffer","t":4,"rt":$n[1].List$1(SimpleDodgeGame.OrbMove),"sn":"moveBuffer","ro":true},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"orbColors","t":4,"rt":System.Array.type(UnityEngine.Color),"sn":"orbColors"},{"at":[new UnityEngine.SerializeFieldAttribute(),new UnityEngine.RangeAttribute(0.6, 1.0)],"a":1,"n":"orbScale","t":4,"rt":$n[0].Single,"sn":"orbScale","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"orbSprites","t":4,"rt":System.Array.type(UnityEngine.Sprite),"sn":"orbSprites"},{"a":1,"n":"pointerDepth","t":4,"rt":$n[0].Single,"sn":"pointerDepth","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"resolveRecoveryAttempts","t":4,"rt":$n[0].Int32,"sn":"resolveRecoveryAttempts","box":function ($v) { return Bridge.box($v, System.Int32);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"resolveStallTimeoutSeconds","t":4,"rt":$n[0].Single,"sn":"resolveStallTimeoutSeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"resolveStartedAt","t":4,"rt":$n[0].Single,"sn":"resolveStartedAt","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"resultText","t":4,"rt":$n[4].Text,"sn":"resultText"},{"at":[new UnityEngine.HeaderAttribute("Round"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"roundDurationSeconds","t":4,"rt":$n[0].Single,"sn":"roundDurationSeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"roundEnded","t":4,"rt":$n[0].Boolean,"sn":"roundEnded","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"rows","t":4,"rt":$n[0].Int32,"sn":"rows","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"score","t":4,"rt":$n[0].Int32,"sn":"score","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"scoreText","t":4,"rt":$n[4].Text,"sn":"scoreText"},{"at":[new UnityEngine.HeaderAttribute("Rendering"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"spriteMaterial","t":4,"rt":$n[3].Material,"sn":"spriteMaterial"},{"a":1,"n":"timeRemaining","t":4,"rt":$n[0].Single,"sn":"timeRemaining","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"timeText","t":4,"rt":$n[4].Text,"sn":"timeText"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"useCustomMaterialInEditor","t":4,"rt":$n[0].Boolean,"sn":"useCustomMaterialInEditor","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"useCustomMaterialInWebGl","t":4,"rt":$n[0].Boolean,"sn":"useCustomMaterialInWebGl","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"visitedCellsBuffer","t":4,"rt":$n[0].Array.type(System.Boolean, 2),"sn":"visitedCellsBuffer"}]}; }, $n);
+    $m("SimpleDodgeGame", function () { return {"nested":[SimpleDodgeGame.Orb,SimpleDodgeGame.OrbMove,SimpleDodgeGame.ImmediateResolvePhase],"att":1048833,"a":2,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"},{"a":1,"n":"AnimateMoves","t":8,"pi":[{"n":"moves","pt":$n[1].List$1(SimpleDodgeGame.OrbMove),"ps":0},{"n":"duration","pt":$n[0].Single,"ps":1}],"sn":"AnimateMoves","rt":$n[2].IEnumerator,"p":[$n[1].List$1(SimpleDodgeGame.OrbMove),$n[0].Single]},{"a":1,"n":"ApplyBackgroundVisuals","t":8,"sn":"ApplyBackgroundVisuals","rt":$n[0].Void},{"a":1,"n":"ApplyBoardFrameVisuals","t":8,"sn":"ApplyBoardFrameVisuals","rt":$n[0].Void},{"a":1,"n":"ApplyOrbVisuals","t":8,"pi":[{"n":"orb","pt":SimpleDodgeGame.Orb,"ps":0}],"sn":"ApplyOrbVisuals","rt":$n[0].Void,"p":[SimpleDodgeGame.Orb]},{"a":2,"n":"ApplyPlaygroundVariant","t":8,"pi":[{"n":"variantIndex","pt":$n[0].Int32,"ps":0}],"sn":"ApplyPlaygroundVariant","rt":$n[0].Void,"p":[$n[0].Int32]},{"a":1,"n":"ApplyRendererMaterial","t":8,"pi":[{"n":"renderer","pt":$n[3].SpriteRenderer,"ps":0}],"sn":"ApplyRendererMaterial","rt":$n[0].Void,"p":[$n[3].SpriteRenderer]},{"a":1,"n":"Awake","t":8,"sn":"Awake","rt":$n[0].Void},{"a":1,"n":"BeginImmediateCollapsePhase","t":8,"sn":"BeginImmediateCollapsePhase","rt":$n[0].Void},{"a":1,"n":"BeginImmediateFillPhase","t":8,"sn":"BeginImmediateFillPhase","rt":$n[0].Void},{"a":1,"n":"BuildCollapseMoves","t":8,"pi":[{"n":"targetMoves","pt":$n[1].List$1(SimpleDodgeGame.OrbMove),"ps":0}],"sn":"BuildCollapseMoves","rt":$n[0].Int32,"p":[$n[1].List$1(SimpleDodgeGame.OrbMove)],"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"BuildFillMoves","t":8,"pi":[{"n":"targetMoves","pt":$n[1].List$1(SimpleDodgeGame.OrbMove),"ps":0}],"sn":"BuildFillMoves","rt":$n[0].Int32,"p":[$n[1].List$1(SimpleDodgeGame.OrbMove)],"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"BuildInitialBoard","t":8,"sn":"BuildInitialBoard","rt":$n[0].Void},{"a":1,"n":"CalculateScoreGain","t":8,"pi":[{"n":"removedCount","pt":$n[0].Int32,"ps":0},{"n":"stepCombos","pt":$n[0].Int32,"ps":1},{"n":"totalCombos","pt":$n[0].Int32,"ps":2}],"sn":"CalculateScoreGain","rt":$n[0].Int32,"p":[$n[0].Int32,$n[0].Int32,$n[0].Int32],"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"CellToWorld","t":8,"pi":[{"n":"x","pt":$n[0].Int32,"ps":0},{"n":"y","pt":$n[0].Int32,"ps":1}],"sn":"CellToWorld","rt":$n[3].Vector3,"p":[$n[0].Int32,$n[0].Int32]},{"a":1,"n":"ClearBoard","t":8,"sn":"ClearBoard","rt":$n[0].Void},{"a":1,"n":"ClearBoolGrid","is":true,"t":8,"pi":[{"n":"grid","pt":$n[0].Array.type(System.Boolean, 2),"ps":0}],"sn":"ClearBoolGrid","rt":$n[0].Void,"p":[$n[0].Array.type(System.Boolean, 2)]},{"a":1,"n":"CollapseColumns","t":8,"sn":"CollapseColumns","rt":$n[2].IEnumerator},{"a":1,"n":"CollectMatches","t":8,"pi":[{"n":"matchedCells","out":true,"pt":$n[1].List$1(UnityEngine.Vector2Int),"ps":0}],"sn":"CollectMatches","rt":$n[0].Int32,"p":[$n[1].List$1(UnityEngine.Vector2Int)],"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"CountEmptyCells","t":8,"sn":"CountEmptyCells","rt":$n[0].Int32,"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"CreateHudText","is":true,"t":8,"pi":[{"n":"parent","pt":$n[3].Transform,"ps":0},{"n":"objectName","pt":$n[0].String,"ps":1},{"n":"font","pt":$n[3].Font,"ps":2},{"n":"fontSize","pt":$n[0].Int32,"ps":3},{"n":"anchorMin","pt":$n[3].Vector2,"ps":4},{"n":"anchorMax","pt":$n[3].Vector2,"ps":5},{"n":"pivot","pt":$n[3].Vector2,"ps":6},{"n":"anchoredPosition","pt":$n[3].Vector2,"ps":7},{"n":"sizeDelta","pt":$n[3].Vector2,"ps":8},{"n":"alignment","pt":$n[3].TextAnchor,"ps":9}],"sn":"CreateHudText","rt":$n[4].Text,"p":[$n[3].Transform,$n[0].String,$n[3].Font,$n[0].Int32,$n[3].Vector2,$n[3].Vector2,$n[3].Vector2,$n[3].Vector2,$n[3].Vector2,$n[3].TextAnchor]},{"a":1,"n":"CreateOrb","t":8,"pi":[{"n":"type","pt":$n[0].Int32,"ps":0},{"n":"worldPosition","pt":$n[3].Vector3,"ps":1}],"sn":"CreateOrb","rt":SimpleDodgeGame.Orb,"p":[$n[0].Int32,$n[3].Vector3]},{"a":1,"n":"CreateRuntimeHud","t":8,"sn":"CreateRuntimeHud","rt":$n[0].Void},{"a":1,"n":"CreateRuntimeVisuals","t":8,"sn":"CreateRuntimeVisuals","rt":$n[0].Void},{"a":1,"n":"DragHeldOrbToward","t":8,"pi":[{"n":"targetCell","pt":$n[3].Vector2Int,"ps":0}],"sn":"DragHeldOrbToward","rt":$n[0].Void,"p":[$n[3].Vector2Int]},{"a":1,"n":"EndRound","t":8,"sn":"EndRound","rt":$n[0].Void},{"a":1,"n":"EnsureMatchBuffers","t":8,"sn":"EnsureMatchBuffers","rt":$n[0].Void},{"a":1,"n":"EvaluateImmediateResolveStep","t":8,"sn":"EvaluateImmediateResolveStep","rt":$n[0].Void},{"a":1,"n":"FillAnyEmptyCellsImmediate","t":8,"sn":"FillAnyEmptyCellsImmediate","rt":$n[0].Void},{"a":1,"n":"FillEmptyCells","t":8,"sn":"FillEmptyCells","rt":$n[2].IEnumerator},{"a":1,"n":"FinishImmediateResolve","t":8,"sn":"FinishImmediateResolve","rt":$n[0].Void},{"a":1,"n":"GetAnyConfiguredOrbSprite","t":8,"sn":"GetAnyConfiguredOrbSprite","rt":$n[3].Sprite},{"a":1,"n":"GetBoardSprite","t":8,"sn":"GetBoardSprite","rt":$n[3].Sprite},{"a":1,"n":"GetGameplayZ","t":8,"sn":"GetGameplayZ","rt":$n[0].Single,"box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"GetGeneratedFallbackSprite","is":true,"t":8,"sn":"GetGeneratedFallbackSprite","rt":$n[3].Sprite},{"a":1,"n":"GetHudFont","t":8,"sn":"GetHudFont","rt":$n[3].Font},{"a":1,"n":"GetInitialOrbType","t":8,"pi":[{"n":"x","pt":$n[0].Int32,"ps":0},{"n":"y","pt":$n[0].Int32,"ps":1}],"sn":"GetInitialOrbType","rt":$n[0].Int32,"p":[$n[0].Int32,$n[0].Int32],"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"GetOrbColor","t":8,"pi":[{"n":"type","pt":$n[0].Int32,"ps":0}],"sn":"GetOrbColor","rt":$n[3].Color,"p":[$n[0].Int32]},{"a":1,"n":"GetOrbColorCount","t":8,"sn":"GetOrbColorCount","rt":$n[0].Int32,"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"GetOrbSpriteForType","t":8,"pi":[{"n":"type","pt":$n[0].Int32,"ps":0}],"sn":"GetOrbSpriteForType","rt":$n[3].Sprite,"p":[$n[0].Int32]},{"a":1,"n":"GetRandomOrbType","t":8,"sn":"GetRandomOrbType","rt":$n[0].Int32,"box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"GetSafeUnscaledDeltaTime","is":true,"t":8,"sn":"GetSafeUnscaledDeltaTime","rt":$n[0].Single,"box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"GetSharedSpriteMaterial","t":8,"sn":"GetSharedSpriteMaterial","rt":$n[3].Material},{"a":1,"n":"GetSpriteWorldSize","is":true,"t":8,"pi":[{"n":"sprite","pt":$n[3].Sprite,"ps":0}],"sn":"GetSpriteWorldSize","rt":$n[3].Vector2,"p":[$n[3].Sprite]},{"a":1,"n":"HandleDragInput","t":8,"sn":"HandleDragInput","rt":$n[0].Void},{"a":1,"n":"HasAnyEmptyCell","t":8,"sn":"HasAnyEmptyCell","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"IsInsideBoard","t":8,"pi":[{"n":"cell","pt":$n[3].Vector2Int,"ps":0}],"sn":"IsInsideBoard","rt":$n[0].Boolean,"p":[$n[3].Vector2Int],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"IsPointerCurrentlyHeld","is":true,"t":8,"sn":"IsPointerCurrentlyHeld","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"MarkResolveProgress","t":8,"sn":"MarkResolveProgress","rt":$n[0].Void},{"a":1,"n":"OnDestroy","t":8,"sn":"OnDestroy","rt":$n[0].Void},{"a":1,"n":"OnValidate","t":8,"sn":"OnValidate","rt":$n[0].Void},{"a":1,"n":"PointerPressedThisFrame","t":8,"sn":"PointerPressedThisFrame","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"PointerReleasedThisFrame","t":8,"sn":"PointerReleasedThisFrame","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"PrepareSpriteForRuntime","t":8,"pi":[{"n":"sourceSprite","pt":$n[3].Sprite,"ps":0}],"sn":"PrepareSpriteForRuntime","rt":$n[3].Sprite,"p":[$n[3].Sprite]},{"a":1,"n":"RecoverFromResolveStallIfNeeded","t":8,"sn":"RecoverFromResolveStallIfNeeded","rt":$n[0].Void},{"at":[new UnityEngine.ContextMenu.ctor("Refresh Visual Theme")],"a":1,"n":"RefreshVisualThemeFromContextMenu","t":8,"sn":"RefreshVisualThemeFromContextMenu","rt":$n[0].Void},{"a":2,"n":"RefreshVisualsNow","t":8,"sn":"RefreshVisualsNow","rt":$n[0].Void},{"a":1,"n":"RemoveMatchedCells","t":8,"pi":[{"n":"matchedCells","pt":$n[1].List$1(UnityEngine.Vector2Int),"ps":0}],"sn":"RemoveMatchedCells","rt":$n[0].Void,"p":[$n[1].List$1(UnityEngine.Vector2Int)]},{"a":1,"n":"RepositionBoardOrbs","t":8,"sn":"RepositionBoardOrbs","rt":$n[0].Void},{"a":1,"n":"ResetImmediateResolveState","t":8,"sn":"ResetImmediateResolveState","rt":$n[0].Void},{"a":1,"n":"ResetRound","t":8,"sn":"ResetRound","rt":$n[0].Void},{"a":1,"n":"ResolveBoardRoutine","t":8,"sn":"ResolveBoardRoutine","rt":$n[2].IEnumerator},{"a":1,"n":"ScreenToWorld","t":8,"pi":[{"n":"screenPosition","pt":$n[3].Vector2,"ps":0}],"sn":"ScreenToWorld","rt":$n[3].Vector3,"p":[$n[3].Vector2]},{"a":1,"n":"SetResultVisible","t":8,"pi":[{"n":"visible","pt":$n[0].Boolean,"ps":0}],"sn":"SetResultVisible","rt":$n[0].Void,"p":[$n[0].Boolean]},{"a":1,"n":"SetTransformDiameter","is":true,"t":8,"pi":[{"n":"targetTransform","pt":$n[3].Transform,"ps":0},{"n":"sprite","pt":$n[3].Sprite,"ps":1},{"n":"diameter","pt":$n[0].Single,"ps":2}],"sn":"SetTransformDiameter","rt":$n[0].Void,"p":[$n[3].Transform,$n[3].Sprite,$n[0].Single]},{"a":1,"n":"SetTransformSize","is":true,"t":8,"pi":[{"n":"targetTransform","pt":$n[3].Transform,"ps":0},{"n":"sprite","pt":$n[3].Sprite,"ps":1},{"n":"width","pt":$n[0].Single,"ps":2},{"n":"height","pt":$n[0].Single,"ps":3}],"sn":"SetTransformSize","rt":$n[0].Void,"p":[$n[3].Transform,$n[3].Sprite,$n[0].Single,$n[0].Single]},{"a":1,"n":"ShouldUseCustomMaterialForCurrentPlatform","t":8,"sn":"ShouldUseCustomMaterialForCurrentPlatform","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"ShouldUseImmediateResolve","t":8,"sn":"ShouldUseImmediateResolve","rt":$n[0].Boolean,"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"StartImmediateMoveAnimation","t":8,"pi":[{"n":"phase","pt":SimpleDodgeGame.ImmediateResolvePhase,"ps":0},{"n":"duration","pt":$n[0].Single,"ps":1}],"sn":"StartImmediateMoveAnimation","rt":$n[0].Void,"p":[SimpleDodgeGame.ImmediateResolvePhase,$n[0].Single]},{"a":1,"n":"StartImmediateResolve","t":8,"sn":"StartImmediateResolve","rt":$n[0].Void},{"a":1,"n":"SwapCells","t":8,"pi":[{"n":"a","pt":$n[3].Vector2Int,"ps":0},{"n":"b","pt":$n[3].Vector2Int,"ps":1}],"sn":"SwapCells","rt":$n[0].Void,"p":[$n[3].Vector2Int,$n[3].Vector2Int]},{"a":1,"n":"TriggerResolve","t":8,"sn":"TriggerResolve","rt":$n[0].Void},{"a":1,"n":"TryGetPointerDownWorld","t":8,"pi":[{"n":"worldPosition","out":true,"pt":$n[3].Vector3,"ps":0}],"sn":"TryGetPointerDownWorld","rt":$n[0].Boolean,"p":[$n[3].Vector3],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"TryGetPointerHeldWorld","t":8,"pi":[{"n":"worldPosition","out":true,"pt":$n[3].Vector3,"ps":0}],"sn":"TryGetPointerHeldWorld","rt":$n[0].Boolean,"p":[$n[3].Vector3],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"TryLoadBuiltinFont","is":true,"t":8,"pi":[{"n":"fontPath","pt":$n[0].String,"ps":0}],"sn":"TryLoadBuiltinFont","rt":$n[3].Font,"p":[$n[0].String]},{"a":1,"n":"TryLoadResourceFont","is":true,"t":8,"pi":[{"n":"resourceName","pt":$n[0].String,"ps":0}],"sn":"TryLoadResourceFont","rt":$n[3].Font,"p":[$n[0].String]},{"a":1,"n":"TryWorldToCell","t":8,"pi":[{"n":"worldPosition","pt":$n[3].Vector3,"ps":0},{"n":"cell","out":true,"pt":$n[3].Vector2Int,"ps":1}],"sn":"TryWorldToCell","rt":$n[0].Boolean,"p":[$n[3].Vector3,$n[3].Vector2Int],"box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"Update","t":8,"sn":"Update","rt":$n[0].Void},{"a":1,"n":"UpdateBackgroundTransform","t":8,"sn":"UpdateBackgroundTransform","rt":$n[0].Void},{"a":1,"n":"UpdateBoardFrameTransform","t":8,"sn":"UpdateBoardFrameTransform","rt":$n[0].Void},{"a":1,"n":"UpdateHudTexts","t":8,"sn":"UpdateHudTexts","rt":$n[0].Void},{"a":1,"n":"UpdateImmediateMoveAnimation","t":8,"pi":[{"n":"dt","pt":$n[0].Single,"ps":0}],"sn":"UpdateImmediateMoveAnimation","rt":$n[0].Void,"p":[$n[0].Single]},{"a":1,"n":"UpdateImmediateResolve","t":8,"sn":"UpdateImmediateResolve","rt":$n[0].Void},{"a":1,"n":"UpdateLayout","t":8,"pi":[{"n":"force","pt":$n[0].Boolean,"ps":0}],"sn":"UpdateLayout","rt":$n[0].Void,"p":[$n[0].Boolean]},{"a":1,"n":"ValidateConfig","t":8,"sn":"ValidateConfig","rt":$n[0].Void},{"a":1,"n":"WaitForSecondsUnscaled","t":8,"pi":[{"n":"seconds","pt":$n[0].Single,"ps":0}],"sn":"WaitForSecondsUnscaled","rt":$n[2].IEnumerator,"p":[$n[0].Single]},{"a":1,"n":"WarnIfMissingSpriteSetup","t":8,"sn":"WarnIfMissingSpriteSetup","rt":$n[0].Void},{"a":1,"n":"HudFontResourceName","is":true,"t":4,"rt":$n[0].String,"sn":"HudFontResourceName"},{"a":1,"n":"NeighborOffsets","is":true,"t":4,"rt":System.Array.type(UnityEngine.Vector2Int),"sn":"NeighborOffsets","ro":true},{"at":[new UnityEngine.HeaderAttribute("Colors"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"backgroundColor","t":4,"rt":$n[3].Color,"sn":"backgroundColor"},{"a":1,"n":"backgroundRenderer","t":4,"rt":$n[3].SpriteRenderer,"sn":"backgroundRenderer"},{"a":1,"n":"backgroundTransform","t":4,"rt":$n[3].Transform,"sn":"backgroundTransform"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"baseScorePerOrb","t":4,"rt":$n[0].Int32,"sn":"baseScorePerOrb","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"board","t":4,"rt":System.Array.type(SimpleDodgeGame.Orb, 2),"sn":"board"},{"a":1,"n":"boardBottomLeft","t":4,"rt":$n[3].Vector2,"sn":"boardBottomLeft"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardBottomPadding","t":4,"rt":$n[0].Single,"sn":"boardBottomPadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardColor","t":4,"rt":$n[3].Color,"sn":"boardColor"},{"a":1,"n":"boardFrameRenderer","t":4,"rt":$n[3].SpriteRenderer,"sn":"boardFrameRenderer"},{"a":1,"n":"boardFrameTransform","t":4,"rt":$n[3].Transform,"sn":"boardFrameTransform"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardOutlineColor","t":4,"rt":$n[3].Color,"sn":"boardOutlineColor"},{"a":1,"n":"boardOutlineRenderer","t":4,"rt":$n[3].SpriteRenderer,"sn":"boardOutlineRenderer"},{"a":1,"n":"boardOutlineTransform","t":4,"rt":$n[3].Transform,"sn":"boardOutlineTransform"},{"a":1,"n":"boardRoot","t":4,"rt":$n[3].Transform,"sn":"boardRoot"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardSidePadding","t":4,"rt":$n[0].Single,"sn":"boardSidePadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"boardTopPadding","t":4,"rt":$n[0].Single,"sn":"boardTopPadding","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"boardWorldHeight","t":4,"rt":$n[0].Single,"sn":"boardWorldHeight","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"boardWorldWidth","t":4,"rt":$n[0].Single,"sn":"boardWorldWidth","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"cellSize","t":4,"rt":$n[0].Single,"sn":"cellSize","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"clearDelaySeconds","t":4,"rt":$n[0].Single,"sn":"clearDelaySeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.HeaderAttribute("Board"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"columns","t":4,"rt":$n[0].Int32,"sn":"columns","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"comboText","t":4,"rt":$n[4].Text,"sn":"comboText"},{"a":1,"n":"complianceHooks","t":4,"rt":PlayworksComplianceHooks,"sn":"complianceHooks"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"fallDurationSeconds","t":4,"rt":$n[0].Single,"sn":"fallDurationSeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"fallbackToDefaultIfShaderUnsupported","t":4,"rt":$n[0].Boolean,"sn":"fallbackToDefaultIfShaderUnsupported","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"floodFillStackBuffer","t":4,"rt":$n[1].List$1(UnityEngine.Vector2Int),"sn":"floodFillStackBuffer","ro":true},{"a":1,"n":"gameplayCamera","t":4,"rt":$n[3].Camera,"sn":"gameplayCamera"},{"a":1,"n":"gameplayZ","t":4,"rt":$n[0].Single,"sn":"gameplayZ","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"generatedFallbackSprite","is":true,"t":4,"rt":$n[3].Sprite,"sn":"generatedFallbackSprite"},{"a":1,"n":"generatedFallbackTexture","is":true,"t":4,"rt":$n[3].Texture2D,"sn":"generatedFallbackTexture"},{"a":1,"n":"hasLoggedMissingHudFont","t":4,"rt":$n[0].Boolean,"sn":"hasLoggedMissingHudFont","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"hasLoggedMissingSpriteConfig","t":4,"rt":$n[0].Boolean,"sn":"hasLoggedMissingSpriteConfig","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"hasReportedGameEnded","t":4,"rt":$n[0].Boolean,"sn":"hasReportedGameEnded","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"heldCell","t":4,"rt":$n[3].Vector2Int,"sn":"heldCell"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"hudFontOverride","t":4,"rt":$n[3].Font,"sn":"hudFontOverride"},{"a":1,"n":"hudRootTransform","t":4,"rt":$n[3].Transform,"sn":"hudRootTransform"},{"a":1,"n":"immediateMoveDuration","t":4,"rt":$n[0].Single,"sn":"immediateMoveDuration","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"immediatePhaseTimer","t":4,"rt":$n[0].Single,"sn":"immediatePhaseTimer","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"immediateResolvePhase","t":4,"rt":SimpleDodgeGame.ImmediateResolvePhase,"sn":"immediateResolvePhase","box":function ($v) { return Bridge.box($v, SimpleDodgeGame.ImmediateResolvePhase, System.Enum.toStringFn(SimpleDodgeGame.ImmediateResolvePhase));}},{"a":1,"n":"immediateTotalMoveCombos","t":4,"rt":$n[0].Int32,"sn":"immediateTotalMoveCombos","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"isDragging","t":4,"rt":$n[0].Boolean,"sn":"isDragging","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"isResolving","t":4,"rt":$n[0].Boolean,"sn":"isResolving","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"lastMoveCombos","t":4,"rt":$n[0].Int32,"sn":"lastMoveCombos","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"layoutInitialized","t":4,"rt":$n[0].Boolean,"sn":"layoutInitialized","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"markedCellsBuffer","t":4,"rt":$n[0].Array.type(System.Boolean, 2),"sn":"markedCellsBuffer"},{"a":1,"n":"matchedCellsBuffer","t":4,"rt":$n[1].List$1(UnityEngine.Vector2Int),"sn":"matchedCellsBuffer","ro":true},{"a":1,"n":"moveBuffer","t":4,"rt":$n[1].List$1(SimpleDodgeGame.OrbMove),"sn":"moveBuffer","ro":true},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"orbColors","t":4,"rt":System.Array.type(UnityEngine.Color),"sn":"orbColors"},{"at":[new UnityEngine.SerializeFieldAttribute(),new UnityEngine.RangeAttribute(0.6, 1.0)],"a":1,"n":"orbScale","t":4,"rt":$n[0].Single,"sn":"orbScale","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"orbSprites","t":4,"rt":System.Array.type(UnityEngine.Sprite),"sn":"orbSprites"},{"a":1,"n":"pointerDepth","t":4,"rt":$n[0].Single,"sn":"pointerDepth","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"resolveRecoveryAttempts","t":4,"rt":$n[0].Int32,"sn":"resolveRecoveryAttempts","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"resolveStage","t":4,"rt":$n[0].String,"sn":"resolveStage"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"resolveStallTimeoutSeconds","t":4,"rt":$n[0].Single,"sn":"resolveStallTimeoutSeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"resolveStartedAt","t":4,"rt":$n[0].Single,"sn":"resolveStartedAt","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"resultText","t":4,"rt":$n[4].Text,"sn":"resultText"},{"at":[new UnityEngine.HeaderAttribute("Round"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"roundDurationSeconds","t":4,"rt":$n[0].Single,"sn":"roundDurationSeconds","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"roundEnded","t":4,"rt":$n[0].Boolean,"sn":"roundEnded","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"rows","t":4,"rt":$n[0].Int32,"sn":"rows","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"score","t":4,"rt":$n[0].Int32,"sn":"score","box":function ($v) { return Bridge.box($v, System.Int32);}},{"a":1,"n":"scoreText","t":4,"rt":$n[4].Text,"sn":"scoreText"},{"at":[new UnityEngine.HeaderAttribute("Rendering"),new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"spriteMaterial","t":4,"rt":$n[3].Material,"sn":"spriteMaterial"},{"a":1,"n":"timeRemaining","t":4,"rt":$n[0].Single,"sn":"timeRemaining","box":function ($v) { return Bridge.box($v, System.Single, System.Single.format, System.Single.getHashCode);}},{"a":1,"n":"timeText","t":4,"rt":$n[4].Text,"sn":"timeText"},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"useCustomMaterialInEditor","t":4,"rt":$n[0].Boolean,"sn":"useCustomMaterialInEditor","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"at":[new UnityEngine.SerializeFieldAttribute()],"a":1,"n":"useCustomMaterialInWebGl","t":4,"rt":$n[0].Boolean,"sn":"useCustomMaterialInWebGl","box":function ($v) { return Bridge.box($v, System.Boolean, System.Boolean.toString);}},{"a":1,"n":"visitedCellsBuffer","t":4,"rt":$n[0].Array.type(System.Boolean, 2),"sn":"visitedCellsBuffer"}]}; }, $n);
     /*SimpleDodgeGame end.*/
 
     /*SimpleDodgeGame+Orb start.*/
@@ -1915,5 +2293,9 @@ if ( TRACE ) { TRACE( "SimpleDodgeGame.OrbMove#$clone", this ); }
     /*SimpleDodgeGame+OrbMove start.*/
     $m("SimpleDodgeGame.OrbMove", function () { return {"td":SimpleDodgeGame,"att":1048843,"a":1,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"},{"a":2,"n":".ctor","t":1,"p":[SimpleDodgeGame.Orb,$n[3].Vector3,$n[3].Vector3],"pi":[{"n":"orb","pt":SimpleDodgeGame.Orb,"ps":0},{"n":"from","pt":$n[3].Vector3,"ps":1},{"n":"to","pt":$n[3].Vector3,"ps":2}],"sn":"$ctor1"},{"a":2,"n":"from","t":4,"rt":$n[3].Vector3,"sn":"from"},{"a":2,"n":"orb","t":4,"rt":SimpleDodgeGame.Orb,"sn":"orb"},{"a":2,"n":"to","t":4,"rt":$n[3].Vector3,"sn":"to"}]}; }, $n);
     /*SimpleDodgeGame+OrbMove end.*/
+
+    /*SimpleDodgeGame+ImmediateResolvePhase start.*/
+    $m("SimpleDodgeGame.ImmediateResolvePhase", function () { return {"td":SimpleDodgeGame,"att":259,"a":1,"m":[{"a":2,"isSynthetic":true,"n":".ctor","t":1,"sn":"ctor"},{"a":2,"n":"ClearDelay","is":true,"t":4,"rt":SimpleDodgeGame.ImmediateResolvePhase,"sn":"ClearDelay","box":function ($v) { return Bridge.box($v, SimpleDodgeGame.ImmediateResolvePhase, System.Enum.toStringFn(SimpleDodgeGame.ImmediateResolvePhase));}},{"a":2,"n":"CollapseAnim","is":true,"t":4,"rt":SimpleDodgeGame.ImmediateResolvePhase,"sn":"CollapseAnim","box":function ($v) { return Bridge.box($v, SimpleDodgeGame.ImmediateResolvePhase, System.Enum.toStringFn(SimpleDodgeGame.ImmediateResolvePhase));}},{"a":2,"n":"FillAnim","is":true,"t":4,"rt":SimpleDodgeGame.ImmediateResolvePhase,"sn":"FillAnim","box":function ($v) { return Bridge.box($v, SimpleDodgeGame.ImmediateResolvePhase, System.Enum.toStringFn(SimpleDodgeGame.ImmediateResolvePhase));}},{"a":2,"n":"Idle","is":true,"t":4,"rt":SimpleDodgeGame.ImmediateResolvePhase,"sn":"Idle","box":function ($v) { return Bridge.box($v, SimpleDodgeGame.ImmediateResolvePhase, System.Enum.toStringFn(SimpleDodgeGame.ImmediateResolvePhase));}}]}; }, $n);
+    /*SimpleDodgeGame+ImmediateResolvePhase end.*/
 
     }});

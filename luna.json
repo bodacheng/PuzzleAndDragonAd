@@ -8245,6 +8245,10 @@
             {
                 "name": "TMPro.HorizontalAlignmentOptions",
                 "excluded": false
+            },
+            {
+                "name": "SimpleDodgeGame.ImmediateResolvePhase",
+                "excluded": false
             }
         ],
         "unusedMethods": [
@@ -22550,7 +22554,7 @@
                     },
                     {
                         "name": "Cancel",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "Update",
@@ -29765,10 +29769,6 @@
                         "excluded": false
                     },
                     {
-                        "name": "GetClearDelayWait",
-                        "excluded": false
-                    },
-                    {
                         "name": "ApplyRendererMaterial",
                         "excluded": false
                     },
@@ -29814,6 +29814,74 @@
                     },
                     {
                         "name": "GetHudFont",
+                        "excluded": false
+                    },
+                    {
+                        "name": "GetSafeUnscaledDeltaTime",
+                        "excluded": false
+                    },
+                    {
+                        "name": "CountEmptyCells",
+                        "excluded": false
+                    },
+                    {
+                        "name": "WaitForSecondsUnscaled",
+                        "excluded": false
+                    },
+                    {
+                        "name": "MarkResolveProgress",
+                        "excluded": false
+                    },
+                    {
+                        "name": "TriggerResolve",
+                        "excluded": false
+                    },
+                    {
+                        "name": "ShouldUseImmediateResolve",
+                        "excluded": false
+                    },
+                    {
+                        "name": "BuildCollapseMoves",
+                        "excluded": false
+                    },
+                    {
+                        "name": "BuildFillMoves",
+                        "excluded": false
+                    },
+                    {
+                        "name": "StartImmediateResolve",
+                        "excluded": false
+                    },
+                    {
+                        "name": "UpdateImmediateResolve",
+                        "excluded": false
+                    },
+                    {
+                        "name": "EvaluateImmediateResolveStep",
+                        "excluded": false
+                    },
+                    {
+                        "name": "BeginImmediateCollapsePhase",
+                        "excluded": false
+                    },
+                    {
+                        "name": "BeginImmediateFillPhase",
+                        "excluded": false
+                    },
+                    {
+                        "name": "StartImmediateMoveAnimation",
+                        "excluded": false
+                    },
+                    {
+                        "name": "UpdateImmediateMoveAnimation",
+                        "excluded": false
+                    },
+                    {
+                        "name": "FinishImmediateResolve",
+                        "excluded": false
+                    },
+                    {
+                        "name": "ResetImmediateResolveState",
                         "excluded": false
                     }
                 ]

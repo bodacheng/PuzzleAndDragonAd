@@ -40,6 +40,14 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		}
 	}
 
+	private enum ImmediateResolvePhase
+	{
+		Idle,
+		ClearDelay,
+		CollapseAnim,
+		FillAnim
+	}
+
 	[Header("Board")]
 	[SerializeField]
 	private int columns = 6;
@@ -67,7 +75,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 	private float fallDurationSeconds = 0.12f;
 
 	[SerializeField]
-	private float resolveStallTimeoutSeconds = 3f;
+	private float resolveStallTimeoutSeconds = 8f;
 
 	[Header("Round")]
 	[SerializeField]
@@ -202,13 +210,19 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
 	private bool[,] visitedCellsBuffer;
 
-	private float cachedClearDelaySeconds = -1f;
-
-	private WaitForSeconds cachedClearDelayWait;
-
 	private float resolveStartedAt = -1f;
 
 	private int resolveRecoveryAttempts;
+
+	private string resolveStage = "idle";
+
+	private ImmediateResolvePhase immediateResolvePhase = ImmediateResolvePhase.Idle;
+
+	private float immediatePhaseTimer;
+
+	private float immediateMoveDuration;
+
+	private int immediateTotalMoveCombos;
 
 	private bool hasLoggedMissingHudFont;
 
@@ -250,7 +264,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		RecoverFromResolveStallIfNeeded();
 		if (!roundEnded && !isResolving && HasAnyEmptyCell())
 		{
-			StartCoroutine(ResolveBoardRoutine());
+			TriggerResolve();
 		}
 		if (roundEnded)
 		{
@@ -268,13 +282,17 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			UpdateHudTexts();
 			return;
 		}
-		timeRemaining -= Time.deltaTime;
+		timeRemaining -= GetSafeUnscaledDeltaTime();
 		if (timeRemaining <= 0f)
 		{
 			timeRemaining = 0f;
 			EndRound();
 			UpdateHudTexts();
 			return;
+		}
+		if (ShouldUseImmediateResolve() && isResolving)
+		{
+			UpdateImmediateResolve();
 		}
 		if (!isResolving)
 		{
@@ -394,6 +412,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		StopAllCoroutines();
 		isDragging = false;
 		isResolving = false;
+		ResetImmediateResolveState();
 		resolveStartedAt = -1f;
 		resolveRecoveryAttempts = 0;
 		roundEnded = false;
@@ -414,6 +433,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			roundEnded = true;
 			isDragging = false;
 			isResolving = false;
+			ResetImmediateResolveState();
 			StopAllCoroutines();
 			if (!hasReportedGameEnded && complianceHooks != null)
 			{
@@ -448,7 +468,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		if (released)
 		{
 			isDragging = false;
-			StartCoroutine(ResolveBoardRoutine());
+			TriggerResolve();
 		}
 	}
 
@@ -497,14 +517,22 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		{
 			yield break;
 		}
+		if (ShouldUseImmediateResolve())
+		{
+			StartImmediateResolve();
+			yield break;
+		}
 		isResolving = true;
-		resolveStartedAt = Time.unscaledTime;
+		MarkResolveProgress();
+		resolveStage = "collect";
 		int totalMoveCombos = 0;
 		int safety = 0;
 		try
 		{
 			while (safety < 24)
 			{
+				MarkResolveProgress();
+				resolveStage = "collect";
 				List<Vector2Int> matchedCells;
 				int combos = CollectMatches(out matchedCells);
 				if (combos <= 0 || matchedCells.Count == 0)
@@ -517,16 +545,24 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 				RemoveMatchedCells(matchedCells);
 				if (clearDelaySeconds > 0f)
 				{
-					yield return GetClearDelayWait();
+					resolveStage = "clear-delay";
+					yield return WaitForSecondsUnscaled(clearDelaySeconds);
+					MarkResolveProgress();
 				}
+				resolveStage = "collapse";
 				yield return CollapseColumns();
+				MarkResolveProgress();
+				resolveStage = "fill";
 				yield return FillEmptyCells();
+				MarkResolveProgress();
 				safety++;
 				matchedCells = null;
 			}
 			if (HasAnyEmptyCell())
 			{
+				resolveStage = "final-fill";
 				yield return FillEmptyCells();
+				MarkResolveProgress();
 			}
 		}
 		finally
@@ -538,6 +574,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			lastMoveCombos = totalMoveCombos;
 			isResolving = false;
 			resolveStartedAt = -1f;
+			resolveStage = "idle";
 			resolveRecoveryAttempts = 0;
 		}
 	}
@@ -634,9 +671,10 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		float elapsed = 0f;
 		while (elapsed < safeDuration)
 		{
-			elapsed += Time.deltaTime;
+			elapsed += GetSafeUnscaledDeltaTime();
 			float t = Mathf.Clamp01(elapsed / safeDuration);
 			float eased = t * t * (3f - 2f * t);
+			MarkResolveProgress();
 			for (int i = 0; i < moves.Count; i++)
 			{
 				OrbMove move = moves[i];
@@ -655,22 +693,24 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 				move2.orb.transform.position = move2.to;
 			}
 		}
+		MarkResolveProgress();
 	}
 
 	private void RecoverFromResolveStallIfNeeded()
 	{
-		if (!isResolving || resolveStartedAt < 0f)
+		if (ShouldUseImmediateResolve() || !isResolving || resolveStartedAt < 0f)
 		{
 			return;
 		}
 		float timeout = Mathf.Max(1f, resolveStallTimeoutSeconds);
 		if (!(Time.unscaledTime - resolveStartedAt < timeout))
 		{
-			Debug.LogWarning("Resolve routine stalled. Attempting recovery.");
+			Debug.LogWarning("Resolve routine stalled at stage '" + resolveStage + "' with emptyCells=" + CountEmptyCells() + ". Attempting recovery.");
 			StopAllCoroutines();
 			isResolving = false;
 			isDragging = false;
 			resolveStartedAt = -1f;
+			resolveStage = "idle";
 			resolveRecoveryAttempts++;
 			FillAnyEmptyCellsImmediate();
 			if (resolveRecoveryAttempts > 2)
@@ -680,7 +720,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			}
 			else
 			{
-				StartCoroutine(ResolveBoardRoutine());
+				TriggerResolve();
 			}
 		}
 	}
@@ -702,6 +742,266 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	private int BuildCollapseMoves(List<OrbMove> targetMoves)
+	{
+		targetMoves.Clear();
+		for (int x = 0; x < columns; x++)
+		{
+			int writeY = 0;
+			for (int readY = 0; readY < rows; readY++)
+			{
+				Orb orb = board[x, readY];
+				if (orb != null)
+				{
+					if (writeY != readY)
+					{
+						board[x, writeY] = orb;
+						board[x, readY] = null;
+						Vector3 from = orb.transform.position;
+						Vector3 to = CellToWorld(x, writeY);
+						targetMoves.Add(new OrbMove(orb, from, to));
+					}
+					writeY++;
+				}
+			}
+		}
+		return targetMoves.Count;
+	}
+
+	private int BuildFillMoves(List<OrbMove> targetMoves)
+	{
+		targetMoves.Clear();
+		for (int x = 0; x < columns; x++)
+		{
+			int spawnOffset = 0;
+			for (int y = 0; y < rows; y++)
+			{
+				if (board[x, y] == null)
+				{
+					int orbType = GetRandomOrbType();
+					Vector3 spawnPosition = CellToWorld(x, rows + spawnOffset);
+					Orb orb = CreateOrb(orbType, spawnPosition);
+					board[x, y] = orb;
+					Vector3 settlePosition = CellToWorld(x, y);
+					targetMoves.Add(new OrbMove(orb, spawnPosition, settlePosition));
+					spawnOffset++;
+				}
+			}
+		}
+		return targetMoves.Count;
+	}
+
+	private void StartImmediateResolve()
+	{
+		if (!isResolving && !roundEnded)
+		{
+			isResolving = true;
+			ResetImmediateResolveState();
+			resolveStage = "collect";
+			MarkResolveProgress();
+			EvaluateImmediateResolveStep();
+		}
+	}
+
+	private void UpdateImmediateResolve()
+	{
+		if (!isResolving)
+		{
+			return;
+		}
+		float dt = GetSafeUnscaledDeltaTime();
+		switch (immediateResolvePhase)
+		{
+		case ImmediateResolvePhase.ClearDelay:
+			immediatePhaseTimer -= dt;
+			MarkResolveProgress();
+			if (immediatePhaseTimer <= 0f)
+			{
+				BeginImmediateCollapsePhase();
+			}
+			break;
+		case ImmediateResolvePhase.CollapseAnim:
+		case ImmediateResolvePhase.FillAnim:
+			UpdateImmediateMoveAnimation(dt);
+			break;
+		default:
+			EvaluateImmediateResolveStep();
+			break;
+		}
+	}
+
+	private void EvaluateImmediateResolveStep()
+	{
+		if (!isResolving || roundEnded)
+		{
+			return;
+		}
+		resolveStage = "collect";
+		MarkResolveProgress();
+		List<Vector2Int> matchedCells;
+		int combos = CollectMatches(out matchedCells);
+		if (combos <= 0 || matchedCells.Count == 0)
+		{
+			if (HasAnyEmptyCell())
+			{
+				BeginImmediateFillPhase();
+			}
+			else
+			{
+				FinishImmediateResolve();
+			}
+			return;
+		}
+		immediateTotalMoveCombos += combos;
+		int removed = matchedCells.Count;
+		score += CalculateScoreGain(removed, combos, immediateTotalMoveCombos);
+		RemoveMatchedCells(matchedCells);
+		if (clearDelaySeconds > 0f)
+		{
+			resolveStage = "clear-delay";
+			immediateResolvePhase = ImmediateResolvePhase.ClearDelay;
+			immediatePhaseTimer = clearDelaySeconds;
+		}
+		else
+		{
+			BeginImmediateCollapsePhase();
+		}
+	}
+
+	private void BeginImmediateCollapsePhase()
+	{
+		resolveStage = "collapse";
+		int moveCount = BuildCollapseMoves(moveBuffer);
+		if (moveCount <= 0)
+		{
+			BeginImmediateFillPhase();
+		}
+		else
+		{
+			StartImmediateMoveAnimation(ImmediateResolvePhase.CollapseAnim, fallDurationSeconds);
+		}
+	}
+
+	private void BeginImmediateFillPhase()
+	{
+		resolveStage = "fill";
+		int moveCount = BuildFillMoves(moveBuffer);
+		if (moveCount <= 0)
+		{
+			EvaluateImmediateResolveStep();
+		}
+		else
+		{
+			StartImmediateMoveAnimation(ImmediateResolvePhase.FillAnim, fallDurationSeconds * 1.15f);
+		}
+	}
+
+	private void StartImmediateMoveAnimation(ImmediateResolvePhase phase, float duration)
+	{
+		immediateResolvePhase = phase;
+		immediatePhaseTimer = 0f;
+		immediateMoveDuration = Mathf.Max(0.01f, duration);
+		MarkResolveProgress();
+	}
+
+	private void UpdateImmediateMoveAnimation(float dt)
+	{
+		immediatePhaseTimer += Mathf.Max(0f, dt);
+		float t = Mathf.Clamp01(immediatePhaseTimer / immediateMoveDuration);
+		float eased = t * t * (3f - 2f * t);
+		for (int j = 0; j < moveBuffer.Count; j++)
+		{
+			OrbMove move = moveBuffer[j];
+			if (move.orb != null && !(move.orb.gameObject == null))
+			{
+				move.orb.transform.position = Vector3.LerpUnclamped(move.from, move.to, eased);
+			}
+		}
+		MarkResolveProgress();
+		if (t < 1f)
+		{
+			return;
+		}
+		for (int i = 0; i < moveBuffer.Count; i++)
+		{
+			OrbMove move2 = moveBuffer[i];
+			if (move2.orb != null && !(move2.orb.gameObject == null))
+			{
+				move2.orb.transform.position = move2.to;
+			}
+		}
+		ImmediateResolvePhase completedPhase = immediateResolvePhase;
+		immediateResolvePhase = ImmediateResolvePhase.Idle;
+		if (completedPhase == ImmediateResolvePhase.CollapseAnim)
+		{
+			BeginImmediateFillPhase();
+		}
+		else
+		{
+			EvaluateImmediateResolveStep();
+		}
+	}
+
+	private void FinishImmediateResolve()
+	{
+		if (HasAnyEmptyCell())
+		{
+			FillAnyEmptyCellsImmediate();
+		}
+		lastMoveCombos = immediateTotalMoveCombos;
+		isResolving = false;
+		resolveStartedAt = -1f;
+		resolveStage = "idle";
+		resolveRecoveryAttempts = 0;
+		ResetImmediateResolveState();
+	}
+
+	private void ResetImmediateResolveState()
+	{
+		immediateResolvePhase = ImmediateResolvePhase.Idle;
+		immediatePhaseTimer = 0f;
+		immediateMoveDuration = 0f;
+		immediateTotalMoveCombos = 0;
+		moveBuffer.Clear();
+	}
+
+	private void TriggerResolve()
+	{
+		if (ShouldUseImmediateResolve())
+		{
+			StartImmediateResolve();
+		}
+		else
+		{
+			StartCoroutine(ResolveBoardRoutine());
+		}
+	}
+
+	private bool ShouldUseImmediateResolve()
+	{
+		return true;
+	}
+
+	private int CountEmptyCells()
+	{
+		if (board == null)
+		{
+			return 0;
+		}
+		int count = 0;
+		for (int x = 0; x < columns; x++)
+		{
+			for (int y = 0; y < rows; y++)
+			{
+				if (board[x, y] == null)
+				{
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 
 	private int CollectMatches(out List<Vector2Int> matchedCells)
@@ -1442,15 +1742,23 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		}
 	}
 
-	private WaitForSeconds GetClearDelayWait()
+	private IEnumerator WaitForSecondsUnscaled(float seconds)
 	{
-		float safeDelay = Mathf.Max(0f, clearDelaySeconds);
-		if (cachedClearDelayWait == null || Mathf.Abs(cachedClearDelaySeconds - safeDelay) > 0.0001f)
+		float remaining = Mathf.Max(0f, seconds);
+		while (remaining > 0f)
 		{
-			cachedClearDelaySeconds = safeDelay;
-			cachedClearDelayWait = new WaitForSeconds(safeDelay);
+			remaining -= GetSafeUnscaledDeltaTime();
+			MarkResolveProgress();
+			yield return null;
 		}
-		return cachedClearDelayWait;
+	}
+
+	private void MarkResolveProgress()
+	{
+		if (isResolving)
+		{
+			resolveStartedAt = Time.unscaledTime;
+		}
 	}
 
 	private void ApplyRendererMaterial(SpriteRenderer renderer)
@@ -1549,5 +1857,15 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			return Vector2.one;
 		}
 		return size;
+	}
+
+	private static float GetSafeUnscaledDeltaTime()
+	{
+		float delta = Time.unscaledDeltaTime;
+		if (delta > 0f && !float.IsNaN(delta) && !float.IsInfinity(delta))
+		{
+			return delta;
+		}
+		return 1f / 60f;
 	}
 }
