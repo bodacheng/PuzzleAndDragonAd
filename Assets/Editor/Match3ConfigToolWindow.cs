@@ -69,6 +69,8 @@ public sealed class Match3ConfigToolWindow : EditorWindow
             EditorGUILayout.Space(8f);
             DrawColorsSection();
             EditorGUILayout.Space(8f);
+            DrawEnemyAttackSection();
+            EditorGUILayout.Space(8f);
             DrawRenderingSection();
             EditorGUILayout.Space(12f);
             DrawPresetSection();
@@ -236,6 +238,42 @@ public sealed class Match3ConfigToolWindow : EditorWindow
         EditorGUILayout.PropertyField(fallback, new GUIContent("Fallback On Unsupported Shader"));
         EditorGUILayout.PropertyField(hudFontOverride, new GUIContent("HUD Font Override"));
         EditorGUILayout.HelpBox("For Playworks, assign a Font asset or place one at Assets/Resources/HudFont.ttf.", MessageType.None);
+    }
+
+    private void DrawEnemyAttackSection()
+    {
+        EditorGUILayout.LabelField("Enemy & Attack", EditorStyles.boldLabel);
+
+        SerializedProperty enemySprite = FindProperty("enemySprite");
+        SerializedProperty enemyTint = FindProperty("enemyTint");
+        SerializedProperty enemySizeInCells = FindProperty("enemySizeInCells");
+        SerializedProperty enemyTopMargin = FindProperty("enemyTopMargin");
+        SerializedProperty attackEffectPrefab = FindProperty("attackEffectPrefab");
+        SerializedProperty attackEffectSprite = FindProperty("attackEffectSprite");
+        SerializedProperty attackTravelSeconds = FindProperty("attackTravelSeconds");
+        SerializedProperty attackArcHeight = FindProperty("attackArcHeight");
+        SerializedProperty attackEffectScale = FindProperty("attackEffectScale");
+
+        if (enemySprite == null || enemyTint == null || enemySizeInCells == null || enemyTopMargin == null ||
+            attackEffectPrefab == null || attackEffectSprite == null || attackTravelSeconds == null ||
+            attackArcHeight == null || attackEffectScale == null)
+        {
+            DrawMissingFieldWarning("enemy/attack settings");
+            return;
+        }
+
+        EditorGUILayout.PropertyField(enemySprite, new GUIContent("Enemy Sprite"));
+        EditorGUILayout.PropertyField(enemyTint, new GUIContent("Enemy Tint"));
+        enemySizeInCells.floatValue = EditorGUILayout.Slider("Enemy Size (Cells)", enemySizeInCells.floatValue, 0.8f, 3f);
+        enemyTopMargin.floatValue = EditorGUILayout.Slider("Enemy Top Margin", enemyTopMargin.floatValue, 0f, 2f);
+        EditorGUILayout.PropertyField(attackEffectPrefab, new GUIContent("Attack Effect Prefab"));
+        EditorGUILayout.PropertyField(attackEffectSprite, new GUIContent("Attack Effect Sprite (Fallback)"));
+        attackTravelSeconds.floatValue = EditorGUILayout.Slider("Attack Travel Time", attackTravelSeconds.floatValue, 0.05f, 0.5f);
+        attackArcHeight.floatValue = EditorGUILayout.Slider("Attack Arc Height", attackArcHeight.floatValue, 0f, 2f);
+        attackEffectScale.floatValue = EditorGUILayout.Slider("Attack Effect Scale", attackEffectScale.floatValue, 0.1f, 1.5f);
+        EditorGUILayout.HelpBox(
+            "Matched orbs launch attack FX toward the enemy display. If Attack Effect Prefab is empty, the fallback sprite is used as a projectile.",
+            MessageType.None);
     }
 
     private void DrawPresetSection()

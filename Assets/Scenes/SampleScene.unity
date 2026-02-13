@@ -228,6 +228,8 @@ MonoBehaviour:
   iosStoreUrl: 
   androidStoreUrl: 
   gameplayVariant: 0
+  enemySprite: {fileID: 0}
+  attackEffectPrefab: {fileID: 0}
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,6 +275,15 @@ MonoBehaviour:
   useCustomMaterialInWebGl: 1
   fallbackToDefaultIfShaderUnsupported: 1
   hudFontOverride: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  enemySprite: {fileID: -2004594408556225018, guid: 340a189cbab0c4553ab9798b922780d4, type: 3}
+  enemyTint: {r: 1, g: 1, b: 1, a: 1}
+  enemySizeInCells: 1.8
+  enemyTopMargin: 0.3
+  attackEffectPrefab: {fileID: 8199056339837927842, guid: 35b9d81d54a8542a3b6f626f1d10d9c6, type: 3}
+  attackEffectSprite: {fileID: 0}
+  attackTravelSeconds: 0.18
+  attackArcHeight: 0.45
+  attackEffectScale: 0.3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

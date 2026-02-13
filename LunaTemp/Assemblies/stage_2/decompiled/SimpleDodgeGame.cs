@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -124,6 +125,38 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 	[SerializeField]
 	private Font hudFontOverride;
 
+	[Header("Enemy & Attack")]
+	[SerializeField]
+	private Sprite enemySprite;
+
+	[SerializeField]
+	private Color enemyTint = Color.white;
+
+	[SerializeField]
+	[Range(0.8f, 3f)]
+	private float enemySizeInCells = 1.8f;
+
+	[SerializeField]
+	private float enemyTopMargin = 0.3f;
+
+	[SerializeField]
+	private GameObject attackEffectPrefab;
+
+	[SerializeField]
+	private Sprite attackEffectSprite;
+
+	[SerializeField]
+	[Range(0.05f, 0.5f)]
+	private float attackTravelSeconds = 0.18f;
+
+	[SerializeField]
+	[Range(0f, 2f)]
+	private float attackArcHeight = 0.45f;
+
+	[SerializeField]
+	[Range(0.1f, 1.5f)]
+	private float attackEffectScale = 0.3f;
+
 	private static readonly Vector2Int[] NeighborOffsets = new Vector2Int[4]
 	{
 		new Vector2Int(1, 0),
@@ -155,6 +188,16 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 	private Transform boardOutlineTransform;
 
 	private SpriteRenderer boardOutlineRenderer;
+
+	private Transform attackEffectsRoot;
+
+	private Transform enemyTransform;
+
+	private SpriteRenderer enemyRenderer;
+
+	private Color enemyBaseColor = Color.white;
+
+	private Coroutine enemyHitFlashRoutine;
 
 	private Orb[,] board;
 
@@ -306,15 +349,15 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		ClearBoard();
 		if (boardRoot != null)
 		{
-			Object.Destroy(boardRoot.gameObject);
+			UnityEngine.Object.Destroy(boardRoot.gameObject);
 		}
 		if (backgroundTransform != null)
 		{
-			Object.Destroy(backgroundTransform.gameObject);
+			UnityEngine.Object.Destroy(backgroundTransform.gameObject);
 		}
 		if (hudRootTransform != null)
 		{
-			Object.Destroy(hudRootTransform.gameObject);
+			UnityEngine.Object.Destroy(hudRootTransform.gameObject);
 		}
 	}
 
@@ -333,6 +376,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		ValidateConfig();
 		ApplyBackgroundVisuals();
 		ApplyBoardFrameVisuals();
+		ApplyEnemyVisuals();
 		UpdateHudTexts();
 		if (board == null)
 		{
@@ -349,6 +393,24 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 					orb.transform.position = CellToWorld(x, y);
 				}
 			}
+		}
+		UpdateEnemyTransform();
+	}
+
+	public void ConfigureEnemyPresentation(Sprite configuredEnemySprite, GameObject configuredAttackEffectPrefab)
+	{
+		if (configuredEnemySprite != null)
+		{
+			enemySprite = configuredEnemySprite;
+		}
+		if (configuredAttackEffectPrefab != null)
+		{
+			attackEffectPrefab = configuredAttackEffectPrefab;
+		}
+		if (Application.isPlaying)
+		{
+			ApplyEnemyVisuals();
+			UpdateEnemyTransform();
 		}
 	}
 
@@ -587,9 +649,134 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			Orb orb = board[cell.x, cell.y];
 			if (orb != null)
 			{
+				LaunchAttackAtEnemy(orb.transform.position, orb.type);
 				board[cell.x, cell.y] = null;
-				Object.Destroy(orb.gameObject);
+				UnityEngine.Object.Destroy(orb.gameObject);
 			}
+		}
+	}
+
+	private void LaunchAttackAtEnemy(Vector3 fromPosition, int orbType)
+	{
+		if (!(enemyTransform == null) && !roundEnded)
+		{
+			GameObject attackObject = CreateAttackEffectObject(orbType);
+			if (!(attackObject == null))
+			{
+				Transform attackTransform = attackObject.transform;
+				attackTransform.position = fromPosition;
+				attackTransform.rotation = Quaternion.identity;
+				StartCoroutine(AnimateAttackEffect(attackObject, fromPosition, enemyTransform.position));
+			}
+		}
+	}
+
+	private GameObject CreateAttackEffectObject(int orbType)
+	{
+		if (attackEffectPrefab != null)
+		{
+			GameObject effectObject = UnityEngine.Object.Instantiate(attackEffectPrefab);
+			if (effectObject == null)
+			{
+				return null;
+			}
+			if (boardRoot != null)
+			{
+				effectObject.transform.SetParent((attackEffectsRoot != null) ? attackEffectsRoot : boardRoot, true);
+			}
+			ApplyAttackEffectTint(effectObject, GetOrbColor(orbType));
+			return effectObject;
+		}
+		GameObject fallbackObject = new GameObject("AttackEffect");
+		if (boardRoot != null)
+		{
+			fallbackObject.transform.SetParent((attackEffectsRoot != null) ? attackEffectsRoot : boardRoot, true);
+		}
+		SpriteRenderer renderer = fallbackObject.AddComponent<SpriteRenderer>();
+		Sprite configuredSprite = ((attackEffectSprite != null) ? attackEffectSprite : GetAnyConfiguredOrbSprite());
+		renderer.sprite = PrepareSpriteForRuntime((configuredSprite != null) ? configuredSprite : GetGeneratedFallbackSprite());
+		renderer.color = GetOrbColor(orbType);
+		renderer.sortingOrder = 18;
+		ApplyRendererMaterial(renderer);
+		SetTransformDiameter(fallbackObject.transform, renderer.sprite, cellSize * attackEffectScale);
+		return fallbackObject;
+	}
+
+	private void ApplyAttackEffectTint(GameObject effectObject, Color tint)
+	{
+		if (effectObject == null)
+		{
+			return;
+		}
+		SpriteRenderer[] renderers = effectObject.GetComponentsInChildren<SpriteRenderer>(true);
+		foreach (SpriteRenderer renderer in renderers)
+		{
+			if (!(renderer == null))
+			{
+				renderer.color = Color.Lerp(renderer.color, tint, 0.8f);
+				renderer.sortingOrder = Mathf.Max(renderer.sortingOrder, 18);
+				ApplyRendererMaterial(renderer);
+			}
+		}
+	}
+
+	private IEnumerator AnimateAttackEffect(GameObject attackObject, Vector3 from, Vector3 to)
+	{
+		if (attackObject == null)
+		{
+			yield break;
+		}
+		float duration = Mathf.Max(0.05f, attackTravelSeconds);
+		float elapsed = 0f;
+		Transform attackTransform = attackObject.transform;
+		while (elapsed < duration)
+		{
+			if (attackTransform == null)
+			{
+				yield break;
+			}
+			elapsed += GetSafeUnscaledDeltaTime();
+			float t = Mathf.Clamp01(elapsed / duration);
+			float eased = t * t * (3f - 2f * t);
+			Vector3 linear = Vector3.LerpUnclamped(from, to, eased);
+			float arcOffset = attackArcHeight * Mathf.Sin(t * 3.14159265f);
+			attackTransform.position = linear + new Vector3(0f, arcOffset, 0f);
+			yield return null;
+		}
+		if (attackTransform != null)
+		{
+			attackTransform.position = to;
+		}
+		TriggerEnemyHitFeedback();
+		if (attackObject != null)
+		{
+			UnityEngine.Object.Destroy(attackObject);
+		}
+	}
+
+	private void TriggerEnemyHitFeedback()
+	{
+		if (!(enemyRenderer == null))
+		{
+			if (enemyHitFlashRoutine != null)
+			{
+				StopCoroutine(enemyHitFlashRoutine);
+			}
+			enemyHitFlashRoutine = StartCoroutine(EnemyHitFlashRoutine());
+		}
+	}
+
+	private IEnumerator EnemyHitFlashRoutine()
+	{
+		if (!(enemyRenderer == null))
+		{
+			enemyRenderer.color = Color.Lerp(enemyBaseColor, Color.white, 0.55f);
+			yield return WaitForSecondsUnscaled(0.06f);
+			if (enemyRenderer != null)
+			{
+				enemyRenderer.color = enemyBaseColor;
+			}
+			enemyHitFlashRoutine = null;
 		}
 	}
 
@@ -1152,6 +1339,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
 	private void ClearBoard()
 	{
+		ClearAttackEffects();
 		if (board == null)
 		{
 			return;
@@ -1163,9 +1351,25 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 				Orb orb = board[x, y];
 				if (orb != null && orb.gameObject != null)
 				{
-					Object.Destroy(orb.gameObject);
+					UnityEngine.Object.Destroy(orb.gameObject);
 				}
 				board[x, y] = null;
+			}
+		}
+	}
+
+	private void ClearAttackEffects()
+	{
+		if (attackEffectsRoot == null)
+		{
+			return;
+		}
+		for (int i = attackEffectsRoot.childCount - 1; i >= 0; i--)
+		{
+			Transform child = attackEffectsRoot.GetChild(i);
+			if (child != null)
+			{
+				UnityEngine.Object.Destroy(child.gameObject);
 			}
 		}
 	}
@@ -1200,7 +1404,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 	private int GetInitialOrbType(int x, int y)
 	{
 		int colorCount = GetOrbColorCount();
-		int candidate = Random.Range(0, colorCount);
+		int candidate = UnityEngine.Random.Range(0, colorCount);
 		for (int attempts = 0; attempts < 16; attempts++)
 		{
 			bool horizontalMatch = x >= 2 && board[x - 1, y] != null && board[x - 2, y] != null && board[x - 1, y].type == candidate && board[x - 2, y].type == candidate;
@@ -1209,14 +1413,14 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			{
 				return candidate;
 			}
-			candidate = Random.Range(0, colorCount);
+			candidate = UnityEngine.Random.Range(0, colorCount);
 		}
 		return candidate;
 	}
 
 	private int GetRandomOrbType()
 	{
-		return Random.Range(0, GetOrbColorCount());
+		return UnityEngine.Random.Range(0, GetOrbColorCount());
 	}
 
 	private int GetOrbColorCount()
@@ -1252,6 +1456,12 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			GameObject boardRootObject = new GameObject("PuzzleBoardRoot");
 			boardRoot = boardRootObject.transform;
 		}
+		if (attackEffectsRoot == null)
+		{
+			GameObject attackEffectsObject = new GameObject("AttackEffects");
+			attackEffectsObject.transform.SetParent(boardRoot, false);
+			attackEffectsRoot = attackEffectsObject.transform;
+		}
 		if (boardFrameTransform == null)
 		{
 			GameObject frameObject = new GameObject("PuzzleBoardFrame");
@@ -1268,8 +1478,17 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			boardOutlineRenderer = outlineObject.AddComponent<SpriteRenderer>();
 			boardOutlineRenderer.sortingOrder = -14;
 		}
+		if (enemyTransform == null)
+		{
+			GameObject enemyObject = new GameObject("EnemyDisplay");
+			enemyObject.transform.SetParent(boardRoot, false);
+			enemyTransform = enemyObject.transform;
+			enemyRenderer = enemyObject.AddComponent<SpriteRenderer>();
+			enemyRenderer.sortingOrder = 16;
+		}
 		ApplyBackgroundVisuals();
 		ApplyBoardFrameVisuals();
+		ApplyEnemyVisuals();
 	}
 
 	private void ApplyBackgroundVisuals()
@@ -1302,6 +1521,20 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 			ApplyRendererMaterial(boardOutlineRenderer);
 		}
 		UpdateBoardFrameTransform();
+	}
+
+	private void ApplyEnemyVisuals()
+	{
+		if (!(enemyRenderer == null))
+		{
+			Sprite configuredSprite = ((enemySprite != null) ? enemySprite : GetAnyConfiguredOrbSprite());
+			enemyRenderer.sprite = PrepareSpriteForRuntime((configuredSprite != null) ? configuredSprite : GetGeneratedFallbackSprite());
+			enemyBaseColor = enemyTint;
+			enemyRenderer.color = enemyBaseColor;
+			enemyRenderer.sortingOrder = 16;
+			ApplyRendererMaterial(enemyRenderer);
+			UpdateEnemyTransform();
+		}
 	}
 
 	private void ApplyOrbVisuals(Orb orb)
@@ -1528,6 +1761,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 				UpdateBackgroundTransform();
 				UpdateBoardFrameTransform();
 				RepositionBoardOrbs();
+				UpdateEnemyTransform();
 			}
 		}
 	}
@@ -1549,6 +1783,22 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 					SetTransformDiameter(orb.transform, orb.renderer.sprite, cellSize * orbScale);
 				}
 			}
+		}
+	}
+
+	private void UpdateEnemyTransform()
+	{
+		if (!(enemyTransform == null) && !(enemyRenderer == null) && !(gameplayCamera == null) && layoutInitialized)
+		{
+			float enemyDiameter = Mathf.Max(0.25f, cellSize * enemySizeInCells);
+			SetTransformDiameter(enemyTransform, enemyRenderer.sprite, enemyDiameter);
+			float boardTopY = boardBottomLeft.y + boardWorldHeight;
+			float desiredY = boardTopY + enemyTopMargin + enemyDiameter * 0.5f;
+			float cameraTopY = gameplayCamera.transform.position.y + gameplayCamera.orthographicSize;
+			float clampedY = Mathf.Min(desiredY, cameraTopY - enemyDiameter * 0.5f - 0.12f);
+			float safeY = Mathf.Max(boardTopY + enemyDiameter * 0.5f, clampedY);
+			float centerX = boardBottomLeft.x + boardWorldWidth * 0.5f;
+			enemyTransform.position = new Vector3(centerX, safeY, gameplayZ + 0.003f);
 		}
 	}
 
@@ -1694,6 +1944,11 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 		clearDelaySeconds = Mathf.Max(0f, clearDelaySeconds);
 		fallDurationSeconds = Mathf.Max(0.01f, fallDurationSeconds);
 		resolveStallTimeoutSeconds = Mathf.Max(1f, resolveStallTimeoutSeconds);
+		enemySizeInCells = Mathf.Clamp(enemySizeInCells, 0.8f, 3f);
+		enemyTopMargin = Mathf.Max(0f, enemyTopMargin);
+		attackTravelSeconds = Mathf.Max(0.05f, attackTravelSeconds);
+		attackArcHeight = Mathf.Max(0f, attackArcHeight);
+		attackEffectScale = Mathf.Clamp(attackEffectScale, 0.1f, 1.5f);
 		if (orbColors == null || orbColors.Length < 4)
 		{
 			orbColors = new Color[6]
