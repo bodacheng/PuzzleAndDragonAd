@@ -24192,7 +24192,7 @@
                     },
                     {
                         "name": "insideUnitCircle#get",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "rotation#get",
@@ -29885,15 +29885,7 @@
                         "excluded": false
                     },
                     {
-                        "name": "AnimateAttackEffect",
-                        "excluded": false
-                    },
-                    {
                         "name": "TriggerEnemyHitFeedback",
-                        "excluded": false
-                    },
-                    {
-                        "name": "EnemyHitFlashRoutine",
                         "excluded": false
                     },
                     {
@@ -29906,6 +29898,22 @@
                     },
                     {
                         "name": "UpdateEnemyTransform",
+                        "excluded": false
+                    },
+                    {
+                        "name": "UpdateActiveAttackEffects",
+                        "excluded": false
+                    },
+                    {
+                        "name": "ResolveAttackImpact",
+                        "excluded": false
+                    },
+                    {
+                        "name": "UpdateEnemyHitFeedback",
+                        "excluded": false
+                    },
+                    {
+                        "name": "ResetEnemyHitVisuals",
                         "excluded": false
                     }
                 ]
@@ -30477,6 +30485,40 @@
                     {
                         "name": "BakeMesh",
                         "excluded": true
+                    }
+                ]
+            },
+            {
+                "className": "SimpleDodgeGame.ActiveAttackEffect",
+                "staticMethods": [],
+                "instanceMethods": [
+                    {
+                        "name": "getDefaultValue",
+                        "excluded": false
+                    },
+                    {
+                        "name": "init",
+                        "excluded": false
+                    },
+                    {
+                        "name": "$ctor1",
+                        "excluded": false
+                    },
+                    {
+                        "name": "ctor",
+                        "excluded": false
+                    },
+                    {
+                        "name": "getHashCode",
+                        "excluded": true
+                    },
+                    {
+                        "name": "equals",
+                        "excluded": true
+                    },
+                    {
+                        "name": "$clone",
+                        "excluded": false
                     }
                 ]
             }

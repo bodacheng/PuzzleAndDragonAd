@@ -284,6 +284,8 @@ MonoBehaviour:
   attackTravelSeconds: 0.18
   attackArcHeight: 0.45
   attackEffectScale: 0.3
+  enemyHitShakeInCells: 0.1345
+  enemyHitShakeSeconds: 0.2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

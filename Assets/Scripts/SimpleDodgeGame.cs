@@ -52,6 +52,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     [SerializeField] [Range(0.05f, 0.5f)] private float attackTravelSeconds = 0.18f;
     [SerializeField] [Range(0f, 2f)] private float attackArcHeight = 0.45f;
     [SerializeField] [Range(0.1f, 1.5f)] private float attackEffectScale = 0.3f;
+    [SerializeField] [Range(0.005f, 0.25f)] private float enemyHitShakeInCells = 0.03f;
+    [SerializeField] [Range(0.01f, 0.2f)] private float enemyHitShakeSeconds = 0.07f;
 
     private sealed class Orb
     {
@@ -80,6 +82,26 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             this.orb = orb;
             this.from = from;
             this.to = to;
+        }
+    }
+
+    private struct ActiveAttackEffect
+    {
+        public readonly GameObject gameObject;
+        public readonly Transform transform;
+        public readonly Vector3 from;
+        public readonly Vector3 to;
+        public readonly float duration;
+        public float elapsed;
+
+        public ActiveAttackEffect(GameObject gameObject, Transform transform, Vector3 from, Vector3 to, float duration)
+        {
+            this.gameObject = gameObject;
+            this.transform = transform;
+            this.from = from;
+            this.to = to;
+            this.duration = duration;
+            elapsed = 0f;
         }
     }
 
@@ -116,7 +138,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private Transform enemyTransform;
     private SpriteRenderer enemyRenderer;
     private Color enemyBaseColor = Color.white;
-    private Coroutine enemyHitFlashRoutine;
+    private Vector3 enemyAnchorPosition;
 
     private Orb[,] board;
     private float gameplayZ;
@@ -144,6 +166,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private Text comboText;
     private Text resultText;
     private readonly List<OrbMove> moveBuffer = new List<OrbMove>(64);
+    private readonly List<ActiveAttackEffect> activeAttackEffects = new List<ActiveAttackEffect>(96);
     private readonly List<Vector2Int> matchedCellsBuffer = new List<Vector2Int>(64);
     private readonly List<Vector2Int> floodFillStackBuffer = new List<Vector2Int>(64);
     private bool[,] markedCellsBuffer;
@@ -156,6 +179,9 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private float immediateMoveDuration;
     private int immediateTotalMoveCombos;
     private bool hasLoggedMissingHudFont;
+    private bool enemyHitFeedbackActive;
+    private float enemyHitFeedbackTimer;
+    private float enemyHitFeedbackDuration;
 
     private void Awake()
     {
@@ -198,6 +224,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
 
         UpdateLayout(force: false);
+        UpdateActiveAttackEffects();
+        UpdateEnemyHitFeedback();
         RecoverFromResolveStallIfNeeded();
 
         if (!roundEnded && !isResolving && HasAnyEmptyCell())
@@ -632,7 +660,9 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         Transform attackTransform = attackObject.transform;
         attackTransform.position = fromPosition;
         attackTransform.rotation = Quaternion.identity;
-        StartCoroutine(AnimateAttackEffect(attackObject, fromPosition, enemyTransform.position));
+        Vector3 targetPosition = layoutInitialized ? enemyAnchorPosition : enemyTransform.position;
+        float duration = Mathf.Max(0.05f, attackTravelSeconds);
+        activeAttackEffects.Add(new ActiveAttackEffect(attackObject, attackTransform, fromPosition, targetPosition, duration));
     }
 
     private GameObject CreateAttackEffectObject(int orbType)
@@ -692,75 +722,110 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
     }
 
-    private IEnumerator AnimateAttackEffect(GameObject attackObject, Vector3 from, Vector3 to)
+    private void UpdateActiveAttackEffects()
     {
-        if (attackObject == null)
+        if (activeAttackEffects.Count == 0)
         {
-            yield break;
+            return;
         }
 
-        float duration = Mathf.Max(0.05f, attackTravelSeconds);
-        float elapsed = 0f;
-        Transform attackTransform = attackObject.transform;
-
-        while (elapsed < duration)
+        float dt = GetSafeUnscaledDeltaTime();
+        for (int i = activeAttackEffects.Count - 1; i >= 0; i--)
         {
-            if (attackTransform == null)
+            ActiveAttackEffect attack = activeAttackEffects[i];
+            if (attack.gameObject == null || attack.transform == null)
             {
-                yield break;
+                activeAttackEffects.RemoveAt(i);
+                continue;
             }
 
-            elapsed += GetSafeUnscaledDeltaTime();
-            float t = Mathf.Clamp01(elapsed / duration);
+            attack.elapsed += dt;
+            float t = Mathf.Clamp01(attack.elapsed / Mathf.Max(0.01f, attack.duration));
             float eased = t * t * (3f - 2f * t);
-            Vector3 linear = Vector3.LerpUnclamped(from, to, eased);
+            Vector3 linear = Vector3.LerpUnclamped(attack.from, attack.to, eased);
             float arcOffset = attackArcHeight * Mathf.Sin(t * Mathf.PI);
-            attackTransform.position = linear + new Vector3(0f, arcOffset, 0f);
-            yield return null;
-        }
+            attack.transform.position = linear + new Vector3(0f, arcOffset, 0f);
 
-        if (attackTransform != null)
+            if (t >= 1f)
+            {
+                ResolveAttackImpact(attack);
+                activeAttackEffects.RemoveAt(i);
+                continue;
+            }
+
+            activeAttackEffects[i] = attack;
+        }
+    }
+
+    private void ResolveAttackImpact(ActiveAttackEffect attack)
+    {
+        if (attack.transform != null)
         {
-            attackTransform.position = to;
+            attack.transform.position = attack.to;
         }
 
         TriggerEnemyHitFeedback();
-        if (attackObject != null)
+        if (attack.gameObject != null)
         {
-            Destroy(attackObject);
+            Destroy(attack.gameObject);
         }
     }
 
     private void TriggerEnemyHitFeedback()
     {
-        if (enemyRenderer == null)
+        if (enemyRenderer == null || enemyTransform == null)
         {
             return;
         }
 
-        if (enemyHitFlashRoutine != null)
-        {
-            StopCoroutine(enemyHitFlashRoutine);
-        }
-
-        enemyHitFlashRoutine = StartCoroutine(EnemyHitFlashRoutine());
+        enemyHitFeedbackActive = true;
+        enemyHitFeedbackDuration = Mathf.Max(0.01f, enemyHitShakeSeconds);
+        enemyHitFeedbackTimer = enemyHitFeedbackDuration;
+        enemyRenderer.color = Color.Lerp(enemyBaseColor, Color.white, 0.55f);
     }
 
-    private IEnumerator EnemyHitFlashRoutine()
+    private void UpdateEnemyHitFeedback()
     {
-        if (enemyRenderer == null)
+        if (!enemyHitFeedbackActive)
         {
-            yield break;
+            return;
         }
 
-        enemyRenderer.color = Color.Lerp(enemyBaseColor, Color.white, 0.55f);
-        yield return WaitForSecondsUnscaled(0.06f);
+        if (enemyRenderer == null || enemyTransform == null)
+        {
+            enemyHitFeedbackActive = false;
+            return;
+        }
+
+        enemyHitFeedbackTimer -= GetSafeUnscaledDeltaTime();
+        float remaining = Mathf.Max(0f, enemyHitFeedbackTimer);
+        float progress = 1f - (remaining / Mathf.Max(0.01f, enemyHitFeedbackDuration));
+        float damping = Mathf.Clamp01(1f - progress);
+        float shakeDistance = cellSize * enemyHitShakeInCells * damping;
+        Vector2 jitter = Random.insideUnitCircle * shakeDistance;
+        enemyTransform.position = enemyAnchorPosition + new Vector3(jitter.x, jitter.y, 0f);
+
+        if (enemyHitFeedbackTimer <= 0f)
+        {
+            ResetEnemyHitVisuals();
+        }
+    }
+
+    private void ResetEnemyHitVisuals()
+    {
+        enemyHitFeedbackActive = false;
+        enemyHitFeedbackTimer = 0f;
+        enemyHitFeedbackDuration = 0f;
+
         if (enemyRenderer != null)
         {
             enemyRenderer.color = enemyBaseColor;
         }
 
-        enemyHitFlashRoutine = null;
+        if (enemyTransform != null)
+        {
+            enemyTransform.position = enemyAnchorPosition;
+        }
     }
 
     private IEnumerator CollapseColumns()
@@ -1439,6 +1504,16 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
     private void ClearAttackEffects()
     {
+        for (int i = 0; i < activeAttackEffects.Count; i++)
+        {
+            ActiveAttackEffect attack = activeAttackEffects[i];
+            if (attack.gameObject != null)
+            {
+                Destroy(attack.gameObject);
+            }
+        }
+        activeAttackEffects.Clear();
+
         if (attackEffectsRoot == null)
         {
             return;
@@ -1988,7 +2063,11 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         float safeY = Mathf.Max(boardTopY + (enemyDiameter * 0.5f), clampedY);
         float centerX = boardBottomLeft.x + (boardWorldWidth * 0.5f);
 
-        enemyTransform.position = new Vector3(centerX, safeY, gameplayZ + 0.003f);
+        enemyAnchorPosition = new Vector3(centerX, safeY, gameplayZ + 0.003f);
+        if (!enemyHitFeedbackActive)
+        {
+            enemyTransform.position = enemyAnchorPosition;
+        }
     }
 
     private void UpdateBackgroundTransform()
@@ -2158,6 +2237,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         attackTravelSeconds = Mathf.Max(0.05f, attackTravelSeconds);
         attackArcHeight = Mathf.Max(0f, attackArcHeight);
         attackEffectScale = Mathf.Clamp(attackEffectScale, 0.1f, 1.5f);
+        enemyHitShakeInCells = Mathf.Clamp(enemyHitShakeInCells, 0.005f, 0.25f);
+        enemyHitShakeSeconds = Mathf.Clamp(enemyHitShakeSeconds, 0.01f, 0.2f);
 
         if (orbColors == null || orbColors.Length < 4)
         {

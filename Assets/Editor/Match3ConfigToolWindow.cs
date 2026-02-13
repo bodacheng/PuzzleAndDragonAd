@@ -253,10 +253,12 @@ public sealed class Match3ConfigToolWindow : EditorWindow
         SerializedProperty attackTravelSeconds = FindProperty("attackTravelSeconds");
         SerializedProperty attackArcHeight = FindProperty("attackArcHeight");
         SerializedProperty attackEffectScale = FindProperty("attackEffectScale");
+        SerializedProperty enemyHitShakeInCells = FindProperty("enemyHitShakeInCells");
+        SerializedProperty enemyHitShakeSeconds = FindProperty("enemyHitShakeSeconds");
 
         if (enemySprite == null || enemyTint == null || enemySizeInCells == null || enemyTopMargin == null ||
             attackEffectPrefab == null || attackEffectSprite == null || attackTravelSeconds == null ||
-            attackArcHeight == null || attackEffectScale == null)
+            attackArcHeight == null || attackEffectScale == null || enemyHitShakeInCells == null || enemyHitShakeSeconds == null)
         {
             DrawMissingFieldWarning("enemy/attack settings");
             return;
@@ -271,6 +273,8 @@ public sealed class Match3ConfigToolWindow : EditorWindow
         attackTravelSeconds.floatValue = EditorGUILayout.Slider("Attack Travel Time", attackTravelSeconds.floatValue, 0.05f, 0.5f);
         attackArcHeight.floatValue = EditorGUILayout.Slider("Attack Arc Height", attackArcHeight.floatValue, 0f, 2f);
         attackEffectScale.floatValue = EditorGUILayout.Slider("Attack Effect Scale", attackEffectScale.floatValue, 0.1f, 1.5f);
+        enemyHitShakeInCells.floatValue = EditorGUILayout.Slider("Enemy Hit Shake (Cells)", enemyHitShakeInCells.floatValue, 0.005f, 0.25f);
+        enemyHitShakeSeconds.floatValue = EditorGUILayout.Slider("Enemy Hit Shake Time", enemyHitShakeSeconds.floatValue, 0.01f, 0.2f);
         EditorGUILayout.HelpBox(
             "Matched orbs launch attack FX toward the enemy display. If Attack Effect Prefab is empty, the fallback sprite is used as a projectile.",
             MessageType.None);

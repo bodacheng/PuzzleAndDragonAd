@@ -697,6 +697,8 @@ Deserializers["SimpleDodgeGame"] = function (request, data, root) {
   i546.attackTravelSeconds = i547[44]
   i546.attackArcHeight = i547[45]
   i546.attackEffectScale = i547[46]
+  i546.enemyHitShakeInCells = i547[47]
+  i546.enemyHitShakeSeconds = i547[48]
   return i546
 }
 
@@ -1647,11 +1649,11 @@ Deserializers.isAntiAliasingEnabled = "False";
 
 Deserializers.isRuntimeAnalysisEnabledForCode = "True";
 
-Deserializers.runtimeAnalysisExcludedClassesCount = "1717";
+Deserializers.runtimeAnalysisExcludedClassesCount = "1694";
 
-Deserializers.runtimeAnalysisExcludedMethodsCount = "4361";
+Deserializers.runtimeAnalysisExcludedMethodsCount = "4454";
 
-Deserializers.runtimeAnalysisExcludedModules = "physics3d, physics2d, particle-system, reflection, prefabs, mecanim-wasm";
+Deserializers.runtimeAnalysisExcludedModules = "physics3d, physics2d, reflection, mecanim-wasm";
 
 Deserializers.isRuntimeAnalysisEnabledForShaders = "True";
 
@@ -1673,7 +1675,7 @@ Deserializers.graphicsConstraint = 24;
 
 Deserializers.linearColorSpace = false;
 
-Deserializers.buildID = "6df1d401-6803-4020-ac60-0ed52eb20520";
+Deserializers.buildID = "d3408733-c55d-4681-a982-6c9b1446b12f";
 
 Deserializers.runtimeInitializeOnLoadInfos = [[["UnityEngine","U2D","Animation","GpuDeformationSystem","CreateFallbackBuffer"],["UnityEngine","Experimental","Rendering","ScriptableRuntimeReflectionSystemSettings","ScriptingDirtyReflectionSystemInstance"]],[["UnityEngine","InputSystem","InputSystem","RunInitialUpdate"],["UnityEngine","AI","NavMesh","ClearPreUpdateListeners"]],[["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"],["$BurstDirectCallInitializer","Initialize"]],[],[["UnityEngine","InputSystem","Plugins","InputForUI","InputSystemProvider","Bootstrap"],["UnityEngine","InputSystem","UI","InputSystemUIInputModule","ResetDefaultActions"],["UnityEngine","InputSystem","InputSystem","RunInitializeInPlayer"]]];
 
