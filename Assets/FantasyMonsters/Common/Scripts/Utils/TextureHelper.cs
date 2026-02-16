@@ -8,6 +8,8 @@ namespace Assets.FantasyMonsters.Common.Scripts.Utils
     /// </summary>
     public static class TextureHelper
     {
+        private static readonly Type[] TextureResizeSignature = { typeof(int), typeof(int) };
+
         public static Sprite CreateSprite(Texture2D texture)
         {
             return Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), Vector2.one / 2, 100f, 0, SpriteMeshType.FullRect);
@@ -92,9 +94,19 @@ namespace Assets.FantasyMonsters.Common.Scripts.Utils
         public static void Crop(Texture2D texture, Rect rect)
         {
             var pixels = texture.GetPixels((int) rect.xMin, (int) rect.yMin, (int) rect.height, (int) rect.width);
+            var targetWidth = (int) rect.height;
+            var targetHeight = (int) rect.width;
 
-            texture.Reinitialize((int) rect.height, (int) rect.width);
-            texture.SetPixels(pixels);
+            if (TryResizeTexture(texture, targetWidth, targetHeight))
+            {
+                texture.SetPixels(pixels);
+                texture.Apply();
+                return;
+            }
+
+            // Fallback for runtimes that don't expose resize APIs on Texture2D.
+            texture.SetPixels(new Color[texture.width * texture.height]);
+            texture.SetPixels(0, 0, targetWidth, targetHeight, pixels);
             texture.Apply();
         }
 
@@ -188,6 +200,42 @@ namespace Assets.FantasyMonsters.Common.Scripts.Utils
             color.r /= color.a;
             color.g /= color.a;
             color.b /= color.a;
+        }
+
+        private static bool TryResizeTexture(Texture2D texture, int width, int height)
+        {
+            if (texture == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                var reinitialize = texture.GetType().GetMethod("Reinitialize", TextureResizeSignature);
+                if (reinitialize != null)
+                {
+                    reinitialize.Invoke(texture, new object[] { width, height });
+                    return true;
+                }
+
+                var resize = texture.GetType().GetMethod("Resize", TextureResizeSignature);
+                if (resize == null)
+                {
+                    return false;
+                }
+
+                var invokeResult = resize.Invoke(texture, new object[] { width, height });
+                if (invokeResult is bool success)
+                {
+                    return success;
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

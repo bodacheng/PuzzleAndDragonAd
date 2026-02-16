@@ -29,7 +29,7 @@ namespace Assets.FantasyMonsters.Common.Scripts
         /// </summary>
         public void SetWheels(int index)
         {
-            if (index != 1 && Animator.GetInteger("State") == (int) MonsterState.Death) return;
+            if (index != 1 && CurrentState == MonsterState.Death) return;
 
             if (index < WheelSprites.Count)
             {

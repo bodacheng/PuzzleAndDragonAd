@@ -37,7 +37,11 @@ namespace Assets.FantasyMonsters.Common.Scripts.EditorScripts
             if (valueInt < 128) valueInt = 128;
             if (valueInt > 1024) valueInt = 1024;
 
-            FrameSize.SetTextWithoutNotify(valueInt.ToString());
+            var clampedText = valueInt.ToString();
+            if (FrameSize.text != clampedText)
+            {
+                FrameSize.text = clampedText;
+            }
         }
 
         public void OnFrameCountChanged(string value)
@@ -49,7 +53,11 @@ namespace Assets.FantasyMonsters.Common.Scripts.EditorScripts
             if (valueInt < 4) valueInt = 4;
             if (valueInt > 16) valueInt = 16;
 
-            FrameCount.SetTextWithoutNotify(valueInt.ToString());
+            var clampedText = valueInt.ToString();
+            if (FrameCount.text != clampedText)
+            {
+                FrameCount.text = clampedText;
+            }
         }
     }
 }

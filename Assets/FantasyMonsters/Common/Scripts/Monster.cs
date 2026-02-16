@@ -11,12 +11,16 @@ namespace Assets.FantasyMonsters.Common.Scripts
     /// </summary>
     public class Monster : MonoBehaviour
     {
+        private const string StateParameterName = "State";
+        private static readonly Type[] AnimatorStateParameterSignature = { typeof(string), typeof(int) };
+
         public SpriteRenderer Head;
         public SpriteRenderer Jaw;
         public List<Sprite> HeadSprites;
         public List<Sprite> JawSprites;
         public Animator Animator;
         public bool Variations;
+        public MonsterState CurrentState { get; private set; } = MonsterState.Idle;
         public event Action<string> OnEvent = eventName => { };
 
         /// <summary>
@@ -53,7 +57,14 @@ namespace Assets.FantasyMonsters.Common.Scripts
         /// </summary>
         public void SetState(MonsterState state)
         {
-            Animator.SetInteger("State", (int) state);
+            CurrentState = state;
+
+            if (TrySetAnimatorStateParameter((int) state))
+            {
+                return;
+            }
+
+            PlayStateFallbackClip(state);
         }
 
         /// <summary>
@@ -108,6 +119,40 @@ namespace Assets.FantasyMonsters.Common.Scripts
             {
                 Jaw.sprite = JawSprites[index];
             }
+        }
+
+        private bool TrySetAnimatorStateParameter(int value)
+        {
+            if (Animator == null)
+            {
+                return false;
+            }
+
+            var setIntegerMethod = Animator.GetType().GetMethod("SetInteger", AnimatorStateParameterSignature);
+            if (setIntegerMethod == null)
+            {
+                return false;
+            }
+
+            setIntegerMethod.Invoke(Animator, new object[] { StateParameterName, value });
+            return true;
+        }
+
+        private void PlayStateFallbackClip(MonsterState state)
+        {
+            if (Animator == null || Animator.runtimeAnimatorController == null)
+            {
+                return;
+            }
+
+            var stateName = state.ToString();
+            var hasMatchingClip = Animator.runtimeAnimatorController.animationClips.Any(clip => clip != null && clip.name == stateName);
+            if (!hasMatchingClip)
+            {
+                return;
+            }
+
+            Animator.Play(stateName, 0, 0f);
         }
     }
 }

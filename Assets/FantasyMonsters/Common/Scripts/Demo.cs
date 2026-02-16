@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Luna.Unity;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -74,7 +75,7 @@ namespace Assets.FantasyMonsters.Common.Scripts
 
         public void OpenURL(string url)
         {
-            Application.OpenURL(url);
+            Playable.InstallFullGame(url, url);
         }
     }
 }
