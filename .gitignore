@@ -54,5 +54,4 @@ crashlytics-build.properties
 /iosbuildtest
 /ServerData
 /TestPC
-/LunaTemp
-/LunaTemp/*
+/LunaTemp/
