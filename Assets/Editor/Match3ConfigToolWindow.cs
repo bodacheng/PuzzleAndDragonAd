@@ -181,24 +181,26 @@ public sealed class Match3ConfigToolWindow : EditorWindow
         EditorGUILayout.LabelField("Colors", EditorStyles.boldLabel);
 
         SerializedProperty backgroundColor = FindProperty("backgroundColor");
+        SerializedProperty backgroundSprite = FindProperty("backgroundSprite");
         SerializedProperty boardColor = FindProperty("boardColor");
         SerializedProperty boardOutlineColor = FindProperty("boardOutlineColor");
         SerializedProperty orbColors = FindProperty("orbColors");
         SerializedProperty orbSprites = FindProperty("orbSprites");
 
-        if (backgroundColor == null || boardColor == null || boardOutlineColor == null || orbColors == null || orbSprites == null)
+        if (backgroundColor == null || backgroundSprite == null || boardColor == null || boardOutlineColor == null || orbColors == null || orbSprites == null)
         {
             DrawMissingFieldWarning("color settings");
             return;
         }
 
         EditorGUILayout.PropertyField(backgroundColor, new GUIContent("Background"));
+        EditorGUILayout.PropertyField(backgroundSprite, new GUIContent("Background Sprite"));
         EditorGUILayout.PropertyField(boardColor, new GUIContent("Board Fill"));
         EditorGUILayout.PropertyField(boardOutlineColor, new GUIContent("Board Outline"));
         EditorGUILayout.PropertyField(orbColors, new GUIContent("Orb Colors"), true);
         EditorGUILayout.PropertyField(orbSprites, new GUIContent("Orb Sprites (By Type Index)"), true);
         EditorGUILayout.HelpBox(
-            "Type index maps by array position: orbColors[i] + orbSprites[i]. Empty orb sprite slots fall back to the first non-empty orb sprite, then generated white sprite.",
+            "Type index maps by array position: orbColors[i] + orbSprites[i]. Empty orb sprite slots fall back to the first non-empty orb sprite, then generated white sprite. Background Sprite uses original colors.",
             MessageType.None);
 
         using (new EditorGUILayout.HorizontalScope())
@@ -244,10 +246,15 @@ public sealed class Match3ConfigToolWindow : EditorWindow
     {
         EditorGUILayout.LabelField("Enemy & Attack", EditorStyles.boldLabel);
 
+        SerializedProperty enemyPrefab = FindProperty("enemyPrefab");
         SerializedProperty enemySprite = FindProperty("enemySprite");
         SerializedProperty enemyTint = FindProperty("enemyTint");
         SerializedProperty enemySizeInCells = FindProperty("enemySizeInCells");
+        SerializedProperty enemyDisplayScale = FindProperty("enemyDisplayScale");
         SerializedProperty enemyTopMargin = FindProperty("enemyTopMargin");
+        SerializedProperty enemyIdleAnimationState = FindProperty("enemyIdleAnimationState");
+        SerializedProperty enemyHurtAnimationState = FindProperty("enemyHurtAnimationState");
+        SerializedProperty enemyHurtAnimationSeconds = FindProperty("enemyHurtAnimationSeconds");
         SerializedProperty attackEffectPrefab = FindProperty("attackEffectPrefab");
         SerializedProperty attackEffectSprite = FindProperty("attackEffectSprite");
         SerializedProperty attackTravelSeconds = FindProperty("attackTravelSeconds");
@@ -256,7 +263,8 @@ public sealed class Match3ConfigToolWindow : EditorWindow
         SerializedProperty enemyHitShakeInCells = FindProperty("enemyHitShakeInCells");
         SerializedProperty enemyHitShakeSeconds = FindProperty("enemyHitShakeSeconds");
 
-        if (enemySprite == null || enemyTint == null || enemySizeInCells == null || enemyTopMargin == null ||
+        if (enemyPrefab == null || enemySprite == null || enemyTint == null || enemySizeInCells == null || enemyDisplayScale == null || enemyTopMargin == null ||
+            enemyIdleAnimationState == null || enemyHurtAnimationState == null || enemyHurtAnimationSeconds == null ||
             attackEffectPrefab == null || attackEffectSprite == null || attackTravelSeconds == null ||
             attackArcHeight == null || attackEffectScale == null || enemyHitShakeInCells == null || enemyHitShakeSeconds == null)
         {
@@ -264,10 +272,15 @@ public sealed class Match3ConfigToolWindow : EditorWindow
             return;
         }
 
+        EditorGUILayout.PropertyField(enemyPrefab, new GUIContent("Enemy Prefab (Animator)"));
         EditorGUILayout.PropertyField(enemySprite, new GUIContent("Enemy Sprite"));
         EditorGUILayout.PropertyField(enemyTint, new GUIContent("Enemy Tint"));
         enemySizeInCells.floatValue = EditorGUILayout.Slider("Enemy Size (Cells)", enemySizeInCells.floatValue, 0.8f, 3f);
+        enemyDisplayScale.floatValue = EditorGUILayout.Slider("Enemy Display Scale", enemyDisplayScale.floatValue, 0.25f, 8f);
         enemyTopMargin.floatValue = EditorGUILayout.Slider("Enemy Top Margin", enemyTopMargin.floatValue, 0f, 2f);
+        EditorGUILayout.PropertyField(enemyIdleAnimationState, new GUIContent("Enemy Idle State"));
+        EditorGUILayout.PropertyField(enemyHurtAnimationState, new GUIContent("Enemy Hurt State"));
+        enemyHurtAnimationSeconds.floatValue = EditorGUILayout.Slider("Enemy Hurt Time", enemyHurtAnimationSeconds.floatValue, 0.05f, 2f);
         EditorGUILayout.PropertyField(attackEffectPrefab, new GUIContent("Attack Effect Prefab"));
         EditorGUILayout.PropertyField(attackEffectSprite, new GUIContent("Attack Effect Sprite (Fallback)"));
         attackTravelSeconds.floatValue = EditorGUILayout.Slider("Attack Travel Time", attackTravelSeconds.floatValue, 0.05f, 0.5f);
@@ -276,7 +289,7 @@ public sealed class Match3ConfigToolWindow : EditorWindow
         enemyHitShakeInCells.floatValue = EditorGUILayout.Slider("Enemy Hit Shake (Cells)", enemyHitShakeInCells.floatValue, 0.005f, 0.25f);
         enemyHitShakeSeconds.floatValue = EditorGUILayout.Slider("Enemy Hit Shake Time", enemyHitShakeSeconds.floatValue, 0.01f, 0.2f);
         EditorGUILayout.HelpBox(
-            "Matched orbs launch attack FX toward the enemy display. If Attack Effect Prefab is empty, the fallback sprite is used as a projectile.",
+            "If Enemy Prefab is assigned, it should contain an Animator with the configured Idle/Hurt states. Hurt state auto-reverts to Idle after Enemy Hurt Time. Enemy Sprite is used as fallback when prefab is empty.",
             MessageType.None);
     }
 

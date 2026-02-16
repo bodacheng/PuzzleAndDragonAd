@@ -23,6 +23,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
     [Header("Colors")]
     [SerializeField] private Color backgroundColor = new Color(0.12f, 0.16f, 0.25f, 1f);
+    [SerializeField] private Sprite backgroundSprite;
     [SerializeField] private Color boardColor = new Color(0.05f, 0.07f, 0.12f, 0.85f);
     [SerializeField] private Color boardOutlineColor = new Color(0.72f, 0.78f, 0.9f, 0.4f);
     [SerializeField] private Color[] orbColors =
@@ -44,10 +45,15 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     [SerializeField] private Font hudFontOverride;
 
     [Header("Enemy & Attack")]
+    [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private Sprite enemySprite;
     [SerializeField] private Color enemyTint = Color.white;
     [SerializeField] [Range(0.8f, 3f)] private float enemySizeInCells = 1.8f;
+    [SerializeField] [Range(0.25f, 8f)] private float enemyDisplayScale = 1f;
     [SerializeField] private float enemyTopMargin = 0.3f;
+    [SerializeField] private string enemyIdleAnimationState = "Idle";
+    [SerializeField] private string enemyHurtAnimationState = "Hurt";
+    [SerializeField] [Range(0.05f, 2f)] private float enemyHurtAnimationSeconds = 0.22f;
     [SerializeField] private GameObject attackEffectPrefab;
     [SerializeField] private Sprite attackEffectSprite;
     [SerializeField] [Range(0.05f, 0.5f)] private float attackTravelSeconds = 0.18f;
@@ -147,8 +153,11 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private SpriteRenderer boardOutlineRenderer;
     private Transform attackEffectsRoot;
     private Transform enemyTransform;
-    private SpriteRenderer enemyRenderer;
-    private Color enemyBaseColor = Color.white;
+    private Transform enemyVisualRoot;
+    private SpriteRenderer[] enemyRenderers = new SpriteRenderer[0];
+    private Color[] enemyBaseRendererColors = new Color[0];
+    private Animator enemyAnimator;
+    private float enemyVisualBaseDiameter = 1f;
     private Vector3 enemyAnchorPosition;
 
     private Orb[,] board;
@@ -200,6 +209,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private bool enemyHitFeedbackActive;
     private float enemyHitFeedbackTimer;
     private float enemyHitFeedbackDuration;
+    private bool enemyHurtAnimationActive;
+    private float enemyHurtAnimationTimer;
     private bool bgmEnabled = true;
     private bool attackSfxEnabled = true;
     private bool match3SfxEnabled = true;
@@ -253,6 +264,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         TryStartBgmOnUserGesture();
         UpdateActiveAttackEffects();
         UpdateEnemyHitFeedback();
+        UpdateEnemyHurtAnimation();
         RecoverFromResolveStallIfNeeded();
 
         if (!roundEnded && !isResolving && HasAnyEmptyCell())
@@ -375,6 +387,16 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
     public void ConfigureEnemyPresentation(Sprite configuredEnemySprite, GameObject configuredAttackEffectPrefab)
     {
+        ConfigureEnemyPresentation(null, configuredEnemySprite, configuredAttackEffectPrefab);
+    }
+
+    public void ConfigureEnemyPresentation(GameObject configuredEnemyPrefab, Sprite configuredEnemySprite, GameObject configuredAttackEffectPrefab)
+    {
+        if (configuredEnemyPrefab != null)
+        {
+            enemyPrefab = configuredEnemyPrefab;
+        }
+
         if (configuredEnemySprite != null)
         {
             enemySprite = configuredEnemySprite;
@@ -468,6 +490,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         score = 0;
         lastMoveCombos = 0;
         timeRemaining = Mathf.Max(5f, roundDurationSeconds);
+        ResetEnemyHitVisuals();
+        ResetEnemyAnimatorToIdle();
 
         ClearBoard();
         BuildInitialBoard();
@@ -834,7 +858,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
     private void TriggerEnemyHitFeedback()
     {
-        if (enemyRenderer == null || enemyTransform == null)
+        if (enemyTransform == null)
         {
             return;
         }
@@ -842,7 +866,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         enemyHitFeedbackActive = true;
         enemyHitFeedbackDuration = Mathf.Max(0.01f, enemyHitShakeSeconds);
         enemyHitFeedbackTimer = enemyHitFeedbackDuration;
-        enemyRenderer.color = Color.Lerp(enemyBaseColor, Color.white, 0.55f);
+        SetEnemyRenderersFlash(0.55f);
+        TriggerEnemyHurtAnimation();
     }
 
     private void UpdateEnemyHitFeedback()
@@ -852,7 +877,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             return;
         }
 
-        if (enemyRenderer == null || enemyTransform == null)
+        if (enemyTransform == null)
         {
             enemyHitFeedbackActive = false;
             return;
@@ -878,15 +903,97 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         enemyHitFeedbackTimer = 0f;
         enemyHitFeedbackDuration = 0f;
 
-        if (enemyRenderer != null)
+        int rendererCount = Mathf.Min(enemyRenderers.Length, enemyBaseRendererColors.Length);
+        for (int i = 0; i < rendererCount; i++)
         {
-            enemyRenderer.color = enemyBaseColor;
+            SpriteRenderer renderer = enemyRenderers[i];
+            if (renderer == null)
+            {
+                continue;
+            }
+
+            renderer.color = enemyBaseRendererColors[i];
         }
 
         if (enemyTransform != null)
         {
             enemyTransform.position = enemyAnchorPosition;
         }
+    }
+
+    private void SetEnemyRenderersFlash(float whiteBlend)
+    {
+        int rendererCount = Mathf.Min(enemyRenderers.Length, enemyBaseRendererColors.Length);
+        float clampedBlend = Mathf.Clamp01(whiteBlend);
+        for (int i = 0; i < rendererCount; i++)
+        {
+            SpriteRenderer renderer = enemyRenderers[i];
+            if (renderer == null)
+            {
+                continue;
+            }
+
+            renderer.color = Color.Lerp(enemyBaseRendererColors[i], Color.white, clampedBlend);
+        }
+    }
+
+    private void TriggerEnemyHurtAnimation()
+    {
+        if (enemyAnimator == null || string.IsNullOrEmpty(enemyHurtAnimationState))
+        {
+            return;
+        }
+
+        enemyHurtAnimationTimer = Mathf.Max(0.01f, enemyHurtAnimationSeconds);
+        enemyHurtAnimationActive = true;
+        PlayEnemyAnimationState(enemyHurtAnimationState);
+    }
+
+    private void UpdateEnemyHurtAnimation()
+    {
+        if (!enemyHurtAnimationActive)
+        {
+            return;
+        }
+
+        if (enemyAnimator == null)
+        {
+            enemyHurtAnimationActive = false;
+            enemyHurtAnimationTimer = 0f;
+            return;
+        }
+
+        enemyHurtAnimationTimer -= GetSafeUnscaledDeltaTime();
+        if (enemyHurtAnimationTimer > 0f)
+        {
+            return;
+        }
+
+        enemyHurtAnimationActive = false;
+        enemyHurtAnimationTimer = 0f;
+        PlayEnemyAnimationState(enemyIdleAnimationState);
+    }
+
+    private void ResetEnemyAnimatorToIdle()
+    {
+        enemyHurtAnimationActive = false;
+        enemyHurtAnimationTimer = 0f;
+        PlayEnemyAnimationState(enemyIdleAnimationState);
+    }
+
+    private void PlayEnemyAnimationState(string stateName)
+    {
+        if (enemyAnimator == null || string.IsNullOrEmpty(stateName))
+        {
+            return;
+        }
+
+        if (!enemyAnimator.isActiveAndEnabled || enemyAnimator.runtimeAnimatorController == null)
+        {
+            return;
+        }
+
+        enemyAnimator.Play(stateName, 0, 0f);
     }
 
     private IEnumerator CollapseColumns()
@@ -1719,8 +1826,6 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             GameObject enemyObject = new GameObject("EnemyDisplay");
             enemyObject.transform.SetParent(boardRoot, worldPositionStays: false);
             enemyTransform = enemyObject.transform;
-            enemyRenderer = enemyObject.AddComponent<SpriteRenderer>();
-            enemyRenderer.sortingOrder = 16;
         }
 
         ApplyBackgroundVisuals();
@@ -1735,8 +1840,9 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             return;
         }
 
-        backgroundRenderer.sprite = GetBoardSprite();
-        backgroundRenderer.color = backgroundColor;
+        bool hasConfiguredBackgroundSprite = backgroundSprite != null;
+        backgroundRenderer.sprite = GetBackgroundSprite();
+        backgroundRenderer.color = hasConfiguredBackgroundSprite ? Color.white : backgroundColor;
         ApplyRendererMaterial(backgroundRenderer);
         UpdateBackgroundTransform();
 
@@ -1767,18 +1873,160 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
     private void ApplyEnemyVisuals()
     {
-        if (enemyRenderer == null)
+        if (enemyTransform == null)
         {
             return;
         }
 
-        Sprite configuredSprite = enemySprite != null ? enemySprite : GetAnyConfiguredOrbSprite();
-        enemyRenderer.sprite = PrepareSpriteForRuntime(configuredSprite != null ? configuredSprite : GetGeneratedFallbackSprite());
-        enemyBaseColor = enemyTint;
-        enemyRenderer.color = enemyBaseColor;
-        enemyRenderer.sortingOrder = 16;
-        ApplyRendererMaterial(enemyRenderer);
+        RebuildEnemyVisual();
+        ResetEnemyAnimatorToIdle();
+        ResetEnemyHitVisuals();
         UpdateEnemyTransform();
+    }
+
+    private void RebuildEnemyVisual()
+    {
+        ClearEnemyVisual();
+        enemyTransform.localScale = Vector3.one;
+        enemyAnimator = null;
+        enemyRenderers = new SpriteRenderer[0];
+        enemyBaseRendererColors = new Color[0];
+        enemyVisualBaseDiameter = 1f;
+
+        if (enemyPrefab != null)
+        {
+            GameObject enemyInstance = Instantiate(enemyPrefab);
+            enemyInstance.name = enemyPrefab.name;
+            enemyInstance.transform.SetParent(enemyTransform, worldPositionStays: false);
+            enemyVisualRoot = enemyInstance.transform;
+        }
+        else
+        {
+            GameObject fallbackObject = new GameObject("EnemySpriteFallback");
+            fallbackObject.transform.SetParent(enemyTransform, worldPositionStays: false);
+            SpriteRenderer fallbackRenderer = fallbackObject.AddComponent<SpriteRenderer>();
+            Sprite configuredSprite = enemySprite != null ? enemySprite : GetAnyConfiguredOrbSprite();
+            fallbackRenderer.sprite = PrepareSpriteForRuntime(configuredSprite != null ? configuredSprite : GetGeneratedFallbackSprite());
+            enemyVisualRoot = fallbackObject.transform;
+        }
+
+        if (enemyVisualRoot == null)
+        {
+            return;
+        }
+
+        enemyVisualRoot.localPosition = Vector3.zero;
+        enemyVisualRoot.localRotation = Quaternion.identity;
+        enemyVisualRoot.localScale = Vector3.one;
+        enemyAnimator = enemyVisualRoot.GetComponentInChildren<Animator>(includeInactive: true);
+        CaptureEnemyRenderers();
+        enemyVisualBaseDiameter = Mathf.Max(0.01f, CalculateEnemyVisualBaseDiameter());
+    }
+
+    private void ClearEnemyVisual()
+    {
+        if (enemyTransform == null)
+        {
+            return;
+        }
+
+        for (int i = enemyTransform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = enemyTransform.GetChild(i);
+            if (child != null)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        enemyVisualRoot = null;
+    }
+
+    private void CaptureEnemyRenderers()
+    {
+        if (enemyVisualRoot == null)
+        {
+            enemyRenderers = new SpriteRenderer[0];
+            enemyBaseRendererColors = new Color[0];
+            return;
+        }
+
+        enemyRenderers = enemyVisualRoot.GetComponentsInChildren<SpriteRenderer>(includeInactive: true);
+        enemyBaseRendererColors = new Color[enemyRenderers.Length];
+
+        int minSortingOrder = int.MaxValue;
+        for (int i = 0; i < enemyRenderers.Length; i++)
+        {
+            SpriteRenderer renderer = enemyRenderers[i];
+            if (renderer == null)
+            {
+                continue;
+            }
+
+            minSortingOrder = Mathf.Min(minSortingOrder, renderer.sortingOrder);
+        }
+
+        int sortingOffset = minSortingOrder == int.MaxValue ? 0 : 16 - minSortingOrder;
+        for (int i = 0; i < enemyRenderers.Length; i++)
+        {
+            SpriteRenderer renderer = enemyRenderers[i];
+            if (renderer == null)
+            {
+                continue;
+            }
+
+            renderer.sortingOrder += sortingOffset;
+            ApplyRendererMaterial(renderer);
+
+            Color baseColor = MultiplyColor(renderer.color, enemyTint);
+            enemyBaseRendererColors[i] = baseColor;
+            renderer.color = baseColor;
+        }
+    }
+
+    private float CalculateEnemyVisualBaseDiameter()
+    {
+        if (enemyRenderers == null || enemyRenderers.Length == 0)
+        {
+            return 1f;
+        }
+
+        Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
+        bool hasBounds = false;
+        for (int i = 0; i < enemyRenderers.Length; i++)
+        {
+            SpriteRenderer renderer = enemyRenderers[i];
+            if (renderer == null || renderer.sprite == null)
+            {
+                continue;
+            }
+
+            if (!hasBounds)
+            {
+                bounds = renderer.bounds;
+                hasBounds = true;
+            }
+            else
+            {
+                bounds.Encapsulate(renderer.bounds);
+            }
+        }
+
+        if (!hasBounds)
+        {
+            return 1f;
+        }
+
+        return Mathf.Max(0.01f, Mathf.Max(bounds.size.x, bounds.size.y));
+    }
+
+    private static Color MultiplyColor(Color source, Color multiplier)
+    {
+        return new Color(
+            source.r * multiplier.r,
+            source.g * multiplier.g,
+            source.b * multiplier.b,
+            source.a * multiplier.a);
     }
 
     private void ApplyOrbVisuals(Orb orb)
@@ -1815,6 +2063,16 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private Sprite GetBoardSprite()
     {
         return GetGeneratedFallbackSprite();
+    }
+
+    private Sprite GetBackgroundSprite()
+    {
+        if (backgroundSprite != null)
+        {
+            return PrepareSpriteForRuntime(backgroundSprite);
+        }
+
+        return GetBoardSprite();
     }
 
     private Sprite GetAnyConfiguredOrbSprite()
@@ -2550,13 +2808,14 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
     private void UpdateEnemyTransform()
     {
-        if (enemyTransform == null || enemyRenderer == null || gameplayCamera == null || !layoutInitialized)
+        if (enemyTransform == null || gameplayCamera == null || !layoutInitialized)
         {
             return;
         }
 
-        float enemyDiameter = Mathf.Max(0.25f, cellSize * enemySizeInCells);
-        SetTransformDiameter(enemyTransform, enemyRenderer.sprite, enemyDiameter);
+        float enemyDiameter = Mathf.Max(0.25f, cellSize * enemySizeInCells * enemyDisplayScale);
+        float scale = enemyDiameter / Mathf.Max(0.01f, enemyVisualBaseDiameter);
+        enemyTransform.localScale = new Vector3(scale, scale, 1f);
 
         float boardTopY = boardBottomLeft.y + boardWorldHeight;
         float desiredY = boardTopY + enemyTopMargin + (enemyDiameter * 0.5f);
@@ -2735,7 +2994,19 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         fallDurationSeconds = Mathf.Max(0.01f, fallDurationSeconds);
         resolveStallTimeoutSeconds = Mathf.Max(1f, resolveStallTimeoutSeconds);
         enemySizeInCells = Mathf.Clamp(enemySizeInCells, 0.8f, 3f);
+        enemyDisplayScale = Mathf.Clamp(enemyDisplayScale, 0.25f, 8f);
         enemyTopMargin = Mathf.Max(0f, enemyTopMargin);
+        enemyHurtAnimationSeconds = Mathf.Clamp(enemyHurtAnimationSeconds, 0.05f, 2f);
+        if (!string.IsNullOrEmpty(enemyIdleAnimationState))
+        {
+            enemyIdleAnimationState = enemyIdleAnimationState.Trim();
+        }
+
+        if (!string.IsNullOrEmpty(enemyHurtAnimationState))
+        {
+            enemyHurtAnimationState = enemyHurtAnimationState.Trim();
+        }
+
         attackTravelSeconds = Mathf.Max(0.05f, attackTravelSeconds);
         attackArcHeight = Mathf.Max(0f, attackArcHeight);
         attackEffectScale = Mathf.Clamp(attackEffectScale, 0.1f, 1.5f);

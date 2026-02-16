@@ -18,6 +18,9 @@ public sealed class PlayworksComplianceHooks : MonoBehaviour
     [LunaPlaygroundField("Attack FX Prefab", 4, "Gameplay")]
     [SerializeField] private GameObject attackEffectPrefab;
 
+    [LunaPlaygroundField("Enemy Prefab", 5, "Gameplay")]
+    [SerializeField] private GameObject enemyPrefab;
+
     private bool gameEnded;
 
     private void Start()
@@ -39,7 +42,7 @@ public sealed class PlayworksComplianceHooks : MonoBehaviour
         if (gameplay != null)
         {
             gameplay.ApplyPlaygroundVariant(gameplayVariant);
-            gameplay.ConfigureEnemyPresentation(enemySprite, attackEffectPrefab);
+            gameplay.ConfigureEnemyPresentation(enemyPrefab, enemySprite, attackEffectPrefab);
         }
 
         // LP3007 custom event
