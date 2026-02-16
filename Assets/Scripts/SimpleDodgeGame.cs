@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public sealed class SimpleDodgeGame : MonoBehaviour
@@ -54,6 +55,13 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     [SerializeField] [Range(0.1f, 1.5f)] private float attackEffectScale = 0.3f;
     [SerializeField] [Range(0.005f, 0.25f)] private float enemyHitShakeInCells = 0.03f;
     [SerializeField] [Range(0.01f, 0.2f)] private float enemyHitShakeSeconds = 0.07f;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip bgmClip;
+    [SerializeField] private AudioClip attackSfxClip;
+    [SerializeField] private AudioClip match3SfxClip;
+    [SerializeField] [Range(0f, 1f)] private float bgmVolume = 0.6f;
+    [SerializeField] [Range(0f, 1f)] private float sfxVolume = 0.9f;
 
     private sealed class Orb
     {
@@ -121,6 +129,9 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         new Vector2Int(0, -1),
     };
     private const string HudFontResourceName = "HudFont";
+    private const string PrefKeyBgmEnabled = "SimpleDodgeGame.BgmEnabled";
+    private const string PrefKeyAttackSfxEnabled = "SimpleDodgeGame.AttackSfxEnabled";
+    private const string PrefKeyMatch3SfxEnabled = "SimpleDodgeGame.Match3SfxEnabled";
 
     private static Sprite generatedFallbackSprite;
     private static Texture2D generatedFallbackTexture;
@@ -165,6 +176,13 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private Text timeText;
     private Text comboText;
     private Text resultText;
+    private Button settingsButton;
+    private GameObject settingsPanelObject;
+    private Toggle bgmToggle;
+    private Toggle attackSfxToggle;
+    private Toggle match3SfxToggle;
+    private AudioSource bgmAudioSource;
+    private AudioSource sfxAudioSource;
     private readonly List<OrbMove> moveBuffer = new List<OrbMove>(64);
     private readonly List<ActiveAttackEffect> activeAttackEffects = new List<ActiveAttackEffect>(96);
     private readonly List<Vector2Int> matchedCellsBuffer = new List<Vector2Int>(64);
@@ -182,6 +200,11 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private bool enemyHitFeedbackActive;
     private float enemyHitFeedbackTimer;
     private float enemyHitFeedbackDuration;
+    private bool bgmEnabled = true;
+    private bool attackSfxEnabled = true;
+    private bool match3SfxEnabled = true;
+    private float nextAttackSfxAllowedAt;
+    private bool shouldRetryBgmStart;
 
     private void Awake()
     {
@@ -206,12 +229,15 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         complianceHooks = GetComponent<PlayworksComplianceHooks>();
         ValidateConfig();
         WarnIfMissingSpriteSetup();
+        LoadAudioSettings();
 
         gameplayZ = GetGameplayZ();
         pointerDepth = Mathf.Abs(gameplayZ - gameplayCamera.transform.position.z);
 
         CreateRuntimeVisuals();
         CreateRuntimeHud();
+        CreateAudioSources();
+        ApplyAudioSettingsToRuntime();
         UpdateLayout(force: true);
         ResetRound();
     }
@@ -224,6 +250,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
 
         UpdateLayout(force: false);
+        TryStartBgmOnUserGesture();
         UpdateActiveAttackEffects();
         UpdateEnemyHitFeedback();
         RecoverFromResolveStallIfNeeded();
@@ -236,7 +263,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         if (roundEnded)
         {
 #if UNITY_LUNA
-            if (PointerPressedThisFrame())
+            if (!IsPointerOverUi() && PointerPressedThisFrame())
             {
                 if (complianceHooks != null)
                 {
@@ -248,7 +275,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
                 }
             }
 #else
-            if (Input.GetKeyDown(KeyCode.R) || PointerPressedThisFrame())
+            if (Input.GetKeyDown(KeyCode.R) || (!IsPointerOverUi() && PointerPressedThisFrame()))
             {
                 ResetRound();
             }
@@ -311,6 +338,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
 
         RefreshVisualsNow();
+        ApplyAudioSettingsToRuntime();
+        UpdateAudioSettingsUiState();
     }
 
     public void RefreshVisualsNow()
@@ -471,6 +500,11 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
     private void HandleDragInput()
     {
+        if (!isDragging && IsPointerOverUi())
+        {
+            return;
+        }
+
         if (!isDragging)
         {
             if (TryGetPointerDownWorld(out Vector3 worldPosition) && TryWorldToCell(worldPosition, out Vector2Int pressedCell))
@@ -518,6 +552,25 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
 
         return false;
+    }
+
+    private static bool IsPointerOverUi()
+    {
+        EventSystem eventSystem = EventSystem.current;
+        if (eventSystem == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < Input.touchCount; i++)
+        {
+            if (eventSystem.IsPointerOverGameObject(Input.GetTouch(i).fingerId))
+            {
+                return true;
+            }
+        }
+
+        return eventSystem.IsPointerOverGameObject();
     }
 
     private void DragHeldOrbToward(Vector2Int targetCell)
@@ -629,6 +682,13 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
     private void RemoveMatchedCells(List<Vector2Int> matchedCells)
     {
+        if (matchedCells == null || matchedCells.Count == 0)
+        {
+            return;
+        }
+
+        PlayMatch3Sfx();
+
         for (int i = 0; i < matchedCells.Count; i++)
         {
             Vector2Int cell = matchedCells[i];
@@ -764,6 +824,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             attack.transform.position = attack.to;
         }
 
+        TryPlayAttackSfx();
         TriggerEnemyHitFeedback();
         if (attack.gameObject != null)
         {
@@ -1807,6 +1868,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             return;
         }
 
+        EnsureRuntimeEventSystem();
+
         GameObject canvasObject = new GameObject("RuntimeHud");
         hudRootTransform = canvasObject.transform;
 
@@ -1820,7 +1883,9 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         timeText = CreateHudText(canvasObject.transform, "TimeText", font, 28, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -54f), new Vector2(460f, 42f), TextAnchor.MiddleLeft);
         comboText = CreateHudText(canvasObject.transform, "ComboText", font, 28, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -92f), new Vector2(560f, 42f), TextAnchor.MiddleLeft);
         resultText = CreateHudText(canvasObject.transform, "ResultText", font, 34, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(700f, 220f), TextAnchor.MiddleCenter);
+        CreateAudioSettingsUi(canvasObject.transform, font);
         SetResultVisible(false);
+        UpdateAudioSettingsUiState();
         UpdateHudTexts();
     }
 
@@ -1861,6 +1926,443 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         rectTransform.anchoredPosition = anchoredPosition;
         rectTransform.sizeDelta = sizeDelta;
         return text;
+    }
+
+    private static void EnsureRuntimeEventSystem()
+    {
+        if (EventSystem.current != null)
+        {
+            return;
+        }
+
+        GameObject eventSystemObject = new GameObject("RuntimeEventSystem");
+        eventSystemObject.AddComponent<EventSystem>();
+        eventSystemObject.AddComponent<StandaloneInputModule>();
+    }
+
+    private void CreateAudioSettingsUi(Transform parent, Font font)
+    {
+        settingsButton = CreateHudButton(
+            parent,
+            "SettingsButton",
+            font,
+            24,
+            new Vector2(1f, 1f),
+            new Vector2(1f, 1f),
+            new Vector2(1f, 1f),
+            new Vector2(-16f, -18f),
+            new Vector2(170f, 42f),
+            "Settings");
+        if (settingsButton != null)
+        {
+            settingsButton.onClick.AddListener(ToggleSettingsPanelVisibility);
+        }
+
+        GameObject panelObject = new GameObject("SettingsPanel", typeof(RectTransform), typeof(Image), typeof(Outline));
+        panelObject.transform.SetParent(parent, false);
+        settingsPanelObject = panelObject;
+
+        RectTransform panelRect = panelObject.GetComponent<RectTransform>();
+        panelRect.anchorMin = new Vector2(1f, 1f);
+        panelRect.anchorMax = new Vector2(1f, 1f);
+        panelRect.pivot = new Vector2(1f, 1f);
+        panelRect.anchoredPosition = new Vector2(-16f, -64f);
+        panelRect.sizeDelta = new Vector2(300f, 184f);
+
+        Image panelImage = panelObject.GetComponent<Image>();
+        panelImage.color = new Color(0f, 0f, 0f, 0.72f);
+        panelImage.raycastTarget = true;
+
+        Outline panelOutline = panelObject.GetComponent<Outline>();
+        panelOutline.effectColor = new Color(1f, 1f, 1f, 0.22f);
+        panelOutline.effectDistance = new Vector2(1.5f, -1.5f);
+
+        Text titleText = CreateHudText(
+            panelObject.transform,
+            "SettingsTitle",
+            font,
+            23,
+            new Vector2(0f, 1f),
+            new Vector2(1f, 1f),
+            new Vector2(0.5f, 1f),
+            new Vector2(0f, -16f),
+            new Vector2(-20f, 34f),
+            TextAnchor.MiddleCenter);
+        if (titleText != null)
+        {
+            titleText.text = "Audio Settings";
+        }
+
+        bgmToggle = CreateAudioToggle(
+            panelObject.transform,
+            "BgmToggle",
+            font,
+            "BGM",
+            bgmEnabled,
+            new Vector2(12f, -56f));
+        if (bgmToggle != null)
+        {
+            bgmToggle.onValueChanged.AddListener(OnBgmToggleChanged);
+        }
+
+        attackSfxToggle = CreateAudioToggle(
+            panelObject.transform,
+            "AttackSfxToggle",
+            font,
+            "Attack SFX",
+            attackSfxEnabled,
+            new Vector2(12f, -94f));
+        if (attackSfxToggle != null)
+        {
+            attackSfxToggle.onValueChanged.AddListener(OnAttackSfxToggleChanged);
+        }
+
+        match3SfxToggle = CreateAudioToggle(
+            panelObject.transform,
+            "Match3SfxToggle",
+            font,
+            "Match-3 SFX",
+            match3SfxEnabled,
+            new Vector2(12f, -132f));
+        if (match3SfxToggle != null)
+        {
+            match3SfxToggle.onValueChanged.AddListener(OnMatch3SfxToggleChanged);
+        }
+
+        SetSettingsPanelVisible(false);
+    }
+
+    private static Button CreateHudButton(
+        Transform parent,
+        string objectName,
+        Font font,
+        int fontSize,
+        Vector2 anchorMin,
+        Vector2 anchorMax,
+        Vector2 pivot,
+        Vector2 anchoredPosition,
+        Vector2 sizeDelta,
+        string label)
+    {
+        GameObject buttonObject = new GameObject(objectName, typeof(RectTransform), typeof(Image), typeof(Button));
+        buttonObject.transform.SetParent(parent, false);
+
+        RectTransform rectTransform = buttonObject.GetComponent<RectTransform>();
+        rectTransform.anchorMin = anchorMin;
+        rectTransform.anchorMax = anchorMax;
+        rectTransform.pivot = pivot;
+        rectTransform.anchoredPosition = anchoredPosition;
+        rectTransform.sizeDelta = sizeDelta;
+
+        Image image = buttonObject.GetComponent<Image>();
+        image.color = new Color(0f, 0f, 0f, 0.72f);
+        image.raycastTarget = true;
+
+        Button button = buttonObject.GetComponent<Button>();
+        button.targetGraphic = image;
+        ColorBlock colors = button.colors;
+        colors.normalColor = Color.white;
+        colors.highlightedColor = new Color(1f, 1f, 1f, 0.92f);
+        colors.pressedColor = new Color(0.86f, 0.86f, 0.86f, 1f);
+        button.colors = colors;
+
+        Text labelText = CreateHudText(
+            buttonObject.transform,
+            "Label",
+            font,
+            fontSize,
+            new Vector2(0f, 0f),
+            new Vector2(1f, 1f),
+            new Vector2(0.5f, 0.5f),
+            Vector2.zero,
+            Vector2.zero,
+            TextAnchor.MiddleCenter);
+        if (labelText != null)
+        {
+            labelText.text = label;
+            labelText.raycastTarget = false;
+        }
+
+        return button;
+    }
+
+    private static Toggle CreateAudioToggle(
+        Transform parent,
+        string objectName,
+        Font font,
+        string label,
+        bool defaultValue,
+        Vector2 anchoredPosition)
+    {
+        GameObject toggleObject = new GameObject(objectName, typeof(RectTransform), typeof(Toggle));
+        toggleObject.transform.SetParent(parent, false);
+
+        RectTransform toggleRect = toggleObject.GetComponent<RectTransform>();
+        toggleRect.anchorMin = new Vector2(0f, 1f);
+        toggleRect.anchorMax = new Vector2(1f, 1f);
+        toggleRect.pivot = new Vector2(0f, 1f);
+        toggleRect.anchoredPosition = anchoredPosition;
+        toggleRect.sizeDelta = new Vector2(-24f, 28f);
+
+        Toggle toggle = toggleObject.GetComponent<Toggle>();
+
+        GameObject backgroundObject = new GameObject("Background", typeof(RectTransform), typeof(Image));
+        backgroundObject.transform.SetParent(toggleObject.transform, false);
+        RectTransform backgroundRect = backgroundObject.GetComponent<RectTransform>();
+        backgroundRect.anchorMin = new Vector2(0f, 0.5f);
+        backgroundRect.anchorMax = new Vector2(0f, 0.5f);
+        backgroundRect.pivot = new Vector2(0f, 0.5f);
+        backgroundRect.anchoredPosition = Vector2.zero;
+        backgroundRect.sizeDelta = new Vector2(22f, 22f);
+
+        Image backgroundImage = backgroundObject.GetComponent<Image>();
+        backgroundImage.color = new Color(1f, 1f, 1f, 0.9f);
+        backgroundImage.raycastTarget = true;
+
+        GameObject checkmarkObject = new GameObject("Checkmark", typeof(RectTransform), typeof(Image));
+        checkmarkObject.transform.SetParent(backgroundObject.transform, false);
+        RectTransform checkmarkRect = checkmarkObject.GetComponent<RectTransform>();
+        checkmarkRect.anchorMin = new Vector2(0.5f, 0.5f);
+        checkmarkRect.anchorMax = new Vector2(0.5f, 0.5f);
+        checkmarkRect.pivot = new Vector2(0.5f, 0.5f);
+        checkmarkRect.anchoredPosition = Vector2.zero;
+        checkmarkRect.sizeDelta = new Vector2(14f, 14f);
+
+        Image checkmarkImage = checkmarkObject.GetComponent<Image>();
+        checkmarkImage.color = new Color(0.13f, 0.82f, 0.38f, 1f);
+        checkmarkImage.raycastTarget = false;
+
+        Text labelText = CreateHudText(
+            toggleObject.transform,
+            "Label",
+            font,
+            21,
+            new Vector2(0f, 0f),
+            new Vector2(1f, 1f),
+            new Vector2(0f, 0.5f),
+            new Vector2(32f, 0f),
+            new Vector2(-32f, 0f),
+            TextAnchor.MiddleLeft);
+        if (labelText != null)
+        {
+            labelText.text = label;
+            labelText.fontStyle = FontStyle.Normal;
+            labelText.raycastTarget = false;
+        }
+
+        toggle.targetGraphic = backgroundImage;
+        toggle.graphic = checkmarkImage;
+        toggle.isOn = defaultValue;
+        return toggle;
+    }
+
+    private void ToggleSettingsPanelVisibility()
+    {
+        bool currentlyVisible = settingsPanelObject != null && settingsPanelObject.activeSelf;
+        SetSettingsPanelVisible(!currentlyVisible);
+    }
+
+    private void SetSettingsPanelVisible(bool visible)
+    {
+        if (settingsPanelObject != null)
+        {
+            settingsPanelObject.SetActive(visible);
+        }
+    }
+
+    private void UpdateAudioSettingsUiState()
+    {
+        if (bgmToggle != null)
+        {
+            bgmToggle.SetIsOnWithoutNotify(bgmEnabled);
+        }
+
+        if (attackSfxToggle != null)
+        {
+            attackSfxToggle.SetIsOnWithoutNotify(attackSfxEnabled);
+        }
+
+        if (match3SfxToggle != null)
+        {
+            match3SfxToggle.SetIsOnWithoutNotify(match3SfxEnabled);
+        }
+    }
+
+    private void OnBgmToggleChanged(bool isOn)
+    {
+        SetBgmEnabled(isOn, savePreference: true);
+    }
+
+    private void OnAttackSfxToggleChanged(bool isOn)
+    {
+        SetAttackSfxEnabled(isOn, savePreference: true);
+    }
+
+    private void OnMatch3SfxToggleChanged(bool isOn)
+    {
+        SetMatch3SfxEnabled(isOn, savePreference: true);
+    }
+
+    private void LoadAudioSettings()
+    {
+        bgmEnabled = PlayerPrefs.GetInt(PrefKeyBgmEnabled, 1) != 0;
+        attackSfxEnabled = PlayerPrefs.GetInt(PrefKeyAttackSfxEnabled, 1) != 0;
+        match3SfxEnabled = PlayerPrefs.GetInt(PrefKeyMatch3SfxEnabled, 1) != 0;
+    }
+
+    private void CreateAudioSources()
+    {
+        if (bgmAudioSource == null)
+        {
+            GameObject bgmObject = new GameObject("BgmAudioSource");
+            bgmObject.transform.SetParent(transform, false);
+            bgmAudioSource = bgmObject.AddComponent<AudioSource>();
+            bgmAudioSource.playOnAwake = false;
+            bgmAudioSource.loop = true;
+            bgmAudioSource.spatialBlend = 0f;
+            TrySetIgnoreListenerPause(bgmAudioSource, true);
+        }
+
+        if (sfxAudioSource == null)
+        {
+            GameObject sfxObject = new GameObject("SfxAudioSource");
+            sfxObject.transform.SetParent(transform, false);
+            sfxAudioSource = sfxObject.AddComponent<AudioSource>();
+            sfxAudioSource.playOnAwake = false;
+            sfxAudioSource.loop = false;
+            sfxAudioSource.spatialBlend = 0f;
+            TrySetIgnoreListenerPause(sfxAudioSource, true);
+        }
+    }
+
+    private static void TrySetIgnoreListenerPause(AudioSource source, bool ignorePause)
+    {
+        if (source == null)
+        {
+            return;
+        }
+
+        try
+        {
+            System.Reflection.PropertyInfo property = source.GetType().GetProperty("ignoreListenerPause");
+            if (property == null || !property.CanWrite)
+            {
+                return;
+            }
+
+            property.SetValue(source, ignorePause, null);
+        }
+        catch
+        {
+            // Older runtime profile may not expose this property.
+        }
+    }
+
+    private void ApplyAudioSettingsToRuntime()
+    {
+        if (bgmAudioSource != null)
+        {
+            bgmAudioSource.clip = bgmClip;
+            bgmAudioSource.volume = Mathf.Clamp01(bgmVolume);
+            if (bgmEnabled && bgmClip != null)
+            {
+                if (!bgmAudioSource.isPlaying)
+                {
+                    bgmAudioSource.Play();
+                }
+            }
+            else if (bgmAudioSource.isPlaying)
+            {
+                bgmAudioSource.Stop();
+            }
+        }
+
+        if (sfxAudioSource != null)
+        {
+            sfxAudioSource.volume = Mathf.Clamp01(sfxVolume);
+        }
+
+        shouldRetryBgmStart = bgmEnabled && bgmClip != null && bgmAudioSource != null && !bgmAudioSource.isPlaying;
+    }
+
+    private void SetBgmEnabled(bool enabled, bool savePreference)
+    {
+        bgmEnabled = enabled;
+        if (savePreference)
+        {
+            PlayerPrefs.SetInt(PrefKeyBgmEnabled, bgmEnabled ? 1 : 0);
+        }
+
+        UpdateAudioSettingsUiState();
+        ApplyAudioSettingsToRuntime();
+    }
+
+    private void SetAttackSfxEnabled(bool enabled, bool savePreference)
+    {
+        attackSfxEnabled = enabled;
+        if (savePreference)
+        {
+            PlayerPrefs.SetInt(PrefKeyAttackSfxEnabled, attackSfxEnabled ? 1 : 0);
+        }
+
+        UpdateAudioSettingsUiState();
+    }
+
+    private void SetMatch3SfxEnabled(bool enabled, bool savePreference)
+    {
+        match3SfxEnabled = enabled;
+        if (savePreference)
+        {
+            PlayerPrefs.SetInt(PrefKeyMatch3SfxEnabled, match3SfxEnabled ? 1 : 0);
+        }
+
+        UpdateAudioSettingsUiState();
+    }
+
+    private void PlayMatch3Sfx()
+    {
+        if (!match3SfxEnabled)
+        {
+            return;
+        }
+
+        PlaySfx(match3SfxClip);
+    }
+
+    private void TryPlayAttackSfx()
+    {
+        if (!attackSfxEnabled || Time.unscaledTime < nextAttackSfxAllowedAt)
+        {
+            return;
+        }
+
+        nextAttackSfxAllowedAt = Time.unscaledTime + 0.04f;
+        PlaySfx(attackSfxClip);
+    }
+
+    private void PlaySfx(AudioClip clip)
+    {
+        if (clip == null || sfxAudioSource == null)
+        {
+            return;
+        }
+
+        sfxAudioSource.PlayOneShot(clip, Mathf.Clamp01(sfxVolume));
+    }
+
+    private void TryStartBgmOnUserGesture()
+    {
+        if (!shouldRetryBgmStart)
+        {
+            return;
+        }
+
+        if (!PointerPressedThisFrame())
+        {
+            return;
+        }
+
+        ApplyAudioSettingsToRuntime();
     }
 
     private void UpdateHudTexts()
@@ -2239,6 +2741,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         attackEffectScale = Mathf.Clamp(attackEffectScale, 0.1f, 1.5f);
         enemyHitShakeInCells = Mathf.Clamp(enemyHitShakeInCells, 0.005f, 0.25f);
         enemyHitShakeSeconds = Mathf.Clamp(enemyHitShakeSeconds, 0.01f, 0.2f);
+        bgmVolume = Mathf.Clamp01(bgmVolume);
+        sfxVolume = Mathf.Clamp01(sfxVolume);
 
         if (orbColors == null || orbColors.Length < 4)
         {

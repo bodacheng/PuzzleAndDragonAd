@@ -286,6 +286,11 @@ MonoBehaviour:
   attackEffectScale: 0.3
   enemyHitShakeInCells: 0.1345
   enemyHitShakeSeconds: 0.2
+  bgmClip: {fileID: 8300000, guid: d1ee67d0d87c34fa0ac688c6cc669c72, type: 3}
+  attackSfxClip: {fileID: 8300000, guid: 36e090b8f2f694e04aaaf4f147dfcdd1, type: 3}
+  match3SfxClip: {fileID: 8300000, guid: f2e5a11b93c7b491da4e719c3c442bdd, type: 3}
+  bgmVolume: 0.6
+  sfxVolume: 0.9
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
