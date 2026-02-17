@@ -62,6 +62,19 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     [SerializeField] [Range(0.005f, 0.25f)] private float enemyHitShakeInCells = 0.03f;
     [SerializeField] [Range(0.01f, 0.2f)] private float enemyHitShakeSeconds = 0.07f;
 
+    [Header("Enemy HP")]
+    [SerializeField] [Range(1, 500)] private int enemyMaxHealth = 40;
+    [SerializeField] [Range(1, 20)] private int enemyDamagePerHit = 1;
+    [SerializeField] private Vector2 enemyHpBarSize = new Vector2(320f, 28f);
+    [SerializeField] private float enemyHpBarOffsetY = 52f;
+    [SerializeField] private Color enemyHpBarBackgroundColor = new Color(0f, 0f, 0f, 0.72f);
+    [SerializeField] private Color enemyHpBarFillColor = new Color(0.9f, 0.2f, 0.2f, 1f);
+
+    [Header("Result")]
+    [SerializeField] private Sprite youWinSprite;
+    [SerializeField] private Vector2 youWinSpriteSize = new Vector2(520f, 220f);
+    [SerializeField] private string victoryLabel = "YOU WIN";
+
     [Header("Audio")]
     [SerializeField] private AudioClip bgmClip;
     [SerializeField] private AudioClip attackSfxClip;
@@ -127,6 +140,13 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         FillAnim,
     }
 
+    private enum RoundEndReason
+    {
+        None,
+        TimeUp,
+        EnemyDefeated,
+    }
+
     private static readonly Vector2Int[] NeighborOffsets =
     {
         new Vector2Int(1, 0),
@@ -172,19 +192,27 @@ public sealed class SimpleDodgeGame : MonoBehaviour
     private bool isDragging;
     private bool isResolving;
     private bool roundEnded;
+    private RoundEndReason roundEndReason;
     private bool hasReportedGameEnded;
     private Vector2Int heldCell;
 
     private float timeRemaining;
     private int score;
     private int lastMoveCombos;
+    private int enemyCurrentHealth;
     private bool hasLoggedMissingSpriteConfig;
 
     private Transform hudRootTransform;
+    private RectTransform hudCanvasRect;
     private Text scoreText;
     private Text timeText;
     private Text comboText;
     private Text resultText;
+    private Image resultImage;
+    private RectTransform enemyHpBarRect;
+    private Image enemyHpBackgroundImage;
+    private Image enemyHpFillImage;
+    private Text enemyHpText;
     private Button settingsButton;
     private GameObject settingsPanelObject;
     private Toggle bgmToggle;
@@ -261,6 +289,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
 
         UpdateLayout(force: false);
+        UpdateEnemyHpBarPosition();
         TryStartBgmOnUserGesture();
         UpdateActiveAttackEffects();
         UpdateEnemyHitFeedback();
@@ -274,20 +303,22 @@ public sealed class SimpleDodgeGame : MonoBehaviour
 
         if (roundEnded)
         {
-#if UNITY_LUNA
             if (!IsPointerOverUi() && PointerPressedThisFrame())
             {
                 if (complianceHooks != null)
                 {
                     complianceHooks.TriggerInstall();
                 }
+#if !UNITY_LUNA
                 else
                 {
                     ResetRound();
                 }
+#endif
             }
-#else
-            if (Input.GetKeyDown(KeyCode.R) || (!IsPointerOverUi() && PointerPressedThisFrame()))
+
+#if !UNITY_LUNA
+            if (Input.GetKeyDown(KeyCode.R) && complianceHooks == null)
             {
                 ResetRound();
             }
@@ -301,7 +332,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         if (timeRemaining <= 0f)
         {
             timeRemaining = 0f;
-            EndRound();
+            EndRound(RoundEndReason.TimeUp);
             UpdateHudTexts();
             return;
         }
@@ -416,6 +447,41 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         UpdateEnemyTransform();
     }
 
+    public void ConfigureEnemyBattle(int configuredEnemyMaxHealth, int configuredEnemyDamagePerHit)
+    {
+        enemyMaxHealth = Mathf.Max(1, configuredEnemyMaxHealth);
+        enemyDamagePerHit = Mathf.Max(1, configuredEnemyDamagePerHit);
+
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        enemyCurrentHealth = Mathf.Clamp(enemyCurrentHealth, 0, enemyMaxHealth);
+        if (!roundEnded)
+        {
+            enemyCurrentHealth = enemyMaxHealth;
+        }
+
+        RefreshEnemyHpUi();
+    }
+
+    public void ConfigureVictoryPresentation(Sprite configuredWinSprite)
+    {
+        if (configuredWinSprite != null)
+        {
+            youWinSprite = configuredWinSprite;
+        }
+
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        RefreshResultVisuals();
+        UpdateHudTexts();
+    }
+
     public void ApplyPlaygroundVariant(int variantIndex)
     {
         int normalizedVariant = Mathf.Abs(variantIndex) % 3;
@@ -485,21 +551,24 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         resolveStartedAt = -1f;
         resolveRecoveryAttempts = 0;
         roundEnded = false;
+        roundEndReason = RoundEndReason.None;
         hasReportedGameEnded = false;
 
         score = 0;
         lastMoveCombos = 0;
         timeRemaining = Mathf.Max(5f, roundDurationSeconds);
+        enemyCurrentHealth = enemyMaxHealth;
         ResetEnemyHitVisuals();
         ResetEnemyAnimatorToIdle();
 
         ClearBoard();
         BuildInitialBoard();
+        RefreshEnemyHpUi();
         SetResultVisible(false);
         UpdateHudTexts();
     }
 
-    private void EndRound()
+    private void EndRound(RoundEndReason reason)
     {
         if (roundEnded)
         {
@@ -507,6 +576,7 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         }
 
         roundEnded = true;
+        roundEndReason = reason;
         isDragging = false;
         isResolving = false;
         ResetImmediateResolveState();
@@ -823,6 +893,13 @@ public sealed class SimpleDodgeGame : MonoBehaviour
                 continue;
             }
 
+            if (roundEnded)
+            {
+                Destroy(attack.gameObject);
+                activeAttackEffects.RemoveAt(i);
+                continue;
+            }
+
             attack.elapsed += dt;
             float t = Mathf.Clamp01(attack.elapsed / Mathf.Max(0.01f, attack.duration));
             float eased = t * t * (3f - 2f * t);
@@ -848,11 +925,39 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             attack.transform.position = attack.to;
         }
 
+        if (roundEnded)
+        {
+            if (attack.gameObject != null)
+            {
+                Destroy(attack.gameObject);
+            }
+
+            return;
+        }
+
         TryPlayAttackSfx();
         TriggerEnemyHitFeedback();
+        ApplyDamageToEnemy(enemyDamagePerHit);
         if (attack.gameObject != null)
         {
             Destroy(attack.gameObject);
+        }
+    }
+
+    private void ApplyDamageToEnemy(int damage)
+    {
+        if (roundEnded)
+        {
+            return;
+        }
+
+        int safeDamage = Mathf.Max(1, damage);
+        enemyCurrentHealth = Mathf.Max(0, enemyCurrentHealth - safeDamage);
+        RefreshEnemyHpUi();
+
+        if (enemyCurrentHealth <= 0)
+        {
+            EndRound(RoundEndReason.EnemyDefeated);
         }
     }
 
@@ -2135,14 +2240,20 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvasObject.AddComponent<CanvasScaler>();
         canvasObject.AddComponent<GraphicRaycaster>();
+        hudCanvasRect = canvasObject.GetComponent<RectTransform>();
 
         Font font = GetHudFont();
         scoreText = CreateHudText(canvasObject.transform, "ScoreText", font, 28, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -16f), new Vector2(460f, 42f), TextAnchor.MiddleLeft);
         timeText = CreateHudText(canvasObject.transform, "TimeText", font, 28, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -54f), new Vector2(460f, 42f), TextAnchor.MiddleLeft);
         comboText = CreateHudText(canvasObject.transform, "ComboText", font, 28, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(20f, -92f), new Vector2(560f, 42f), TextAnchor.MiddleLeft);
+        resultImage = CreateHudImage(canvasObject.transform, "ResultImage", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 48f), youWinSpriteSize);
         resultText = CreateHudText(canvasObject.transform, "ResultText", font, 34, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(700f, 220f), TextAnchor.MiddleCenter);
+        CreateEnemyHpUi(canvasObject.transform, font);
         CreateAudioSettingsUi(canvasObject.transform, font);
         SetResultVisible(false);
+        RefreshResultVisuals();
+        RefreshEnemyHpUi();
+        UpdateEnemyHpBarPosition();
         UpdateAudioSettingsUiState();
         UpdateHudTexts();
     }
@@ -2184,6 +2295,84 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         rectTransform.anchoredPosition = anchoredPosition;
         rectTransform.sizeDelta = sizeDelta;
         return text;
+    }
+
+    private Image CreateHudImage(
+        Transform parent,
+        string objectName,
+        Vector2 anchorMin,
+        Vector2 anchorMax,
+        Vector2 pivot,
+        Vector2 anchoredPosition,
+        Vector2 sizeDelta)
+    {
+        GameObject imageObject = new GameObject(objectName, typeof(RectTransform), typeof(Image));
+        imageObject.transform.SetParent(parent, false);
+
+        RectTransform rectTransform = imageObject.GetComponent<RectTransform>();
+        rectTransform.anchorMin = anchorMin;
+        rectTransform.anchorMax = anchorMax;
+        rectTransform.pivot = pivot;
+        rectTransform.anchoredPosition = anchoredPosition;
+        rectTransform.sizeDelta = sizeDelta;
+
+        Image image = imageObject.GetComponent<Image>();
+        image.sprite = GetGeneratedFallbackSprite();
+        image.preserveAspect = true;
+        image.raycastTarget = false;
+        return image;
+    }
+
+    private void CreateEnemyHpUi(Transform parent, Font font)
+    {
+        GameObject rootObject = new GameObject("EnemyHpBarRoot", typeof(RectTransform), typeof(Image));
+        rootObject.transform.SetParent(parent, false);
+        enemyHpBarRect = rootObject.GetComponent<RectTransform>();
+        enemyHpBarRect.anchorMin = new Vector2(0.5f, 0.5f);
+        enemyHpBarRect.anchorMax = new Vector2(0.5f, 0.5f);
+        enemyHpBarRect.pivot = new Vector2(0.5f, 0.5f);
+        enemyHpBarRect.anchoredPosition = Vector2.zero;
+        enemyHpBarRect.sizeDelta = enemyHpBarSize;
+
+        enemyHpBackgroundImage = rootObject.GetComponent<Image>();
+        enemyHpBackgroundImage.sprite = GetGeneratedFallbackSprite();
+        enemyHpBackgroundImage.color = enemyHpBarBackgroundColor;
+        enemyHpBackgroundImage.raycastTarget = false;
+
+        GameObject fillObject = new GameObject("Fill", typeof(RectTransform), typeof(Image));
+        fillObject.transform.SetParent(rootObject.transform, false);
+
+        RectTransform fillRect = fillObject.GetComponent<RectTransform>();
+        fillRect.anchorMin = new Vector2(0f, 0f);
+        fillRect.anchorMax = new Vector2(1f, 1f);
+        fillRect.offsetMin = new Vector2(2f, 2f);
+        fillRect.offsetMax = new Vector2(-2f, -2f);
+
+        enemyHpFillImage = fillObject.GetComponent<Image>();
+        enemyHpFillImage.sprite = GetGeneratedFallbackSprite();
+        enemyHpFillImage.type = Image.Type.Filled;
+        enemyHpFillImage.fillMethod = Image.FillMethod.Horizontal;
+        enemyHpFillImage.fillOrigin = (int)Image.OriginHorizontal.Left;
+        enemyHpFillImage.fillAmount = 1f;
+        enemyHpFillImage.color = enemyHpBarFillColor;
+        enemyHpFillImage.raycastTarget = false;
+
+        enemyHpText = CreateHudText(
+            rootObject.transform,
+            "EnemyHpText",
+            font,
+            20,
+            new Vector2(0f, 0f),
+            new Vector2(1f, 1f),
+            new Vector2(0.5f, 0.5f),
+            Vector2.zero,
+            Vector2.zero,
+            TextAnchor.MiddleCenter);
+        if (enemyHpText != null)
+        {
+            enemyHpText.color = Color.white;
+            enemyHpText.fontStyle = FontStyle.Bold;
+        }
     }
 
     private static void EnsureRuntimeEventSystem()
@@ -2640,15 +2829,28 @@ public sealed class SimpleDodgeGame : MonoBehaviour
             comboText.text = "Last Combo: x" + lastMoveCombos;
         }
 
+        RefreshEnemyHpUi();
         if (resultText != null && roundEnded)
         {
-#if UNITY_LUNA
-            resultText.text = "TIME UP\nScore: " + score + "\nTap / Click to install";
-#else
-            resultText.text = "TIME UP\nScore: " + score + "\nTap / Click to restart";
-#endif
+            string actionLabel = GetResultActionLabel();
+            if (roundEndReason == RoundEndReason.EnemyDefeated)
+            {
+                if (youWinSprite != null)
+                {
+                    resultText.text = actionLabel;
+                }
+                else
+                {
+                    resultText.text = GetVictoryLabel() + "\nScore: " + score + "\n" + actionLabel;
+                }
+            }
+            else
+            {
+                resultText.text = "TIME UP\nScore: " + score + "\n" + actionLabel;
+            }
         }
 
+        RefreshResultVisuals();
     }
 
     private void SetResultVisible(bool visible)
@@ -2657,6 +2859,97 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         {
             resultText.enabled = visible;
         }
+
+        if (resultImage != null)
+        {
+            resultImage.enabled = visible &&
+                                 roundEnded &&
+                                 roundEndReason == RoundEndReason.EnemyDefeated &&
+                                 youWinSprite != null;
+        }
+    }
+
+    private void RefreshEnemyHpUi()
+    {
+        if (enemyHpFillImage != null)
+        {
+            enemyHpFillImage.fillAmount = enemyMaxHealth <= 0 ? 0f : Mathf.Clamp01((float)enemyCurrentHealth / enemyMaxHealth);
+        }
+
+        if (enemyHpText != null)
+        {
+            enemyHpText.text = "Enemy HP: " + enemyCurrentHealth + " / " + enemyMaxHealth;
+        }
+
+        if (enemyHpBarRect != null)
+        {
+            enemyHpBarRect.sizeDelta = enemyHpBarSize;
+        }
+
+        if (enemyHpBackgroundImage != null)
+        {
+            enemyHpBackgroundImage.color = enemyHpBarBackgroundColor;
+        }
+
+        if (enemyHpFillImage != null)
+        {
+            enemyHpFillImage.color = enemyHpBarFillColor;
+        }
+    }
+
+    private void RefreshResultVisuals()
+    {
+        if (resultImage == null)
+        {
+            return;
+        }
+
+        resultImage.sprite = youWinSprite != null ? youWinSprite : GetGeneratedFallbackSprite();
+        resultImage.rectTransform.sizeDelta = youWinSpriteSize;
+        resultImage.enabled = roundEnded &&
+                              roundEndReason == RoundEndReason.EnemyDefeated &&
+                              youWinSprite != null;
+    }
+
+    private void UpdateEnemyHpBarPosition()
+    {
+        if (hudCanvasRect == null && hudRootTransform != null)
+        {
+            hudCanvasRect = hudRootTransform as RectTransform;
+        }
+
+        if (enemyHpBarRect == null || hudCanvasRect == null || gameplayCamera == null || !layoutInitialized)
+        {
+            return;
+        }
+
+        Vector3 worldAnchor = new Vector3(boardBottomLeft.x + (boardWorldWidth * 0.5f), boardBottomLeft.y + boardWorldHeight, gameplayZ);
+        Vector3 screenPoint = gameplayCamera.WorldToScreenPoint(worldAnchor);
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(hudCanvasRect, screenPoint, null, out Vector2 canvasPoint))
+        {
+            return;
+        }
+
+        enemyHpBarRect.anchoredPosition = canvasPoint + new Vector2(0f, enemyHpBarOffsetY);
+    }
+
+    private string GetVictoryLabel()
+    {
+        return string.IsNullOrEmpty(victoryLabel) ? "YOU WIN" : victoryLabel;
+    }
+
+    private string GetResultActionLabel()
+    {
+        if (complianceHooks != null)
+        {
+            return "Tap / Click to install";
+        }
+
+#if UNITY_LUNA
+        return "Tap / Click to install";
+#else
+        return "Tap / Click to restart";
+#endif
     }
 
     private Font GetHudFont()
@@ -2829,6 +3122,8 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         {
             enemyTransform.position = enemyAnchorPosition;
         }
+
+        UpdateEnemyHpBarPosition();
     }
 
     private void UpdateBackgroundTransform()
@@ -3012,6 +3307,23 @@ public sealed class SimpleDodgeGame : MonoBehaviour
         attackEffectScale = Mathf.Clamp(attackEffectScale, 0.1f, 1.5f);
         enemyHitShakeInCells = Mathf.Clamp(enemyHitShakeInCells, 0.005f, 0.25f);
         enemyHitShakeSeconds = Mathf.Clamp(enemyHitShakeSeconds, 0.01f, 0.2f);
+        enemyMaxHealth = Mathf.Max(1, enemyMaxHealth);
+        enemyDamagePerHit = Mathf.Max(1, enemyDamagePerHit);
+        enemyHpBarSize.x = Mathf.Max(120f, enemyHpBarSize.x);
+        enemyHpBarSize.y = Mathf.Max(12f, enemyHpBarSize.y);
+        enemyHpBarOffsetY = Mathf.Clamp(enemyHpBarOffsetY, 0f, 280f);
+        youWinSpriteSize.x = Mathf.Max(120f, youWinSpriteSize.x);
+        youWinSpriteSize.y = Mathf.Max(60f, youWinSpriteSize.y);
+        if (!string.IsNullOrEmpty(victoryLabel))
+        {
+            victoryLabel = victoryLabel.Trim();
+        }
+
+        if (string.IsNullOrEmpty(victoryLabel))
+        {
+            victoryLabel = "YOU WIN";
+        }
+
         bgmVolume = Mathf.Clamp01(bgmVolume);
         sfxVolume = Mathf.Clamp01(sfxVolume);
 

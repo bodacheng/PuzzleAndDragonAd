@@ -21,6 +21,15 @@ public sealed class PlayworksComplianceHooks : MonoBehaviour
     [LunaPlaygroundField("Enemy Prefab", 5, "Gameplay")]
     [SerializeField] private GameObject enemyPrefab;
 
+    [LunaPlaygroundField("Enemy Max HP", 6, "Gameplay")]
+    [SerializeField] [Range(1, 500)] private int enemyMaxHp = 40;
+
+    [LunaPlaygroundField("Damage Per Hit", 7, "Gameplay")]
+    [SerializeField] [Range(1, 20)] private int enemyDamagePerHit = 1;
+
+    [LunaPlaygroundField("You Win Sprite", 8, "Gameplay")]
+    [SerializeField] private Sprite youWinSprite;
+
     private bool gameEnded;
 
     private void Start()
@@ -43,6 +52,8 @@ public sealed class PlayworksComplianceHooks : MonoBehaviour
         {
             gameplay.ApplyPlaygroundVariant(gameplayVariant);
             gameplay.ConfigureEnemyPresentation(enemyPrefab, enemySprite, attackEffectPrefab);
+            gameplay.ConfigureEnemyBattle(enemyMaxHp, enemyDamagePerHit);
+            gameplay.ConfigureVictoryPresentation(youWinSprite);
         }
 
         // LP3007 custom event

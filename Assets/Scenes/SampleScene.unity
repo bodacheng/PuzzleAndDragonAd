@@ -231,6 +231,9 @@ MonoBehaviour:
   enemySprite: {fileID: 0}
   attackEffectPrefab: {fileID: 0}
   enemyPrefab: {fileID: 0}
+  enemyMaxHp: 40
+  enemyDamagePerHit: 1
+  youWinSprite: {fileID: 0}
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,6 +296,15 @@ MonoBehaviour:
   attackEffectScale: 0.3
   enemyHitShakeInCells: 0.1345
   enemyHitShakeSeconds: 0.2
+  enemyMaxHealth: 40
+  enemyDamagePerHit: 1
+  enemyHpBarSize: {x: 320, y: 28}
+  enemyHpBarOffsetY: 52
+  enemyHpBarBackgroundColor: {r: 0, g: 0, b: 0, a: 0.72}
+  enemyHpBarFillColor: {r: 0.9, g: 0.2, b: 0.2, a: 1}
+  youWinSprite: {fileID: -737061344196339206, guid: 7689c85a64b014537b5fca7baec7f775, type: 3}
+  youWinSpriteSize: {x: 520, y: 220}
+  victoryLabel: YOU WIN
   bgmClip: {fileID: 8300000, guid: d1ee67d0d87c34fa0ac688c6cc669c72, type: 3}
   attackSfxClip: {fileID: 8300000, guid: 36e090b8f2f694e04aaaf4f147dfcdd1, type: 3}
   match3SfxClip: {fileID: 8300000, guid: f2e5a11b93c7b491da4e719c3c442bdd, type: 3}
